@@ -10,6 +10,7 @@
     "@babel/preset-typescript": "^7.15.0",
     "@types/jest": "^27.0.2",
     "@types/node": "^16.10.3",
+    "@types/ramda": "^0.27.45",
     "@typescript-eslint/eslint-plugin": "^4.33.0",
     "@typescript-eslint/parser": "^4.33.0",
     "babel-loader": "^8.2.2",
@@ -39,5 +40,8 @@
     "dev": "webpack serve",
     "build": "NODE_ENV=production webpack",
     "release": "standard-version"
+  },
+  "dependencies": {
+    "ramda": "^0.27.1"
   }
 }
