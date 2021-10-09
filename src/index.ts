@@ -40,7 +40,7 @@ engine((t) => {
   )(player);
 })();
 
-engine((_) => {
+engine((t) => {
   context.fillStyle = '#d2d2d2';
   context.fillRect(0, 0, canvas.width, canvas.height);
   context.globalAlpha = 1;
@@ -50,7 +50,7 @@ engine((_) => {
   const [platx, platy] = platform.position;
   context.fillStyle = '#8a5a5a';
   context.fillRect(platx, platy, platform.width, platform.height);
-})();
+});
 
 const drawVector =
   ([vx, vy]) =>

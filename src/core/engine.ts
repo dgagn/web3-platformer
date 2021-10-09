@@ -1,4 +1,6 @@
-const engine = (fn) => {
+type Fn = (time: number) => void;
+
+const engine = (fn: Fn) => {
   let timestamp = 0;
   const cb = (time: number = timestamp) => {
     requestAnimationFrame(cb);

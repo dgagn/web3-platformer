@@ -1,3 +1,5 @@
+type InputManager = {};
+
 const createKeyManager = () => {
   const keyManager = {};
   document.addEventListener('keydown', ({code}) => (keyManager[code] = true));
@@ -7,6 +9,7 @@ const createKeyManager = () => {
 
 const keyManager = createKeyManager();
 
-const initializeButtonDown = (im) => (key: string) => !!keyManager[im[key]];
+const initializeButtonDown = (im: InputManager) => (key: string) =>
+  !!keyManager[im[key]];
 
 export default initializeButtonDown;
