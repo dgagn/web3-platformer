@@ -1,21 +1,28 @@
-import physics, {addForce, updatePhysics} from './core/physics';
+import {physics, addForce, TPhysics, updatePhysics} from './core/physics';
 
 import engine from './core/engine';
 import {compose} from 'ramda';
-import vector, {scale} from './core/vector';
+import {scale, vector} from './core/vector';
 import Input from './game/input-manager';
 import {forceCollision, jump} from './game/player';
+import rectangle from './core/rectangle';
 
 const canvas = document.getElementById('canvas') as HTMLCanvasElement;
 const context = canvas.getContext('2d');
 
 const gravity = 1.5;
 
-let player = {
+type Player = TPhysics & {
+  movementSpeed: number;
+  width: number;
+  height: number;
+  isGrounded: boolean;
+};
+
+let player: Player = {
   ...physics(1, [50, 50]),
+  ...rectangle(32, 64),
   movementSpeed: 2,
-  width: 32,
-  height: 64,
   isGrounded: false,
 };
 
@@ -30,11 +37,10 @@ const platform = {
 };
 
 engine((t) => {
-  // @ts-ignore
-  player = compose(
-      updatePhysics,
+  player = compose<Player, Player, Player, Player, Player, Player>(
+      updatePhysics(0.1),
       addForce(scale(vector(Input.getAxisX() * player.movementSpeed, 0), t)),
-      jump,
+      jump(40),
       forceCollision(platform),
       addForce(scale(vector(0, gravity), t)),
   )(player);
@@ -50,7 +56,7 @@ engine((t) => {
   const [platx, platy] = platform.position;
   context.fillStyle = '#8a5a5a';
   context.fillRect(platx, platy, platform.width, platform.height);
-});
+})();
 
 const drawVector =
   ([vx, vy]) =>

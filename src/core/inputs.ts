@@ -1,6 +1,4 @@
-type InputManager = {};
-
-const createKeyManager = () => {
+const createKeyManager = (): any => {
   const keyManager = {};
   document.addEventListener('keydown', ({code}) => (keyManager[code] = true));
   document.addEventListener('keyup', ({code}) => delete keyManager[code]);
@@ -9,7 +7,9 @@ const createKeyManager = () => {
 
 const keyManager = createKeyManager();
 
-const initializeButtonDown = (im: InputManager) => (key: string) =>
-  !!keyManager[im[key]];
+const initializeButtonDown =
+  <T>(im: T) =>
+    (key: keyof T) =>
+      !!keyManager[im[key]];
 
 export default initializeButtonDown;
