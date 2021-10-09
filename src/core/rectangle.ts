@@ -1,16 +1,22 @@
-import {TPhysics} from './physics';
-import {vector} from './vector';
+import {Physics} from './physics';
 import {TSize} from './size';
 
-export type TRectangle = TSize & TPhysics;
+export type TRectangle = TSize &
+  Physics & {
+    top: number;
+    bottom: number;
+    left: number;
+    right: number;
+  };
 
-const rectangle = <T extends TRectangle>(rec: T): T => {
+type Rectangle<T> = T & {};
+
+const rectangle = <T extends TSize & Physics>(rec: T): Rectangle<T> => {
   const {width, height, position} = rec;
   const [px, py] = position;
 
   return {
     ...rec,
-    center: vector(px + width / 2, py + height / 2),
   };
 };
 

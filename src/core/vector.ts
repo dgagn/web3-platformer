@@ -5,11 +5,11 @@ const vector = <X extends number, Y extends number>(x: X, y: Y): [X, Y] => [
   y,
 ];
 
-const zero = vector(0, 0);
-const up = vector(0, 1);
-const down = vector(0, -1);
-const left = vector(-1, 0);
-const right = vector(1, 0);
+const zero: TVector = vector(0, 0);
+const up: TVector = vector(0, 1);
+const down: TVector = vector(0, -1);
+const left: TVector = vector(-1, 0);
+const right: TVector = vector(1, 0);
 
 const degreeToRad = (deg: number) => (deg * Math.PI) / 180;
 

@@ -5,11 +5,10 @@ const createKeyManager = (): any => {
   return keyManager;
 };
 
-const keyManager = createKeyManager();
-
 const initializeButtonDown =
+  (keyManager: any) =>
   <T>(im: T) =>
-    (key: keyof T) =>
-      !!keyManager[im[key]];
+      (key: keyof T) =>
+        !!keyManager[im[key]];
 
-export default initializeButtonDown;
+export default initializeButtonDown(createKeyManager());
