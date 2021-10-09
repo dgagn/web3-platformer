@@ -19,7 +19,7 @@ const physics = (
   mass,
 });
 
-export const updatePhysics = (phys: Physics, friction = 0.1) => {
+export const updatePhysics = (phys: Physics, friction = 0.12) => {
   let [[px, py], [vx, vy], [ax, ay]] = [
     phys.position,
     phys.velocity,
