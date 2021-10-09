@@ -4,9 +4,11 @@ type Physics = {
   position: Vector;
   velocity: Vector;
   acceleration: Vector;
+  mass: number;
 };
 
 const physics = (
+    mass: number = 1,
     position: Vector = vec.zero,
     velocity: Vector = vec.zero,
     acceleration: Vector = vec.zero,
@@ -14,6 +16,7 @@ const physics = (
   position,
   velocity,
   acceleration,
+  mass,
 });
 
 export const updatePhysics = (phys: Physics, friction = 0.1) => {
@@ -33,9 +36,11 @@ export const updatePhysics = (phys: Physics, friction = 0.1) => {
   };
 };
 
-export const addForce = (phys: Physics, mass: number, force: Vector) => ({
-  ...phys,
-  acceleration: add(scale(force, mass), phys.acceleration),
-});
+export const addForce =
+  (force: Vector) =>
+    (phys: Physics): Physics => ({
+      ...phys,
+      acceleration: add(scale(force, phys.mass), phys.acceleration),
+    });
 
 export default physics;
