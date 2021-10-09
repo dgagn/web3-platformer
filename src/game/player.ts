@@ -21,7 +21,7 @@ export const forceCollision = (r1) => (r2) => {
     return {
       ...r2,
       isGrounded: true,
-      position: vector(r2.position[0], r1.position[1] - r2.height),
+      position: vector(r2.position[0], ~~(r1.position[1] - r2.height)),
       acceleration: vector(r2.acceleration[0], 0),
     };
   }

@@ -51,3 +51,37 @@ engine((_) => {
   context.fillStyle = '#8a5a5a';
   context.fillRect(platx, platy, platform.width, platform.height);
 })();
+
+const drawVector =
+  ([vx, vy]) =>
+    ([x, y], n, color) => {
+      context.beginPath();
+      context.moveTo(x, y);
+      context.lineTo(x + vx * n, y + vy * n);
+      context.strokeStyle = color;
+      context.stroke();
+      context.closePath();
+    };
+
+engine(() => {
+  const vec = drawVector(player.velocity);
+  vec(
+      vector(
+          player.position[0] + player.width / 2,
+          player.position[1] + player.height / 2,
+      ),
+      10,
+      'red',
+  );
+  context.fillText(
+      `vx: ${~~player.velocity[0]}, vy: ${~~player.velocity[1]}`,
+      400,
+      420,
+  );
+  context.fillText(
+      `x: ${~~player.position[0]}, y: ${~~player.position[1]}`,
+      400,
+      400,
+  );
+  context.fillText(`isGrounded: ${player.isGrounded}`, 400, 440);
+})();
