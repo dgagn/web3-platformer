@@ -1,30 +1,29 @@
-import {physics, addForce, TPhysics, updatePhysics} from './core/physics';
+import {physics, addForce, updatePhysics} from './core/physics';
 
 import engine from './core/engine';
 import {compose} from 'ramda';
 import {scale, vector} from './core/vector';
 import Input from './game/input-manager';
 import {forceCollision, jump} from './game/player';
-import rectangle from './core/rectangle';
+import rectangle, {TRectangle} from './core/rectangle';
+import size from './core/size';
 
 const canvas = document.getElementById('canvas') as HTMLCanvasElement;
 const context = canvas.getContext('2d');
 
 const gravity = 1.5;
 
-type Player = TPhysics & {
+type Player = TRectangle & {
   movementSpeed: number;
-  width: number;
-  height: number;
   isGrounded: boolean;
 };
 
-let player: Player = {
+let player = rectangle({
   ...physics(1, [50, 50]),
-  ...rectangle(32, 64),
+  ...size(32, 64),
   movementSpeed: 2,
   isGrounded: false,
-};
+});
 
 const platformSize = {
   width: canvas.width,
@@ -44,6 +43,7 @@ engine((t) => {
       forceCollision(platform),
       addForce(scale(vector(0, gravity), t)),
   )(player);
+  window.player = player;
 })();
 
 engine((t) => {
