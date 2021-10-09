@@ -1,5 +1,4 @@
-import initButtonDown from '../core/inputs';
-import {vector} from '../core/vector';
+import {createAxis, initButtonDown} from '../core/inputs';
 
 const inputManager = {
   jump: 'Space',
@@ -7,24 +6,15 @@ const inputManager = {
   right: 'KeyD',
 };
 
-export const getButtonDown = initButtonDown(inputManager);
+const getButtonDown = initButtonDown(inputManager);
+const getAxis = () => createAxis(inputManager)('left', 'right', 'jump');
+const getAxisX = () => getAxis()[0];
+const getAxisY = () => getAxis()[1];
 
-type AxisX = 1 | 0 | -1;
-export const getAxisX = (): 1 | 0 | -1 => {
-  const left = getButtonDown('left');
-  const right = getButtonDown('right');
-  return left && right ? 0 : left ? -1 : right ? 1 : 0;
-};
-
-type AxisY = -1 | 0;
-export const getAxisY = () => (getButtonDown('jump') ? -1 : 0);
-
-export const getAxis = (): [AxisX, AxisY] =>
-  vector<AxisX, AxisY>(getAxisX(), getAxisY());
-
+export {getButtonDown, getAxis, getAxisX, getAxisY};
 export default {
-  getAxisX,
-  getAxisY,
   getButtonDown,
   getAxis,
+  getAxisX,
+  getAxisY,
 };

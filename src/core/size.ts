@@ -1,9 +1,5 @@
-export type TSize = {
-  width: number;
-  height: number;
-};
-
-const size = (width: number, height: number): TSize => ({
+const size = (width: number, height: number) => (p) => ({
+  ...p,
   width,
   height,
 });
