@@ -10,7 +10,6 @@ let player = {
 };
 
 const gravity = 1;
-
 const playerPhysics = compose(updatePhysics, addForce([0, gravity]));
 
 engine((_) => {
