@@ -1,4 +1,4 @@
-import {addForce, physics, updatePhysics} from '../../src/core/physics';
+import {addForce, physics, updatePhysics} from '../src/core/physics';
 
 describe('physics', () => {
   describe('[physics] create physics', () => {

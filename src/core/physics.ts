@@ -1,4 +1,4 @@
-import Vec, {add, vector, scale, TVector} from './vector';
+import Vec, {add, vector, scale, Vector} from './vector';
 
 const physics =
   ({
@@ -37,7 +37,7 @@ const updatePhysics =
       };
     };
 
-const addForce = (force: TVector) => (p) => ({
+const addForce = (force: Vector) => (p) => ({
   ...p,
   acceleration: add(scale(force, p.mass), p.acceleration),
 });

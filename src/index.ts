@@ -1,8 +1,8 @@
 import engine from './core/engine';
-import pipe from './utils/pipe';
+import pipe from './core/pipe';
 import {addForce, physics, updatePhysics} from './core/physics';
 import size from './core/size';
-import compose from './utils/compose';
+import compose from './core/compose';
 import {draw, text, vector} from './core/vector';
 import Input from './game/input-manager';
 
