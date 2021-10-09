@@ -4,7 +4,7 @@ const engine = (fn: Fn) => {
   let timestamp = 0;
   const cb = (time: number = timestamp) => {
     requestAnimationFrame(cb);
-    fn(~~(time - timestamp) / 16);
+    fn(~~(time - timestamp) / 1000);
     timestamp = time;
   };
   return cb;

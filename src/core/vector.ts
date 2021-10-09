@@ -42,6 +42,34 @@ const heading = (v: TVector) => {
 const angleBetween = (v1: TVector, v2: TVector) =>
   radToDegree(Math.acos((dot(v1, v2) / mag(v1)) * mag(v2)));
 
+const draw =
+  (context: CanvasRenderingContext2D) =>
+    ([v1x, v1y]) =>
+      ([v2x, v2y], n, color) => {
+        context.beginPath();
+        context.moveTo(v2x, v2y);
+        const [vx, vy] = vector(v2x + v1x * n, v2y + v1y * n);
+        context.lineTo(vx, vy);
+        context.strokeStyle = color;
+        context.stroke();
+        context.closePath();
+      };
+
+const round = (num: number, precision: number) =>
+  Math.round((num + Number.EPSILON) * Math.pow(10, precision)) /
+  Math.pow(10, precision);
+
+const text =
+  (context: CanvasRenderingContext2D) =>
+    ([v1x, v1y]) =>
+      ([v2x, v2y], prefix: string) => {
+        context.fillText(
+            prefix + `: [${round(v1x, 2)}, ${round(v1y, 2)}]`,
+            v2x,
+            v2y,
+        );
+      };
+
 export {
   vector,
   scale,
@@ -54,6 +82,8 @@ export {
   heading,
   angleBetween,
   TVector,
+  draw,
+  text,
 };
 
 export default {
@@ -72,4 +102,6 @@ export default {
   dist,
   heading,
   angleBetween,
+  draw,
+  text,
 };

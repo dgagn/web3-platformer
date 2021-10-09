@@ -37,12 +37,10 @@ const updatePhysics =
       };
     };
 
-const addForce =
-  (force: TVector) =>
-    ({mass, acceleration, ...p}) => ({
-      ...p,
-      acceleration: add(scale(force, mass), acceleration),
-    });
+const addForce = (force: TVector) => (p) => ({
+  ...p,
+  acceleration: add(scale(force, p.mass), p.acceleration),
+});
 
 export {physics, addForce, updatePhysics};
 
