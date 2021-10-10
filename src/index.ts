@@ -6,6 +6,7 @@ import {draw, text, vector} from './core/vector';
 import Input from './game/input-manager';
 import {rectangle} from './core/rectangle';
 import {collision} from './core/collision';
+import random from './core/random';
 
 const canvas = document.getElementById('canvas') as HTMLCanvasElement;
 const context = canvas.getContext('2d');
@@ -19,33 +20,91 @@ let player = pipe(
 )({
   isGrounded: false,
   speed: 1,
-  jumpForce: 3,
+  jumpForce: 14,
 });
 
-const platform = pipe(physics({position: [50, 550]}), size(200, 64))({});
-const platform2 = pipe(physics({position: [200, 450]}), size(200, 64))({});
-let platforms = [platform, platform2];
+let floor = pipe(
+    physics({position: [0, canvas.height - 20]}),
+    size(canvas.width, 20),
+)({});
+
+let platforms = Array(10)
+    .fill(true)
+    .map((_) =>
+      pipe(
+          physics({position: [random(0, canvas.width), random(0, canvas.height)]}),
+          size(random(50, 100), random(10, 20)),
+      )({}),
+    );
+
+const stayTopBounds = (p) => {
+  if (p.bottom <= 0) {
+    return {
+      ...p,
+      position: [random(0, canvas.width - p.width), canvas.height],
+    };
+  }
+  return p;
+};
+
+const gameBounds = (p) => {
+  if (p.right >= canvas.width) {
+    return addForce(vector(-10, 0))(p);
+  }
+  if (p.left <= 0) {
+    return addForce(vector(10, 0))(p);
+  }
+  if (p.top <= 0) {
+    return {
+      ...p,
+      position: [random(0, canvas.width - p.width - 20), canvas.height - 100],
+      velocity: [0, 0],
+      acceleration: [0, 0],
+    };
+  }
+  return p;
+};
 
 const movement = (player) =>
   addForce(vector(Input.getAxisX() * player.speed, 0))(player);
 
 const jump = (player) =>
-  addForce(vector(0, Input.getAxisY() * player.jumpForce))(player);
+  player.isGrounded ?
+    {
+      ...addForce(vector(0, Input.getAxisY() * player.jumpForce))(player),
+      isGrounded: false,
+    } :
+    player;
 
 const gravity = (gravity) => (player) => addForce(vector(0, gravity))(player);
 
+const invertGravity = (gravity) => (player) =>
+  addForce(vector(0, -gravity))(player);
+
 engine((t) => {
-  player = pipe(
+  const playerUpdate = pipe(
       updatePhysics(0.1),
       movement,
       jump,
       gravity(1),
       rectangle,
-  )(player);
+      pipe(...platforms.map((p) => collision(p))),
+      collision(floor),
+      gameBounds,
+  );
 
-  player = pipe(...platforms.map((p) => collision(p)))(player);
+  const platformUpdate = pipe(
+      updatePhysics(0.1),
+      invertGravity(0.2),
+      rectangle,
+      stayTopBounds,
+  );
 
-  platforms = platforms.map((p) => pipe(updatePhysics(0.1), rectangle)(p));
+  const floorUpdate = pipe(updatePhysics(0.1), rectangle);
+
+  player = playerUpdate(player);
+  platforms = platforms.map((p) => platformUpdate(p));
+  floor = floorUpdate(floor);
 })();
 
 engine((t) => {
@@ -65,6 +124,13 @@ engine((t) => {
         platform.height,
     );
   });
+
+  context.fillRect(
+      floor.position[0],
+      floor.position[1],
+      floor.width,
+      floor.height,
+  );
 
   drawVec(player.velocity)(
       vector(

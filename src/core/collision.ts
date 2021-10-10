@@ -20,7 +20,7 @@ const collision = (rec) => (p) => {
       ...p,
       position: vector(px, rec.top - 0.1 - height),
       velocity: vector(vx, rec.velocity[1]),
-      isGrounded: false,
+      isGrounded: true,
     };
   } else if (p.top <= rec.bottom && p.oldtop > rec.oldbottom) {
     return {
