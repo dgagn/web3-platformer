@@ -64,16 +64,18 @@ describe('physics', () => {
       expect(updatePhysics()(physicObj).oldpos).toStrictEqual([50, 50]);
     });
     it('should be able to add acceleration X', () => {
-      const physicObj = physics({position: [50, 50], acceleration: [2, 0]})(
-          {},
-      );
+      const physicObj = physics({
+        position: [50, 50],
+        acceleration: [2, 0],
+      })({});
       expect(updatePhysics()(physicObj).position).toStrictEqual([51.8, 50]);
       expect(updatePhysics()(physicObj).oldpos).toStrictEqual([50, 50]);
     });
     it('should be able to add acceleration Y', () => {
-      const physicObj = physics({position: [50, 50], acceleration: [0, 2]})(
-          {},
-      );
+      const physicObj = physics({
+        position: [50, 50],
+        acceleration: [0, 2],
+      })({});
       expect(updatePhysics()(physicObj).position).toStrictEqual([50, 51.8]);
       expect(updatePhysics()(physicObj).oldpos).toStrictEqual([50, 50]);
     });

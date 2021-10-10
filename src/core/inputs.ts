@@ -21,10 +21,7 @@ const createAxis =
       const left = buttonDown(leftKey);
       const right = buttonDown(rightKey);
       const jump = buttonDown(jumpKey);
-      return vector(
-      left && right ? 0 : left ? -1 : right ? 1 : 0,
-      jump ? -1 : 0,
-      );
+      return vector(left && right ? 0 : left ? -1 : right ? 1 : 0, jump ? -1 : 0);
     };
 
 export {createAxis, initButtonDown};
