@@ -17,13 +17,53 @@ const playerRunning = new Image();
 playerRunning.src = 'Player_Running.png';
 const playerFalling = new Image();
 playerFalling.src = 'Player_Falling.png';
+const playerJumping = new Image();
+playerJumping.src = 'Player_Jumping.png';
 
 const drawVec = draw(context);
 const textVec = text(context);
 
+/**
+ *
+ * Requires all state and a default state
+ *
+ */
+
+const arg = [
+  {
+    state: 'idle',
+    src: 'Player.png',
+    steps: 5,
+    size: vector(32, 32),
+    scale: vector(2, 2),
+  },
+  {
+    state: 'running',
+    src: 'Player_Running.png',
+    steps: 6,
+    size: vector(32, 32),
+    scale: vector(2, 2),
+  },
+  {
+    state: 'falling',
+    src: 'Player_Falling.png',
+    steps: 1,
+    size: vector(32, 32),
+    scale: vector(2, 2),
+  },
+];
+
+const state = (state) => (boolean) => (p) => {
+  return {
+    ...p,
+    state: boolean ? state : p.state,
+  };
+};
+
 let player = pipe(
     physics({position: [50, 50]}),
     size(32, 50),
+    state('idle')(true),
 )({
   isGrounded: false,
   speed: 1,
@@ -90,6 +130,26 @@ const gravity = (gravity) => (player) => addForce(vector(0, gravity))(player);
 const invertGravity = (gravity) => (player) =>
   addForce(vector(0, -gravity))(player);
 
+const runningState = (speed: number) => (player) => {
+  const [vx] = player.velocity;
+  const isRunning = vx < -speed || (vx > speed && player.isGrounded);
+  return state('running')(isRunning)(player);
+};
+
+const fallingState = (fallingForce: number) => (player) => {
+  const [, vy] = player.velocity;
+  const isFalling = !player.isGrounded && vy > fallingForce;
+  return state('falling')(isFalling)(player);
+};
+
+const jumpingState = (jumpingForce: number) => (player) => {
+  const [, vy] = player.velocity;
+  const isJumping = !player.isGrounded && vy < -jumpingForce;
+  return state('jumping')(isJumping)(player);
+};
+
+const idleState = state('idle')(true);
+
 engine((t) => {
   const playerUpdate = pipe(
       updatePhysics(0.1),
@@ -100,6 +160,10 @@ engine((t) => {
       pipe(...platforms.map((p) => collision(p))),
       collision(floor),
       gameBounds,
+      idleState,
+      runningState(2),
+      jumpingState(-10),
+      fallingState(5),
   );
 
   const platformUpdate = pipe(
@@ -132,19 +196,17 @@ engine((t) => {
   const [vx] = player.velocity;
   const [sw, sh] = vector(64, 64);
 
-  /*
-  context.translate(this.position.x + tileWidth/2, this.position.y + tileHeight/2); //  déplace notre point de rotation
-            context.scale(-1, 1);
-            context.translate(
-                -(this.position.x + tileWidth/2),
-                -(this.position.y + tileHeight/2)
-            );
-   */
-
-  const maxSteps = 5;
+  // player = vx < -2 || vx > 2 && player.isGrounded ? state('running')(player) :
+  //   !player.isGrounded && vy > 5 ? state('falling')(player) : state('idle')(player)
 
   const image =
-    (vx < -2 || vx > 2) && player.isGrounded ? playerRunning : playerImage;
+    player.state === 'running' ?
+      playerRunning :
+      player.state === 'falling' ?
+      playerFalling :
+      player.state === 'jumping' ?
+      playerJumping :
+      playerImage;
 
   const [fpx, fpy] = [px - 15, py - 14];
   if (vx < 0) {
@@ -153,15 +215,25 @@ engine((t) => {
     context.scale(-1, 1);
     context.translate(-(fpx + sw / 2), -(fpy + sh / 2));
   }
+  const maxSteps =
+    image === playerImage ?
+      5 :
+      image === playerRunning ?
+      5 :
+      image === playerFalling ?
+      1 :
+      image === playerJumping ?
+      1 :
+      0;
 
-  if (frames % 5 == 0) {
+  if (frames % maxSteps == 0) {
     step = step < maxSteps - 1 ? step + 1 : 0;
   }
 
   context.drawImage(image, step * stepWidth, 0, 32, 32, fpx, fpy, sw, sh);
   context.restore();
   context.strokeStyle = '#4e62e0';
-  // context.strokeRect(px, py, player.width, player.height);
+  context.strokeRect(px, py, player.width, player.height);
   context.strokeStyle = '#000';
 
   platforms.forEach((platform) => {
