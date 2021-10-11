@@ -25,6 +25,7 @@ const createAxis =
     };
 
 export {createAxis, initButtonDown};
+
 export default {
   initButtonDown,
   createAxis,

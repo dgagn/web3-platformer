@@ -11,12 +11,19 @@ import random from './core/random';
 const canvas = document.getElementById('canvas') as HTMLCanvasElement;
 const context = canvas.getContext('2d');
 
+const playerImage = new Image();
+playerImage.src = 'Player.png';
+const playerRunning = new Image();
+playerRunning.src = 'Player_Running.png';
+const playerFalling = new Image();
+playerFalling.src = 'Player_Falling.png';
+
 const drawVec = draw(context);
 const textVec = text(context);
 
 let player = pipe(
     physics({position: [50, 50]}),
-    size(32, 64),
+    size(32, 50),
 )({
   isGrounded: false,
   speed: 1,
@@ -109,14 +116,53 @@ engine((t) => {
   floor = floorUpdate(floor);
 })();
 
+const stepWidth = 32;
+let step = 0;
+let frames = 0;
 engine((t) => {
-  context.globalAlpha = 0.5;
+  context.globalAlpha = 0.6;
+  context.imageSmoothingEnabled = false;
+
   context.fillStyle = '#d2d2d2';
   context.fillRect(0, 0, canvas.width, canvas.height);
   context.globalAlpha = 1;
   context.fillStyle = '#181818';
   const [px, py] = player.position;
-  context.fillRect(px, py, player.width, player.height);
+
+  const [vx] = player.velocity;
+  const [sw, sh] = vector(64, 64);
+
+  /*
+  context.translate(this.position.x + tileWidth/2, this.position.y + tileHeight/2); //  déplace notre point de rotation
+            context.scale(-1, 1);
+            context.translate(
+                -(this.position.x + tileWidth/2),
+                -(this.position.y + tileHeight/2)
+            );
+   */
+
+  const maxSteps = 5;
+
+  const image =
+    (vx < -2 || vx > 2) && player.isGrounded ? playerRunning : playerImage;
+
+  const [fpx, fpy] = [px - 15, py - 14];
+  if (vx < 0) {
+    context.save();
+    context.translate(fpx + sw / 2, fpy + sh / 2); //  déplace notre point de rotation
+    context.scale(-1, 1);
+    context.translate(-(fpx + sw / 2), -(fpy + sh / 2));
+  }
+
+  if (frames % 5 == 0) {
+    step = step < maxSteps - 1 ? step + 1 : 0;
+  }
+
+  context.drawImage(image, step * stepWidth, 0, 32, 32, fpx, fpy, sw, sh);
+  context.restore();
+  context.strokeStyle = '#4e62e0';
+  // context.strokeRect(px, py, player.width, player.height);
+  context.strokeStyle = '#000';
 
   platforms.forEach((platform) => {
     context.fillRect(
@@ -146,4 +192,5 @@ engine((t) => {
   textVec(player.position)(vector(400, 415), 'position');
   // @ts-ignore
   window.player = player;
+  frames++;
 })();
