@@ -7,6 +7,8 @@ import Input from './game/input-manager';
 import {rectangle} from './core/rectangle';
 import {collision} from './core/collision';
 import random from './core/random';
+import {createAnimations} from './core/animations';
+import {createPhysics} from '../tests/core/physics.test';
 
 const canvas = document.getElementById('canvas') as HTMLCanvasElement;
 const context = canvas.getContext('2d');
@@ -23,17 +25,12 @@ playerJumping.src = 'Player_Jumping.png';
 const drawVec = draw(context);
 const textVec = text(context);
 
-/**
- *
- * Requires all state and a default state
- *
- */
-
 const arg = [
   {
     state: 'idle',
     src: 'Player.png',
     steps: 5,
+    current: 1,
     size: vector(32, 32),
     scale: vector(2, 2),
   },
@@ -41,6 +38,7 @@ const arg = [
     state: 'running',
     src: 'Player_Running.png',
     steps: 6,
+    current: 1,
     size: vector(32, 32),
     scale: vector(2, 2),
   },
@@ -48,6 +46,15 @@ const arg = [
     state: 'falling',
     src: 'Player_Falling.png',
     steps: 1,
+    current: 1,
+    size: vector(32, 32),
+    scale: vector(2, 2),
+  },
+  {
+    state: 'jumping',
+    src: 'Player_Jumping.png',
+    steps: 1,
+    current: 1,
     size: vector(32, 32),
     scale: vector(2, 2),
   },
@@ -60,15 +67,28 @@ const state = (state) => (boolean) => (p) => {
   };
 };
 
+const jumper = (jumpForce: number) => (p) => {
+  return {
+    ...p,
+    isGrounded: false,
+    jumpForce: jumpForce,
+  };
+};
+
+const mover = (speed: number) => (p) => {
+  return {
+    ...p,
+    speed,
+  };
+};
+
 let player = pipe(
     physics({position: [50, 50]}),
     size(32, 50),
     state('idle')(true),
-)({
-  isGrounded: false,
-  speed: 1,
-  jumpForce: 14,
-});
+    jumper(14),
+    mover(1),
+)({});
 
 let floor = pipe(
     physics({position: [0, canvas.height - 20]}),
@@ -164,6 +184,7 @@ engine((t) => {
       runningState(2),
       jumpingState(-10),
       fallingState(5),
+      createAnimations(arg),
   );
 
   const platformUpdate = pipe(
@@ -196,9 +217,6 @@ engine((t) => {
   const [vx] = player.velocity;
   const [sw, sh] = vector(64, 64);
 
-  // player = vx < -2 || vx > 2 && player.isGrounded ? state('running')(player) :
-  //   !player.isGrounded && vy > 5 ? state('falling')(player) : state('idle')(player)
-
   const image =
     player.state === 'running' ?
       playerRunning :
@@ -230,7 +248,17 @@ engine((t) => {
     step = step < maxSteps - 1 ? step + 1 : 0;
   }
 
-  context.drawImage(image, step * stepWidth, 0, 32, 32, fpx, fpy, sw, sh);
+  context.drawImage(
+      player.animation.image,
+      player.animation.current * stepWidth,
+      0,
+      32,
+      32,
+      fpx,
+      fpy,
+      sw,
+      sh,
+  );
   context.restore();
   context.strokeStyle = '#4e62e0';
   context.strokeRect(px, py, player.width, player.height);

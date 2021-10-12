@@ -6,7 +6,7 @@ describe('pipe', () => {
     expect(typeof piper).toBe('function');
   });
   it('should pass the second argument to the first function', () => {
-    const fn1 = (param) => {
+    const fn1 = param => {
       expect(param).toBe('hello');
       return param;
     };
@@ -14,7 +14,7 @@ describe('pipe', () => {
     expect(piper).toBe('hello');
   });
   it('should pass to the chain', () => {
-    const fn1 = (param) => {
+    const fn1 = param => {
       expect(param).toBe('hello');
       return param;
     };
@@ -22,7 +22,7 @@ describe('pipe', () => {
     expect(piper).toBe('hello');
   });
   it('should pass to the chain', () => {
-    const fn1 = (p) => p + '1';
+    const fn1 = p => p + '1';
     const piper = pipe(fn1, fn1, fn1, fn1)('hello');
     expect(piper).toBe('hello1111');
   });
