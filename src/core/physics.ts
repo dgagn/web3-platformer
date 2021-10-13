@@ -1,18 +1,21 @@
-import Vec, {add, vector, scale, Vector} from './vector';
+import Vector, {add, vector, scale, Vec} from './vector';
 import {curry} from '../utils';
 
-const isPhysics = (obj) => {
-  if (obj.mass && obj.position && obj.velocity && obj.acceleration) {
-    throw new Error('the object needs to have physics properties');
-  }
-};
+export const hasPhysics = (obj) =>
+  !(
+    !obj.mass ||
+    !obj.position ||
+    !obj.velocity ||
+    !obj.acceleration ||
+    !obj.oldpos
+  );
 
 const physics =
   ({
     mass = 1,
-    position = Vec.zero,
-    velocity = Vec.zero,
-    acceleration = Vec.zero,
+    position = Vector.zero,
+    velocity = Vector.zero,
+    acceleration = Vector.zero,
   } = {}) =>
     (p: any = {}) => ({
       ...p,
@@ -20,12 +23,13 @@ const physics =
       position,
       velocity,
       acceleration,
+      oldpos: Vector.zero,
     });
 
 const updatePhysics =
   (friction: number = 0.1) =>
     (obj) => {
-      isPhysics(obj);
+      hasPhysics(obj);
 
       const [[px, py], [vx, vy], [ax, ay]] = [
         obj.position,
@@ -41,13 +45,13 @@ const updatePhysics =
         ...obj,
         position: vector(px + uvx, py + uvy),
         velocity: vector(uvx, uvy),
-        acceleration: Vec.zero,
+        acceleration: Vector.zero,
         oldpos,
       };
     };
 
-const _addForce = (force: Vector, obj) => {
-  isPhysics(obj);
+const _addForce = (force: Vec, obj) => {
+  hasPhysics(obj);
 
   if (force.length !== 2) {
     throw new Error('the force needs to be a vector');

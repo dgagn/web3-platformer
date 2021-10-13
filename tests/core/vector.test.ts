@@ -1,15 +1,4 @@
-import {vector, Vector} from 'core';
-import {
-  degreeToRad,
-  radToDegree,
-  scale,
-  add,
-  sub,
-  dot,
-  normalize,
-  mag,
-  dist,
-} from '../../src/core/vector';
+import {vector, Vector, scale, add, sub, dot, normalize, mag, dist} from 'core';
 
 describe('vector', () => {
   it('should return a [number, number]', () => {
@@ -32,17 +21,6 @@ describe('should have alias for commonly used vector', () => {
   });
   it('should have right', () => {
     expect(Vector.right).toEqual([1, 0]);
-  });
-});
-
-describe('degree and rad conversions', () => {
-  it('should convert degrees to rad', () => {
-    const convert = degreeToRad(180); // ?
-    expect(convert).toBeCloseTo(3.14);
-  });
-  it('should convert rad to degrees', () => {
-    const convert = radToDegree(3.14159); // ?
-    expect(convert).toBeCloseTo(180);
   });
 });
 

@@ -286,6 +286,7 @@ engine((t) => {
       10,
       'red',
   );
+
   textVec(player.velocity)(vector(400, 400), 'velocity');
   textVec(player.position)(vector(400, 415), 'position');
   // @ts-ignore

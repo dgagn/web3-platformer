@@ -1,3 +1,14 @@
+// ignore file coverage
 export {physics, updatePhysics, addForce} from './physics';
-export {vector} from './vector';
-export {default as Vector} from './vector';
+export {
+  default as Vector,
+  vector,
+  scale,
+  add,
+  sub,
+  dot,
+  normalize,
+  mag,
+  dist,
+} from './vector';
+export {sizer} from './sizer';
