@@ -1,4 +1,11 @@
 import Vec, {add, vector, scale, Vector} from './vector';
+import {curry} from '../utils';
+
+const isPhysics = (obj) => {
+  if (obj.mass && obj.position && obj.velocity && obj.acceleration) {
+    throw new Error('the object needs to have physics properties');
+  }
+};
 
 const physics =
   ({
@@ -17,11 +24,13 @@ const physics =
 
 const updatePhysics =
   (friction: number = 0.1) =>
-    (p) => {
+    (obj) => {
+      isPhysics(obj);
+
       const [[px, py], [vx, vy], [ax, ay]] = [
-        p.position,
-        p.velocity,
-        p.acceleration,
+        obj.position,
+        obj.velocity,
+        obj.acceleration,
       ];
       const oldpos = vector(px, py);
       const [uvx, uvy] = vector(
@@ -29,7 +38,7 @@ const updatePhysics =
           (vy + ay) * (1 - friction),
       );
       return {
-        ...p,
+        ...obj,
         position: vector(px + uvx, py + uvy),
         velocity: vector(uvx, uvy),
         acceleration: Vec.zero,
@@ -37,15 +46,19 @@ const updatePhysics =
       };
     };
 
-const addForce = (force: Vector) => (p) => ({
-  ...p,
-  acceleration: add(scale(force, p.mass), p.acceleration),
-});
+const _addForce = (force: Vector, obj) => {
+  isPhysics(obj);
+
+  if (force.length !== 2) {
+    throw new Error('the force needs to be a vector');
+  }
+
+  return {
+    ...obj,
+    acceleration: add(scale(force, obj.mass), obj.acceleration),
+  };
+};
+
+const addForce = curry(_addForce);
 
 export {physics, addForce, updatePhysics};
-
-export default {
-  addForce,
-  updatePhysics,
-  physics,
-};

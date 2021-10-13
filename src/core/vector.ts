@@ -1,11 +1,8 @@
-import round from './round';
+import {round} from '../utils';
 
 type Vector = [number, number];
 
-const vector = <X extends number, Y extends number>(x: X, y: Y): [X, Y] => [
-  x,
-  y,
-];
+export const vector = (x: number, y: number): Vector => [x, y];
 
 const zero: Vector = vector(0, 0);
 const up: Vector = vector(0, 1);
@@ -13,9 +10,9 @@ const down: Vector = vector(0, -1);
 const left: Vector = vector(-1, 0);
 const right: Vector = vector(1, 0);
 
-const degreeToRad = (deg: number) => (deg * Math.PI) / 180;
+export const degreeToRad = (deg: number) => (deg * Math.PI) / 180;
 
-const radToDegree = (rad: number) => (rad * 180) / Math.PI;
+export const radToDegree = (rad: number) => (rad * 180) / Math.PI;
 
 const scale = ([x, y]: Vector, scalar: number): Vector =>
   vector(scalar * x, scalar * y);
@@ -34,15 +31,6 @@ const mag = ([x, y]) => Math.sqrt(x * x + y * y);
 
 const dist = ([x1, y1], [x2, y2]) =>
   Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
-
-const heading = (v: Vector) => {
-  const angle = angleBetween(v, vector(0, -1 * mag(v)));
-  const [vx] = v;
-  return vx < 0 ? 360 - angle : angle;
-};
-
-const angleBetween = (v1: Vector, v2: Vector) =>
-  radToDegree(Math.acos((dot(v1, v2) / mag(v1)) * mag(v2)));
 
 const draw =
   (context: CanvasRenderingContext2D) =>
@@ -68,21 +56,7 @@ const text =
         );
       };
 
-export {
-  vector,
-  scale,
-  add,
-  sub,
-  dot,
-  normalize,
-  mag,
-  dist,
-  heading,
-  angleBetween,
-  Vector,
-  draw,
-  text,
-};
+export {scale, add, sub, dot, normalize, mag, dist, Vector, draw, text};
 
 export default {
   vector,
@@ -98,8 +72,6 @@ export default {
   normalize,
   mag,
   dist,
-  heading,
-  angleBetween,
   draw,
   text,
 };

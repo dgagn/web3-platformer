@@ -18,6 +18,9 @@ describe('pipe', () => {
     expect(add(2)).toBe(3);
     expect(() => add(2)()).toThrow();
   });
+});
+
+describe('pipeWith', () => {
   it('should pipe with a default value', () => {
     const four = pipeWith(3, inc);
     expect(four).not.toBeInstanceOf(Function);

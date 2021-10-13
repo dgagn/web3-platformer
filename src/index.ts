@@ -1,14 +1,12 @@
 import engine from './core/engine';
-import pipe from './core/pipe';
+import {pipe, random} from './utils';
 import {addForce, physics, updatePhysics} from './core/physics';
 import size from './core/size';
 import {draw, text, vector} from './core/vector';
 import Input from './game/input-manager';
 import {rectangle} from './core/rectangle';
 import {collision} from './core/collision';
-import random from './core/random';
 import {createAnimations} from './core/animations';
-import {createPhysics} from '../tests/core/physics.test';
 
 const canvas = document.getElementById('canvas') as HTMLCanvasElement;
 const context = canvas.getContext('2d');

@@ -1,6 +1,6 @@
 import {curry, curryN} from 'utils';
 
-const sum = (a = 0, b = 0, c = 0) => a + b + c;
+const sum = (a, b, c) => a + b + c;
 
 describe('curry', () => {
   it('should curry the function with a length of 3', () => {
@@ -19,6 +19,8 @@ describe('curry', () => {
   it('should throw a error when calling a function on a value', () => {
     expect(() => curry(sum)(1, 2, 3)()).toThrow();
   });
+});
+describe('curryN', () => {
   it('should curry n times a function', () => {
     expect(curryN(1, sum)(3, 3, 3)).toBe(9);
     expect(curryN(2, sum)(3)(3, 3)).toBe(9);
@@ -26,5 +28,10 @@ describe('curry', () => {
     expect(curryN(3, sum)(3, 3, 3)).toBe(9);
     expect(() => curryN(1, sum)(3)(3, 3)).toThrow();
     expect(() => curryN(2, sum)(3)(3)(3)).toThrow();
+  });
+  it('should get a number of curryN', () => {
+    expect(curryN).toBeInstanceOf(Function);
+    expect(curryN(1, () => {})).toBeInstanceOf(Function);
+    expect(curryN(1, () => {})('')).toBe(undefined);
   });
 });
