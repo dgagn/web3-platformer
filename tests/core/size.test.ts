@@ -1,6 +1,10 @@
-import {size} from 'core';
+import {hasSize, size} from 'core';
 
 describe('size', () => {
+  it('should verify if it has a size', () => {
+    expect(hasSize({})).toBeFalsy();
+    expect(hasSize({height: 10, width: 10})).toBeTruthy();
+  });
   it('should add a property size on a default obj', () => {
     const sizer = size(10, 10)({}); // ?
     expect(sizer).toEqual({
