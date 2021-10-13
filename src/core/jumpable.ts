@@ -1,4 +1,4 @@
-import {isDefined} from '../utils';
+import {curry, isDefined, pipeWith} from '../utils';
 import {addForce, hasPhysics} from './physics';
 import {vector} from './vector';
 
@@ -10,6 +10,18 @@ export const jumpable = (jumpForce: number) => (obj) => ({
   isGrounded: false,
   jumpForce,
 });
+
+const _setGrounded = (boolean, obj) => {
+  if (!hasJumpable(obj)) {
+    throw new Error('the object must have jumpable properties');
+  }
+  return {
+    ...obj,
+    isGrounded: boolean,
+  };
+};
+
+const setGrounded = curry(_setGrounded);
 
 export const jump = (axisY) => (obj) => {
   if (!hasJumpable(obj) || !hasPhysics(obj)) {

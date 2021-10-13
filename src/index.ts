@@ -13,6 +13,10 @@ import {
   draw,
   text,
   engine,
+  jumpable,
+  movable,
+  hasPhysics,
+  hasRectangle,
 } from './core';
 import Input from './game/input-manager';
 import {createAnimations} from './core/animations';
@@ -74,27 +78,12 @@ const state = (state) => (boolean) => (p) => {
   };
 };
 
-const jumper = (jumpForce: number) => (p) => {
-  return {
-    ...p,
-    isGrounded: false,
-    jumpForce: jumpForce,
-  };
-};
-
-const mover = (speed: number) => (p) => {
-  return {
-    ...p,
-    speed,
-  };
-};
-
 let player = pipe(
     physics({position: [50, 50]}),
     size(32, 50),
     state('idle')(true),
-    jumper(14),
-    mover(1),
+    jumpable(14),
+    movable(1),
     rectangle,
 )({});
 
@@ -126,22 +115,26 @@ const stayTopBounds = (p) => {
   return p;
 };
 
-const gameBounds = (p) => {
-  if (p.right >= canvas.width) {
-    return addForce(vector(-10, 0))(p);
+const gameBounds = (obj) => {
+  // rectangle checks for physics and size
+  if (!hasRectangle(obj)) {
+    throw new Error('the object must have the rectangle properties');
   }
-  if (p.left <= 0) {
-    return addForce(vector(10, 0))(p);
+  if (obj.right >= canvas.width) {
+    return addForce(vector(-10, 0), obj);
   }
-  if (p.top <= 0) {
+  if (obj.left <= 0) {
+    return addForce(vector(10, 0), obj);
+  }
+  if (obj.top <= 0) {
     return {
-      ...p,
-      position: [random(0, canvas.width - p.width - 20), canvas.height - 100],
+      ...obj,
+      position: [random(0, canvas.width - obj.width - 20), canvas.height - 100],
       velocity: [0, 0],
       acceleration: [0, 0],
     };
   }
-  return p;
+  return obj;
 };
 
 const runningState = (speed: number) => (player) => {
@@ -164,7 +157,7 @@ const jumpingState = (jumpingForce: number) => (player) => {
 
 const idleState = state('idle')(true);
 
-engine((t) => {
+engine(() => {
   const playerUpdate = pipe(
       updatePhysics(0.1),
       movement(Input.getAxisX()),
@@ -198,7 +191,7 @@ engine((t) => {
 const stepWidth = 32;
 let step = 0;
 let frames = 0;
-engine((t) => {
+engine(() => {
   context.globalAlpha = 0.6;
   context.imageSmoothingEnabled = false;
 

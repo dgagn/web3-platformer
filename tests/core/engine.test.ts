@@ -1,4 +1,4 @@
-import engine from '../../src/core/engine';
+import {engine} from 'core';
 
 describe('engine', () => {
   it('should be a function', () => {
