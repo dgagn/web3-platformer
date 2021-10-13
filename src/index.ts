@@ -1,9 +1,20 @@
-import engine from './core/engine';
 import {pipe, random} from './utils';
-import {addForce, physics, updatePhysics, size, rectangle} from './core';
-import {draw, text, vector} from './core/vector';
+import {
+  addForce,
+  physics,
+  updatePhysics,
+  size,
+  rectangle,
+  jump,
+  movement,
+  gravity,
+  collision,
+  vector,
+  draw,
+  text,
+  engine,
+} from './core';
 import Input from './game/input-manager';
-import {collision} from './core/collision';
 import {createAnimations} from './core/animations';
 
 const canvas = document.getElementById('canvas') as HTMLCanvasElement;
@@ -84,11 +95,13 @@ let player = pipe(
     state('idle')(true),
     jumper(14),
     mover(1),
+    rectangle,
 )({});
 
 let floor = pipe(
     physics({position: [0, canvas.height - 20]}),
     size(canvas.width, 20),
+    rectangle,
 )({});
 
 let platforms = Array(10)
@@ -99,6 +112,7 @@ let platforms = Array(10)
             position: [random(0, canvas.width), random(0, canvas.height)],
           }),
           size(random(50, 100), random(10, 20)),
+          rectangle,
       )({}),
     );
 
@@ -130,22 +144,6 @@ const gameBounds = (p) => {
   return p;
 };
 
-const movement = (player) =>
-  addForce(vector(Input.getAxisX() * player.speed, 0))(player);
-
-const jump = (player) =>
-  player.isGrounded ?
-    {
-      ...addForce(vector(0, Input.getAxisY() * player.jumpForce))(player),
-      isGrounded: false,
-    } :
-    player;
-
-const gravity = (gravity) => (player) => addForce(vector(0, gravity))(player);
-
-const invertGravity = (gravity) => (player) =>
-  addForce(vector(0, -gravity))(player);
-
 const runningState = (speed: number) => (player) => {
   const [vx] = player.velocity;
   const isRunning = vx < -speed || (vx > speed && player.isGrounded);
@@ -169,8 +167,8 @@ const idleState = state('idle')(true);
 engine((t) => {
   const playerUpdate = pipe(
       updatePhysics(0.1),
-      movement,
-      jump,
+      movement(Input.getAxisX()),
+      jump(Input.getAxisY()),
       gravity(1),
       rectangle,
       pipe(...platforms.map((p) => collision(p))),
@@ -185,7 +183,7 @@ engine((t) => {
 
   const platformUpdate = pipe(
       updatePhysics(0.1),
-      invertGravity(0.2),
+      gravity(-0.2),
       rectangle,
       stayTopBounds,
   );

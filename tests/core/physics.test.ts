@@ -1,5 +1,6 @@
 import {addForce, hasPhysics, physics, updatePhysics} from '../../src/core';
 import {pipeWith} from '../../src/utils';
+import {gravity} from '../../src/core/physics';
 
 describe('has physics', () => {
   it('should determine if it has physics properties on obj', () => {
@@ -7,6 +8,15 @@ describe('has physics', () => {
   });
   it('should determine correctly', () => {
     expect(hasPhysics(physics({})({}))).toBeTruthy();
+  });
+  it('should determine even with falsy values', () => {
+    expect(
+        hasPhysics(
+            physics({
+              mass: 0,
+            })(),
+        ),
+    ).toBeTruthy();
   });
 });
 
@@ -37,11 +47,13 @@ describe('physics', () => {
     const physicsObj = physics({
       mass: 0,
       position: [50, 50],
+      oldpos: [2, 0],
     })({});
     expect(physicsObj.mass).toBe(0);
     expect(physicsObj.position).toStrictEqual([50, 50]);
     expect(physicsObj.velocity).toStrictEqual([0, 0]);
     expect(physicsObj.acceleration).toStrictEqual([0, 0]);
+    expect(physicsObj.oldpos).toStrictEqual([2, 0]);
   });
   it('should extend the last parameter and overwrite properties', () => {
     const defaultObj = {
@@ -66,6 +78,9 @@ describe('update physics', () => {
   it('should return a function', () => {
     const update = updatePhysics(0.1);
     expect(typeof update).toBe('function');
+  });
+  it('should throw a error if the object doesnt have the physics properties', () => {
+    expect(() => updatePhysics(0.1)({})).toThrow('physics');
   });
   it('should not calculate if 0', () => {
     const physicObj = physics()({});
@@ -125,5 +140,25 @@ describe('add force', () => {
     const physicObj = physics({position: [50, 50]})({});
     const force = addForce([20, 20]);
     expect(force(physicObj).acceleration).toStrictEqual([20, 20]);
+  });
+});
+
+describe('gravity', () => {
+  it('should throw a error if the object is not valid', () => {
+    expect(() => gravity(1)({})).toThrow('physics');
+  });
+  it('should return a object with the applied force downward', () => {
+    const physObj = physics()({});
+    expect(gravity(1)(physObj)).toEqual({
+      ...physObj,
+      acceleration: [0, 1],
+    });
+  });
+  it('should return a a object with the applied force upward', () => {
+    const physObj = physics()({});
+    expect(gravity(-1)(physObj)).toEqual({
+      ...physObj,
+      acceleration: [0, -1],
+    });
   });
 });

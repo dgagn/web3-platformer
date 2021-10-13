@@ -1,6 +1,7 @@
 import {vector} from './vector';
+import {hasRectangle} from './rectangle';
 
-const haveCollision = (rec1, rec2) =>
+export const hasCollision = (rec1, rec2) =>
   !(
     rec1.bottom < rec2.top ||
     rec1.top > rec2.bottom ||
@@ -20,50 +21,52 @@ const isRightLeftCollision = (rec1, rec2) =>
 const isLeftRightCollision = (rec1, rec2) =>
   rec1.left <= rec2.right && rec1.oldleft > rec2.oldright;
 
-const collision = (rec) => (p) => {
-  if (!haveCollision(p, rec)) return p;
-  const {width, height} = p;
-  const [px, py] = p.position;
-  const [vx, vy] = p.velocity;
+const collision = (rec) => (obj) => {
+  if (!hasRectangle(obj) || !hasRectangle(rec)) {
+    throw new Error('objects must have the rectangle properties');
+  }
+  if (!hasCollision(obj, rec)) return obj;
 
-  if (isBottomTopCollision(p, rec)) {
+  const {width, height} = obj;
+  const [[px, py], [vx, vy]] = [obj.position, obj.velocity];
+
+  if (isBottomTopCollision(obj, rec)) {
     return {
-      ...p,
+      ...obj,
       position: vector(px, rec.top - 0.1 - height),
       velocity: vector(vx, rec.velocity[1]),
       isGrounded: true,
     };
   }
 
-  if (isTopBottomCollision(p, rec)) {
+  if (isTopBottomCollision(obj, rec)) {
     return {
-      ...p,
+      ...obj,
       position: vector(px, rec.bottom + 0.1),
       velocity: vector(vx, rec.velocity[1]),
     };
   }
 
-  if (isRightLeftCollision(p, rec)) {
+  if (isRightLeftCollision(obj, rec)) {
     return {
-      ...p,
+      ...obj,
       position: vector(rec.left - 0.1 - width, py),
       velocity: vector(rec.velocity[0], vy),
     };
   }
 
-  if (isLeftRightCollision(p, rec)) {
+  if (isLeftRightCollision(obj, rec)) {
     return {
-      ...p,
+      ...obj,
       position: vector(rec.right + 0.1, py),
       velocity: vector(rec.velocity[0], vy),
     };
   }
 
-  return p;
+  return obj;
 };
 
 export {
-  haveCollision,
   collision,
   isBottomTopCollision,
   isTopBottomCollision,

@@ -1,13 +1,9 @@
 import Vector, {add, vector, scale, Vec} from './vector';
-import {curry} from '../utils';
+import {curry, isDefined} from '../utils';
 
 export const hasPhysics = (obj) =>
-  !(
-    !obj.mass ||
-    !obj.position ||
-    !obj.velocity ||
-    !obj.acceleration ||
-    !obj.oldpos
+  [obj.mass, obj.position, obj.velocity, obj.acceleration, obj.oldpos].every(
+      isDefined,
   );
 
 const physics =
@@ -16,6 +12,7 @@ const physics =
     position = Vector.zero,
     velocity = Vector.zero,
     acceleration = Vector.zero,
+    oldpos = Vector.zero,
   } = {}) =>
     (p = {}) => ({
       ...p,
@@ -23,13 +20,15 @@ const physics =
       position,
       velocity,
       acceleration,
-      oldpos: Vector.zero,
+      oldpos,
     });
 
 const updatePhysics =
   (friction: number = 0.1) =>
     (obj) => {
-      hasPhysics(obj);
+      if (!hasPhysics(obj)) {
+        throw new Error('object must have physics properties');
+      }
 
       const [[px, py], [vx, vy], [ax, ay]] = [
         obj.position,
@@ -64,5 +63,12 @@ const _addForce = (force: Vec, obj) => {
 };
 
 const addForce = curry(_addForce);
+
+export const gravity = (gravity: number) => (obj) => {
+  if (!hasPhysics(obj)) {
+    throw new Error('the object must have the physics properties');
+  }
+  return addForce(vector(0, gravity), obj);
+};
 
 export {physics, addForce, updatePhysics};

@@ -1,10 +1,16 @@
 import {physics, size, rectangle} from 'core';
 import {pipeWith} from '../../src/utils';
+import {hasRectangle} from '../../src/core/rectangle';
 
 const correctObj = pipeWith({}, physics({}), size(50, 50));
 describe('rectangle', () => {
   it('should be a function', () => {
     expect(rectangle).toBeInstanceOf(Function);
+  });
+  it('should have a rectangle properties checker', () => {
+    expect(hasRectangle({})).toBeFalsy();
+    expect(hasRectangle({})).toBeFalsy();
+    expect(hasRectangle(rectangle(correctObj))).toBeTruthy();
   });
   it('should throw if it is not a physics or sizer object', () => {
     const physicobj = physics({});

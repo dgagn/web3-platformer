@@ -1,11 +1,10 @@
 type Fn = (time: number) => void;
 
-const engine = (fn: Fn) => {
+export const engine = (fn: Fn) => {
+  // ignore coverage because request animation frame is not resolved in jest
   const cb = (time?: number) => {
     requestAnimationFrame(cb);
     fn(~~time);
   };
   return cb;
 };
-
-export default engine;
