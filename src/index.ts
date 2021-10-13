@@ -43,6 +43,8 @@ const arg = [
     current: 1,
     size: vector(32, 32),
     scale: vector(2, 2),
+    original_size: vector(32, 32),
+    offset: [-15, -14],
   },
   {
     state: 'running',
@@ -51,6 +53,8 @@ const arg = [
     current: 1,
     size: vector(32, 32),
     scale: vector(2, 2),
+    original_size: vector(32, 32),
+    offset: [-15, -14],
   },
   {
     state: 'falling',
@@ -59,6 +63,7 @@ const arg = [
     current: 1,
     size: vector(32, 32),
     scale: vector(2, 2),
+    offset: [-15, -14],
   },
   {
     state: 'jumping',
@@ -67,6 +72,7 @@ const arg = [
     current: 1,
     size: vector(32, 32),
     scale: vector(2, 2),
+    offset: [-15, -14],
   },
 ];
 
@@ -187,8 +193,6 @@ engine(() => {
   platforms = platforms.map(platformUpdate);
 })();
 
-const stepWidth = 32;
-let step = 0;
 let frames = 0;
 engine(() => {
   context.globalAlpha = 0.6;
@@ -201,49 +205,27 @@ engine(() => {
   const [px, py] = player.position;
 
   const [vx] = player.velocity;
-  const [sw, sh] = vector(64, 64);
+  const [sw, sh] = player.animation.localSize;
 
-  const image =
-    player.state === 'running' ?
-      playerRunning :
-      player.state === 'falling' ?
-      playerFalling :
-      player.state === 'jumping' ?
-      playerJumping :
-      playerImage;
+  const [fpx, fpy] = player.animation.position;
 
-  const [fpx, fpy] = [px - 15, py - 14];
   if (vx < 0) {
     context.save();
     context.translate(fpx + sw / 2, fpy + sh / 2); //  déplace notre point de rotation
     context.scale(-1, 1);
     context.translate(-(fpx + sw / 2), -(fpy + sh / 2));
   }
-  const maxSteps =
-    image === playerImage ?
-      5 :
-      image === playerRunning ?
-      5 :
-      image === playerFalling ?
-      1 :
-      image === playerJumping ?
-      1 :
-      0;
-
-  if (frames % maxSteps == 0) {
-    step = step < maxSteps - 1 ? step + 1 : 0;
-  }
 
   context.drawImage(
       player.animation.image,
-      player.animation.current * stepWidth,
+      player.animation.current * player.animation.size[0],
       0,
-      32,
-      32,
-      fpx,
-      fpy,
-      sw,
-      sh,
+      player.animation.size[0],
+      player.animation.size[0],
+      player.animation.position[0],
+      player.animation.position[1],
+      player.animation.localSize[0],
+      player.animation.localSize[1],
   );
   context.restore();
   context.strokeStyle = '#4e62e0';

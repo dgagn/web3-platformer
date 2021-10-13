@@ -1,3 +1,5 @@
+import {add, mult, scale} from './vector';
+
 const state = (state) => (boolean) => (p) => {
   return {
     ...p,
@@ -7,8 +9,8 @@ const state = (state) => (boolean) => (p) => {
 
 let frames = 0;
 let current = 0;
-export const createAnimations = (states: any[]) => (p) => {
-  const animation = states.filter((s) => s.state === p.state)[0] ?? {};
+export const createAnimations = (states: any[]) => (obj) => {
+  const animation = states.filter((s) => s.state === obj.state)[0] ?? {};
   const image = new Image();
   image.src = animation.src;
   if (frames % animation.steps == 0) {
@@ -16,11 +18,13 @@ export const createAnimations = (states: any[]) => (p) => {
   }
   frames++;
   return {
-    ...p,
+    ...obj,
     animation: {
       ...animation,
       current,
       image,
+      position: add(obj.position, animation.offset),
+      localSize: mult(animation.size, animation.scale),
     },
   };
 };

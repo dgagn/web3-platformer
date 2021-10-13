@@ -19,6 +19,9 @@ export const add = (...vx: Vec[]) =>
 export const sub = (...vx: Vec[]) =>
   vx.reduce(([ax, ay], [vx, vy]) => vector(ax - vx, ay - vy));
 
+export const mult = (...vx: Vec[]) =>
+  vx.reduce(([ax, ay], [vx, vy]) => vector(ax * vx, ay * vy), vector(1, 1));
+
 export const dot = ([x1, y1], [x2, y2]) => x1 * x2 + y1 * y2;
 
 export const normalize = (v: Vec) => scale(v, 1 / (mag(v) || 1));
