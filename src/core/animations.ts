@@ -1,5 +1,7 @@
-import {add, mult, scale} from './vector';
+import {add, mult} from './vector';
 
+// todo: add unit tests for animations
+// todo: has animation properties
 const state = (state) => (boolean) => (p) => {
   return {
     ...p,

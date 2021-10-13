@@ -1,6 +1,8 @@
 import {vector} from './vector';
 import {hasRectangle} from './rectangle';
 
+// todo: add a tagging system for all objects to detect collision on tag
+
 export const hasCollision = (rec1, rec2) =>
   !(
     rec1.bottom < rec2.top ||

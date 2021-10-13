@@ -12,6 +12,7 @@ export {
   dist,
   draw,
   text,
+  mult,
 } from './vector';
 export {size, hasSize} from './size';
 export {rectangle, hasRectangle} from './rectangle';

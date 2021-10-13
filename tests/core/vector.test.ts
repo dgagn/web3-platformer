@@ -1,4 +1,15 @@
-import {vector, Vector, scale, add, sub, dot, normalize, mag, dist} from 'core';
+import {
+  vector,
+  Vector,
+  scale,
+  add,
+  sub,
+  dot,
+  normalize,
+  mag,
+  dist,
+  mult,
+} from 'core';
 
 describe('vector', () => {
   it('should return a [number, number]', () => {
@@ -36,6 +47,10 @@ describe('vector functions', () => {
   it('should subtract vectors together', () => {
     const v = sub([3, 3], [1, 1], [1, 1]); // ?
     expect(v).toEqual([1, 1]);
+  });
+  it('should multiply vectors togheter', () => {
+    const v = mult([32, 32], [2, 2]); // ?
+    expect(v).toEqual([64, 64]);
   });
   it('should multiplie two vectors together to get the dot', () => {
     const v = dot([3, 4], [5, 5]); // ?

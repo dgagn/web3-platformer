@@ -1,5 +1,7 @@
 import {vector} from './vector';
 
+// todo: add unit test for inputs
+
 const createKeyManager = (): any => {
   const keyManager = {};
   document.addEventListener('keydown', ({code}) => (keyManager[code] = true));
