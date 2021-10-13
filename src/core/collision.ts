@@ -28,13 +28,17 @@ const collision = (rec) => (obj) => {
   if (!hasCollision(obj, rec)) return obj;
 
   const {width, height} = obj;
-  const [[px, py], [vx, vy]] = [obj.position, obj.velocity];
+  const [[px, py], [vx, vy], [rvx, rvy]] = [
+    obj.position,
+    obj.velocity,
+    rec.velocity,
+  ];
 
   if (isBottomTopCollision(obj, rec)) {
     return {
       ...obj,
       position: vector(px, rec.top - 0.1 - height),
-      velocity: vector(vx, rec.velocity[1]),
+      velocity: vector(vx, rvy),
       isGrounded: true,
     };
   }
@@ -43,7 +47,7 @@ const collision = (rec) => (obj) => {
     return {
       ...obj,
       position: vector(px, rec.bottom + 0.1),
-      velocity: vector(vx, rec.velocity[1]),
+      velocity: vector(vx, rvy),
     };
   }
 
@@ -51,7 +55,7 @@ const collision = (rec) => (obj) => {
     return {
       ...obj,
       position: vector(rec.left - 0.1 - width, py),
-      velocity: vector(rec.velocity[0], vy),
+      velocity: vector(rvx, vy),
     };
   }
 
@@ -59,7 +63,7 @@ const collision = (rec) => (obj) => {
     return {
       ...obj,
       position: vector(rec.right + 0.1, py),
-      velocity: vector(rec.velocity[0], vy),
+      velocity: vector(rvx, vy),
     };
   }
 

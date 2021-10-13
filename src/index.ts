@@ -1,4 +1,4 @@
-import {pipe, random} from './utils';
+import {pipe, pipeWith, random} from './utils';
 import {
   addForce,
   physics,
@@ -15,7 +15,6 @@ import {
   engine,
   jumpable,
   movable,
-  hasPhysics,
   hasRectangle,
 } from './core';
 import Input from './game/input-manager';
@@ -78,41 +77,44 @@ const state = (state) => (boolean) => (p) => {
   };
 };
 
-let player = pipe(
+let player = pipeWith(
+    {},
     physics({position: [50, 50]}),
     size(32, 50),
     state('idle')(true),
     jumpable(14),
     movable(1),
     rectangle,
-)({});
+);
 
-let floor = pipe(
+let floor = pipeWith(
+    {},
     physics({position: [0, canvas.height - 20]}),
     size(canvas.width, 20),
     rectangle,
-)({});
+);
 
 let platforms = Array(10)
     .fill(true)
     .map((_) =>
-      pipe(
+      pipeWith(
+          {},
           physics({
             position: [random(0, canvas.width), random(0, canvas.height)],
           }),
           size(random(50, 100), random(10, 20)),
           rectangle,
-      )({}),
+      ),
     );
 
-const stayTopBounds = (p) => {
-  if (p.bottom <= 0) {
+const stayTopBounds = (obj) => {
+  if (obj.bottom <= 0) {
     return {
-      ...p,
-      position: [random(0, canvas.width - p.width), canvas.height],
+      ...obj,
+      position: [random(0, canvas.width - obj.width), canvas.height],
     };
   }
-  return p;
+  return obj;
 };
 
 const gameBounds = (obj) => {
@@ -158,13 +160,14 @@ const jumpingState = (jumpingForce: number) => (player) => {
 const idleState = state('idle')(true);
 
 engine(() => {
-  const playerUpdate = pipe(
+  player = pipeWith(
+      player,
       updatePhysics(0.1),
       movement(Input.getAxisX()),
       jump(Input.getAxisY()),
       gravity(1),
       rectangle,
-      pipe(...platforms.map((p) => collision(p))),
+      pipe(...platforms.map(collision)),
       collision(floor),
       gameBounds,
       idleState,
@@ -174,18 +177,15 @@ engine(() => {
       createAnimations(arg),
   );
 
+  floor = pipeWith(floor, updatePhysics(0.1), rectangle);
+
   const platformUpdate = pipe(
       updatePhysics(0.1),
       gravity(-0.2),
       rectangle,
       stayTopBounds,
   );
-
-  const floorUpdate = pipe(updatePhysics(0.1), rectangle);
-
-  player = playerUpdate(player);
-  platforms = platforms.map((p) => platformUpdate(p));
-  floor = floorUpdate(floor);
+  platforms = platforms.map(platformUpdate);
 })();
 
 const stepWidth = 32;
