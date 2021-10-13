@@ -94,18 +94,17 @@ let floor = pipeWith(
     rectangle,
 );
 
-let platforms = Array(10)
-    .fill(true)
-    .map((_) =>
-      pipeWith(
-          {},
-          physics({
-            position: [random(0, canvas.width), random(0, canvas.height)],
-          }),
-          size(random(50, 100), random(10, 20)),
-          rectangle,
-      ),
-    );
+const platform = (_) =>
+  pipeWith(
+      {},
+      physics({
+        position: [random(0, canvas.width), random(0, canvas.height)],
+      }),
+      size(random(50, 100), random(10, 20)),
+      rectangle,
+  );
+
+let platforms = Array(10).fill(true).map(platform);
 
 const stayTopBounds = (obj) => {
   if (obj.bottom <= 0) {
