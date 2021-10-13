@@ -14,8 +14,8 @@ const physics =
     acceleration = Vector.zero,
     oldpos = Vector.zero,
   } = {}) =>
-    (p = {}) => ({
-      ...p,
+    (obj = {}) => ({
+      ...obj,
       mass,
       position,
       velocity,

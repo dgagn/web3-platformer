@@ -13,17 +13,17 @@ export const hasRectangle = (obj) =>
     obj.oldright,
   ].every(isDefined);
 
-const rectangle = (p) => {
-  if (!hasPhysics(p) || !hasSize(p)) {
+const rectangle = (obj) => {
+  if (!hasPhysics(obj) || !hasSize(obj)) {
     throw new Error('the object must have physics and size properties');
   }
 
-  const [px, py] = p.position;
-  const [ox, oy] = p.oldpos;
-  const {width, height} = p;
+  const [px, py] = obj.position;
+  const [ox, oy] = obj.oldpos;
+  const {width, height} = obj;
 
   return {
-    ...p,
+    ...obj,
     top: py,
     bottom: py + height,
     left: px,
