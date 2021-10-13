@@ -1,10 +1,8 @@
 import engine from './core/engine';
 import {pipe, random} from './utils';
-import {addForce, physics, updatePhysics} from './core/physics';
-import size from './core/size';
+import {addForce, physics, updatePhysics, size, rectangle} from './core';
 import {draw, text, vector} from './core/vector';
 import Input from './game/input-manager';
-import {rectangle} from './core/rectangle';
 import {collision} from './core/collision';
 import {createAnimations} from './core/animations';
 

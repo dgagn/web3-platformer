@@ -17,7 +17,7 @@ const physics =
     velocity = Vector.zero,
     acceleration = Vector.zero,
   } = {}) =>
-    (p: any = {}) => ({
+    (p = {}) => ({
       ...p,
       mass,
       position,
@@ -51,10 +51,10 @@ const updatePhysics =
     };
 
 const _addForce = (force: Vec, obj) => {
-  hasPhysics(obj);
-
-  if (force.length !== 2) {
-    throw new Error('the force needs to be a vector');
+  if (!hasPhysics(obj) || force.length !== 2) {
+    throw new Error(
+        'the object needs to have the physics properties and force needs to be a vector',
+    );
   }
 
   return {

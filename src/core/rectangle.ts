@@ -1,5 +1,4 @@
-import {hasPhysics} from './physics';
-import {hasSize} from './sizer';
+import {hasSize, hasPhysics} from './index';
 
 const rectangle = (p) => {
   if (!hasPhysics(p) || !hasSize(p)) {

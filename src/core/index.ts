@@ -1,5 +1,5 @@
 // ignore file coverage
-export {physics, updatePhysics, addForce} from './physics';
+export {physics, updatePhysics, addForce, hasPhysics} from './physics';
 export {
   default as Vector,
   vector,
@@ -11,4 +11,5 @@ export {
   mag,
   dist,
 } from './vector';
-export {sizer} from './sizer';
+export {size, hasSize} from './size';
+export {rectangle} from './rectangle';
