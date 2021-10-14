@@ -18,10 +18,10 @@ describe('has collision', () => {
   });
   it('should not have a collision if rec1 is far away', () => {
     const newRec1 = pipeWith(
-        {},
-        physics({position: [100, 100]}),
-        size(30, 30),
-        rectangle,
+      {},
+      physics({position: [100, 100]}),
+      size(30, 30),
+      rectangle
     );
     expect(hasCollision(newRec1, rec2)).toBeFalsy();
   });
@@ -51,32 +51,32 @@ describe('resolve collisions', () => {
   });
   it('should return the default object if no collision', () => {
     const newRec1 = pipeWith(
-        {},
-        physics({position: [100, 100]}),
-        size(30, 30),
-        rectangle,
+      {},
+      physics({position: [100, 100]}),
+      size(30, 30),
+      rectangle
     );
     const noCollision = collision(newRec1)(rec2); // ?
     expect(noCollision).toEqual(rec2);
   });
   it('should return the default object when collision is none of them', () => {
     const r1 = pipeWith(
-        {},
-        physics({
-          position: [0, 0],
-          oldpos: [0, 0],
-        }),
-        size(100, 100),
-        rectangle,
+      {},
+      physics({
+        position: [0, 0],
+        oldpos: [0, 0],
+      }),
+      size(100, 100),
+      rectangle
     );
     const r2 = pipeWith(
-        {},
-        physics({
-          position: [0, 10],
-          oldpos: [0, 100],
-        }),
-        size(100, 100),
-        rectangle,
+      {},
+      physics({
+        position: [0, 10],
+        oldpos: [0, 100],
+      }),
+      size(100, 100),
+      rectangle
     );
     const noValidCollision = collision(r1)(r2); // ?
     expect(noValidCollision).toEqual(r2);
@@ -85,24 +85,24 @@ describe('resolve collisions', () => {
   it('should resolve bottom top collision', () => {
     // todo: check for of type jumper to add isgrounded
     const r1 = pipeWith(
-        {},
-        physics({
-          position: [76.99097598085001, 530.8],
-          oldpos: [76.98997331205557, 529.9],
-          velocity: [0.001, 0.9],
-        }),
-        size(32, 50),
-        rectangle,
+      {},
+      physics({
+        position: [76.99097598085001, 530.8],
+        oldpos: [76.98997331205557, 529.9],
+        velocity: [0.001, 0.9],
+      }),
+      size(32, 50),
+      rectangle
     );
     const r2 = pipeWith(
-        {},
-        physics({
-          position: [0, 580],
-          oldpos: [0, 580],
-          velocity: [1, 1],
-        }),
-        size(800, 20),
-        rectangle,
+      {},
+      physics({
+        position: [0, 580],
+        oldpos: [0, 580],
+        velocity: [1, 1],
+      }),
+      size(800, 20),
+      rectangle
     );
 
     const topBottom = collision(r2)(r1); // ?
@@ -116,24 +116,24 @@ describe('resolve collisions', () => {
   });
   it('should return if top bottom collision', () => {
     const r1 = pipeWith(
-        {},
-        physics({
-          position: [76.99097598085001, 530.8],
-          oldpos: [76.98997331205557, 529.9],
-          velocity: [0.001, 0.9],
-        }),
-        size(32, 50),
-        rectangle,
+      {},
+      physics({
+        position: [76.99097598085001, 530.8],
+        oldpos: [76.98997331205557, 529.9],
+        velocity: [0.001, 0.9],
+      }),
+      size(32, 50),
+      rectangle
     );
     const r2 = pipeWith(
-        {},
-        physics({
-          position: [0, 580],
-          oldpos: [0, 580],
-          velocity: [1, 1],
-        }),
-        size(800, 20),
-        rectangle,
+      {},
+      physics({
+        position: [0, 580],
+        oldpos: [0, 580],
+        velocity: [1, 1],
+      }),
+      size(800, 20),
+      rectangle
     );
 
     const topBottom = collision(r1)(r2); // ?

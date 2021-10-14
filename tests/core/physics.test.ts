@@ -11,11 +11,11 @@ describe('has physics', () => {
   });
   it('should determine even with falsy values', () => {
     expect(
-        hasPhysics(
-            physics({
-              mass: 0,
-            })(),
-        ),
+      hasPhysics(
+        physics({
+          mass: 0,
+        })()
+      )
     ).toBeTruthy();
   });
 });

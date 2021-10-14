@@ -1,7 +1,7 @@
 import {hasSize, hasPhysics} from './index';
 import {isDefined} from '../utils';
 
-export const hasRectangle = (obj) =>
+export const hasRectangle = obj =>
   [
     obj.top,
     obj.bottom,
@@ -13,7 +13,7 @@ export const hasRectangle = (obj) =>
     obj.oldright,
   ].every(isDefined);
 
-const rectangle = (obj) => {
+const rectangle = obj => {
   if (!hasPhysics(obj) || !hasSize(obj)) {
     throw new Error('the object must have physics and size properties');
   }

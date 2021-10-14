@@ -33,11 +33,11 @@ export const dist = ([x1, y1], [x2, y2]) =>
 
 // ignore coverage
 const _drawVector = (
-    context: CanvasRenderingContext2D,
-    [v1x, v1y],
-    [v2x, v2y],
-    n,
-    color,
+  context: CanvasRenderingContext2D,
+  [v1x, v1y],
+  [v2x, v2y],
+  n,
+  color
 ) => {
   context.beginPath();
   context.moveTo(v2x, v2y);
@@ -50,10 +50,10 @@ const _drawVector = (
 
 // ignore coverage
 const _textVector = (
-    context: CanvasRenderingContext2D,
-    [v1x, v1y],
-    [v2x, v2y],
-    prefix: string,
+  context: CanvasRenderingContext2D,
+  [v1x, v1y],
+  [v2x, v2y],
+  prefix: string
 ) => {
   context.fillText(prefix + `: [${round(v1x, 2)}, ${round(v1y, 2)}]`, v2x, v2y);
 };

@@ -6,18 +6,18 @@ describe('jumpable', () => {
   it('should say if a object is a jumpable object', () => {
     expect(hasJumpable({})).toBeFalsy();
     expect(
-        hasJumpable({
-          isGrounded: true,
-          jumpForce: 4,
-        }),
+      hasJumpable({
+        isGrounded: true,
+        jumpForce: 4,
+      })
     ).toBeTruthy();
   });
   it('should return true even if falsy values', () => {
     expect(
-        hasJumpable({
-          isGrounded: false,
-          jumpForce: 0,
-        }),
+      hasJumpable({
+        isGrounded: false,
+        jumpForce: 0,
+      })
     ).toBeTruthy();
   });
   it('should create a jumpable object', () => {

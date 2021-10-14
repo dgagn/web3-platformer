@@ -44,9 +44,9 @@ describe('rectangle', () => {
   });
   it('should update rectangle on new position', () => {
     const newCorrect = pipeWith(
-        {},
-        physics({position: [20, 30]}),
-        size(10, 20),
+      {},
+      physics({position: [20, 30]}),
+      size(10, 20)
     );
     expect(rectangle(newCorrect)).toEqual({
       ...newCorrect,

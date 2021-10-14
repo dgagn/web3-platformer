@@ -1,7 +1,7 @@
 import {pipe, pipeWith} from 'utils';
 
-const inc = (a) => a + 1;
-const dec = (a) => a - 1;
+const inc = a => a + 1;
+const dec = a => a - 1;
 
 describe('pipe', () => {
   it('should return a function', () => {

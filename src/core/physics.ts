@@ -1,9 +1,9 @@
 import Vector, {add, vector, scale, Vec} from './vector';
 import {curry, isDefined} from '../utils';
 
-export const hasPhysics = (obj) =>
+export const hasPhysics = obj =>
   [obj.mass, obj.position, obj.velocity, obj.acceleration, obj.oldpos].every(
-      isDefined,
+    isDefined
   );
 
 const physics =
@@ -14,45 +14,45 @@ const physics =
     acceleration = Vector.zero,
     oldpos = Vector.zero,
   } = {}) =>
-    (obj = {}) => ({
-      ...obj,
-      mass,
-      position,
-      velocity,
-      acceleration,
-      oldpos,
-    });
+  (obj = {}) => ({
+    ...obj,
+    mass,
+    position,
+    velocity,
+    acceleration,
+    oldpos,
+  });
 
 const updatePhysics =
   (friction: number = 0.1) =>
-    (obj) => {
-      if (!hasPhysics(obj)) {
-        throw new Error('object must have physics properties');
-      }
+  obj => {
+    if (!hasPhysics(obj)) {
+      throw new Error('object must have physics properties');
+    }
 
-      const [[px, py], [vx, vy], [ax, ay]] = [
-        obj.position,
-        obj.velocity,
-        obj.acceleration,
-      ];
-      const oldpos = vector(px, py);
-      const [uvx, uvy] = vector(
-          (vx + ax) * (1 - friction),
-          (vy + ay) * (1 - friction),
-      );
-      return {
-        ...obj,
-        position: vector(px + uvx, py + uvy),
-        velocity: vector(uvx, uvy),
-        acceleration: Vector.zero,
-        oldpos,
-      };
+    const [[px, py], [vx, vy], [ax, ay]] = [
+      obj.position,
+      obj.velocity,
+      obj.acceleration,
+    ];
+    const oldpos = vector(px, py);
+    const [uvx, uvy] = vector(
+      (vx + ax) * (1 - friction),
+      (vy + ay) * (1 - friction)
+    );
+    return {
+      ...obj,
+      position: vector(px + uvx, py + uvy),
+      velocity: vector(uvx, uvy),
+      acceleration: Vector.zero,
+      oldpos,
     };
+  };
 
 const _addForce = (force: Vec, obj) => {
   if (!hasPhysics(obj) || force.length !== 2) {
     throw new Error(
-        'the object needs to have the physics properties and force needs to be a vector',
+      'the object needs to have the physics properties and force needs to be a vector'
     );
   }
 
@@ -64,7 +64,7 @@ const _addForce = (force: Vec, obj) => {
 
 const addForce = curry(_addForce);
 
-export const gravity = (gravity: number) => (obj) => {
+export const gravity = (gravity: number) => obj => {
   if (!hasPhysics(obj)) {
     throw new Error('the object must have the physics properties');
   }

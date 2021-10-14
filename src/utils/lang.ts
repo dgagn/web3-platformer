@@ -1,1 +1,1 @@
-export const isDefined = (value) => typeof value !== 'undefined';
+export const isDefined = value => typeof value !== 'undefined';

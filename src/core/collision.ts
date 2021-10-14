@@ -23,7 +23,7 @@ const isRightLeftCollision = (rec1, rec2) =>
 const isLeftRightCollision = (rec1, rec2) =>
   rec1.left <= rec2.right && rec1.oldleft > rec2.oldright;
 
-const collision = (rec) => (obj) => {
+const collision = rec => obj => {
   if (!hasRectangle(obj) || !hasRectangle(rec)) {
     throw new Error('objects must have the rectangle properties');
   }

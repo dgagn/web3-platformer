@@ -76,7 +76,7 @@ const arg = [
   },
 ];
 
-const state = (state) => (boolean) => (p) => {
+const state = state => boolean => p => {
   return {
     ...p,
     state: boolean ? state : p.state,
@@ -84,35 +84,35 @@ const state = (state) => (boolean) => (p) => {
 };
 
 let player = pipeWith(
-    {},
-    physics({position: [50, 50]}),
-    size(32, 50),
-    state('idle')(true),
-    jumpable(14),
-    movable(1),
-    rectangle,
+  {},
+  physics({position: [50, 50]}),
+  size(32, 50),
+  state('idle')(true),
+  jumpable(14),
+  movable(1),
+  rectangle
 );
 
 let floor = pipeWith(
-    {},
-    physics({position: [0, canvas.height - 20]}),
-    size(canvas.width, 20),
-    rectangle,
+  {},
+  physics({position: [0, canvas.height - 20]}),
+  size(canvas.width, 20),
+  rectangle
 );
 
-const platform = (_) =>
+const platform = _ =>
   pipeWith(
-      {},
-      physics({
-        position: [random(0, canvas.width), random(0, canvas.height)],
-      }),
-      size(random(50, 100), random(10, 20)),
-      rectangle,
+    {},
+    physics({
+      position: [random(0, canvas.width), random(0, canvas.height)],
+    }),
+    size(random(50, 100), random(10, 20)),
+    rectangle
   );
 
 let platforms = Array(10).fill(true).map(platform);
 
-const stayTopBounds = (obj) => {
+const stayTopBounds = obj => {
   if (obj.bottom <= 0) {
     return {
       ...obj,
@@ -122,7 +122,7 @@ const stayTopBounds = (obj) => {
   return obj;
 };
 
-const gameBounds = (obj) => {
+const gameBounds = obj => {
   // rectangle checks for physics and size
   if (!hasRectangle(obj)) {
     throw new Error('the object must have the rectangle properties');
@@ -144,19 +144,19 @@ const gameBounds = (obj) => {
   return obj;
 };
 
-const runningState = (speed: number) => (player) => {
+const runningState = (speed: number) => player => {
   const [vx] = player.velocity;
   const isRunning = vx < -speed || (vx > speed && player.isGrounded);
   return state('running')(isRunning)(player);
 };
 
-const fallingState = (fallingForce: number) => (player) => {
+const fallingState = (fallingForce: number) => player => {
   const [, vy] = player.velocity;
   const isFalling = !player.isGrounded && vy > fallingForce;
   return state('falling')(isFalling)(player);
 };
 
-const jumpingState = (jumpingForce: number) => (player) => {
+const jumpingState = (jumpingForce: number) => player => {
   const [, vy] = player.velocity;
   const isJumping = !player.isGrounded && vy < -jumpingForce;
   return state('jumping')(isJumping)(player);
@@ -166,29 +166,29 @@ const idleState = state('idle')(true);
 
 engine(() => {
   player = pipeWith(
-      player,
-      updatePhysics(0.1),
-      movement(Input.getAxisX()),
-      jump(Input.getAxisY()),
-      gravity(1),
-      rectangle,
-      pipe(...platforms.map(collision)),
-      collision(floor),
-      gameBounds,
-      idleState,
-      runningState(2),
-      jumpingState(-10),
-      fallingState(5),
-      createAnimations(arg),
+    player,
+    updatePhysics(0.1),
+    movement(Input.getAxisX()),
+    jump(Input.getAxisY()),
+    gravity(1),
+    rectangle,
+    pipe(...platforms.map(collision)),
+    collision(floor),
+    gameBounds,
+    idleState,
+    runningState(2),
+    jumpingState(-10),
+    fallingState(5),
+    createAnimations(arg)
   );
 
   floor = pipeWith(floor, updatePhysics(0.1), rectangle);
 
   const platformUpdate = pipe(
-      updatePhysics(0.1),
-      gravity(-0.2),
-      rectangle,
-      stayTopBounds,
+    updatePhysics(0.1),
+    gravity(-0.2),
+    rectangle,
+    stayTopBounds
   );
   platforms = platforms.map(platformUpdate);
 })();
@@ -217,44 +217,44 @@ engine(() => {
   }
 
   context.drawImage(
-      player.animation.image,
-      player.animation.current * player.animation.size[0],
-      0,
-      player.animation.size[0],
-      player.animation.size[0],
-      player.animation.position[0],
-      player.animation.position[1],
-      player.animation.localSize[0],
-      player.animation.localSize[1],
+    player.animation.image,
+    player.animation.current * player.animation.size[0],
+    0,
+    player.animation.size[0],
+    player.animation.size[0],
+    player.animation.position[0],
+    player.animation.position[1],
+    player.animation.localSize[0],
+    player.animation.localSize[1]
   );
   context.restore();
   context.strokeStyle = '#4e62e0';
   context.strokeRect(px, py, player.width, player.height);
   context.strokeStyle = '#000';
 
-  platforms.forEach((platform) => {
+  platforms.forEach(platform => {
     context.fillRect(
-        platform.position[0],
-        platform.position[1],
-        platform.width,
-        platform.height,
+      platform.position[0],
+      platform.position[1],
+      platform.width,
+      platform.height
     );
   });
 
   context.fillRect(
-      floor.position[0],
-      floor.position[1],
-      floor.width,
-      floor.height,
+    floor.position[0],
+    floor.position[1],
+    floor.width,
+    floor.height
   );
 
   drawVec(player.velocity)(
-      vector(
-          player.position[0] + player.width / 2,
-          player.position[1] + player.height / 2,
-      ),
-      10,
-      'red',
+    vector(
+      player.position[0] + player.width / 2,
+      player.position[1] + player.height / 2
+    ),
+    10,
+    'red'
   );
 
   textVec(player.velocity)(vector(400, 400), 'velocity');

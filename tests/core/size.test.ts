@@ -14,8 +14,8 @@ describe('size', () => {
   });
   it('should add a property and keep all others', () => {
     const sizer = size(
-        100,
-        50,
+      100,
+      50
     )({
       hello: true,
     }); // ?
