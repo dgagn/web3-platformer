@@ -6,7 +6,7 @@ export const hasPhysics = obj =>
     isDefined
   );
 
-const physics =
+export const physics =
   ({
     mass = 1,
     position = Vector.zero,
@@ -23,7 +23,7 @@ const physics =
     oldpos,
   });
 
-const updatePhysics =
+export const updatePhysics =
   (friction: number = 0.1) =>
   obj => {
     if (!hasPhysics(obj)) {
@@ -62,7 +62,7 @@ const _addForce = (force: Vec, obj) => {
   };
 };
 
-const addForce = curry(_addForce);
+export const addForce = curry(_addForce);
 
 export const gravity = (gravity: number) => obj => {
   if (!hasPhysics(obj)) {
@@ -70,5 +70,3 @@ export const gravity = (gravity: number) => obj => {
   }
   return addForce(vector(0, gravity), obj);
 };
-
-export {physics, addForce, updatePhysics};

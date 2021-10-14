@@ -11,19 +11,19 @@ export const hasCollision = (rec1, rec2) =>
     rec1.right < rec2.left
   );
 
-const isBottomTopCollision = (rec1, rec2) =>
+export const isBottomTopCollision = (rec1, rec2) =>
   rec1.bottom >= rec2.top && rec1.oldbottom < rec2.oldtop;
 
-const isTopBottomCollision = (rec1, rec2) =>
+export const isTopBottomCollision = (rec1, rec2) =>
   rec1.top <= rec2.bottom && rec1.oldtop > rec2.oldbottom;
 
-const isRightLeftCollision = (rec1, rec2) =>
+export const isRightLeftCollision = (rec1, rec2) =>
   rec1.right >= rec2.left && rec1.oldright < rec2.oldleft;
 
-const isLeftRightCollision = (rec1, rec2) =>
+export const isLeftRightCollision = (rec1, rec2) =>
   rec1.left <= rec2.right && rec1.oldleft > rec2.oldright;
 
-const collision = rec => obj => {
+export const collision = rec => obj => {
   if (!hasRectangle(obj) || !hasRectangle(rec)) {
     throw new Error('objects must have the rectangle properties');
   }
@@ -70,12 +70,4 @@ const collision = rec => obj => {
   }
 
   return obj;
-};
-
-export {
-  collision,
-  isBottomTopCollision,
-  isTopBottomCollision,
-  isLeftRightCollision,
-  isRightLeftCollision,
 };

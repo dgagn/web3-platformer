@@ -13,7 +13,7 @@ export const hasRectangle = obj =>
     obj.oldright,
   ].every(isDefined);
 
-const rectangle = obj => {
+export const rectangle = obj => {
   if (!hasPhysics(obj) || !hasSize(obj)) {
     throw new Error('the object must have physics and size properties');
   }
@@ -34,5 +34,3 @@ const rectangle = obj => {
     oldright: ox + width,
   };
 };
-
-export {rectangle};

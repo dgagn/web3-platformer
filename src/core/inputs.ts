@@ -11,12 +11,12 @@ const createKeyManager = (): any => {
 
 const keyManager = createKeyManager();
 
-const initButtonDown =
+export const initButtonDown =
   <T>(im: T) =>
   (key: keyof T) =>
     !!keyManager[im[key]];
 
-const createAxis =
+export const createAxis =
   <T>(im: T) =>
   (leftKey: keyof T, rightKey: keyof T, jumpKey: keyof T) => {
     const buttonDown = initButtonDown(im);
@@ -25,8 +25,6 @@ const createAxis =
     const jump = buttonDown(jumpKey);
     return vector(left && right ? 0 : left ? -1 : right ? 1 : 0, jump ? -1 : 0);
   };
-
-export {createAxis, initButtonDown};
 
 export default {
   initButtonDown,
