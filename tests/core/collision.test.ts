@@ -1,13 +1,15 @@
+import {pipeWith} from 'utils';
 import {
+  physics,
+  rectangle,
+  size,
   collision,
   hasCollision,
   isBottomTopCollision,
   isLeftRightCollision,
   isRightLeftCollision,
   isTopBottomCollision,
-} from '../../src/core/collision';
-import {pipeWith} from '../../src/utils';
-import {physics, rectangle, size} from '../../src/core';
+} from 'core';
 
 const rec1 = pipeWith({}, physics({}), size(64, 64), rectangle);
 const rec2 = pipeWith({}, physics({}), size(64, 64), rectangle);

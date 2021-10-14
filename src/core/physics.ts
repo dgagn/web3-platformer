@@ -75,11 +75,11 @@ const _addForce = (force: Vec, obj) => {
  */
 export const addForce = curry(_addForce);
 
-const forc = addForce();
-
 export const gravity = (gravity: number) => obj => {
   if (!hasPhysics(obj)) {
     throw new Error('the object must have the physics properties');
   }
   return addForce(vector(0, gravity), obj);
 };
+
+const hello = true;

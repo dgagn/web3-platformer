@@ -1,6 +1,5 @@
-import {physics, size, rectangle} from 'core';
-import {pipeWith} from '../../src/utils';
-import {hasRectangle} from '../../src/core/rectangle';
+import {physics, size, rectangle, hasRectangle} from 'core';
+import {pipeWith} from 'utils';
 
 const correctObj = pipeWith({}, physics({}), size(50, 50));
 describe('rectangle', () => {

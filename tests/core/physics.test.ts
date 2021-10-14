@@ -1,6 +1,5 @@
-import {addForce, hasPhysics, physics, updatePhysics} from '../../src/core';
-import {pipeWith} from '../../src/utils';
-import {gravity} from '../../src/core/physics';
+import {addForce, hasPhysics, physics, updatePhysics, gravity} from 'core';
+import {pipeWith} from 'utils';
 
 describe('has physics', () => {
   it('should determine if it has physics properties on obj', () => {

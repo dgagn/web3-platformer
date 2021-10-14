@@ -1,6 +1,5 @@
-import {hasMovable, movable, movement} from '../../src/core/movable';
-import {pipeWith} from '../../src/utils';
-import {physics, size} from '../../src/core';
+import {hasMovable, movable, movement, physics, size} from 'core';
+import {pipeWith} from 'utils';
 
 describe('movable', () => {
   it('should say if a object is movable', () => {

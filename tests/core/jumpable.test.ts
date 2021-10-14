@@ -1,5 +1,5 @@
-import {pipeWith} from '../../src/utils';
-import {physics, size, hasJumpable, jump, jumpable} from '../../src/core';
+import {pipeWith} from 'utils';
+import {physics, size, hasJumpable, jump, jumpable} from 'core';
 
 describe('jumpable', () => {
   it('should say if a object is a jumpable object', () => {
