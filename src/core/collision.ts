@@ -3,6 +3,15 @@ import {hasRectangle} from './rectangle';
 
 // todo: add a tagging system for all objects to detect collision on tag
 
+/**
+ * Permet de savoir si il y a une collision entre deux
+ * rectangles.
+ *
+ * @param {Object} rec1 - le premier rectangle
+ * @param {Object} rec2 - le deuxième rectangle
+ * @return {boolean} - un booléen pour savoir si il y a une
+ * collision entre deux rectangles.
+ */
 export const hasCollision = (rec1, rec2) =>
   !(
     rec1.bottom < rec2.top ||
@@ -11,15 +20,62 @@ export const hasCollision = (rec1, rec2) =>
     rec1.right < rec2.left
   );
 
+/**
+ * Permet de savoir si la collision est une collision de
+ * type bas à haut.
+ *
+ * @example
+ * // Un joueur en haut d'une plateforme
+ * @param {Object} rec1 - le rectangle pour vérifier le bas
+ * @param {Object} rec2 - le rectangle pour vérifier le haut
+ * @return {boolean} - un booléen pour savoir si le rectangle est
+ * en collision (le bas du rectangle 1 sur le haut du rectangle 2)
+ */
 export const isBottomTopCollision = (rec1, rec2) =>
   rec1.bottom >= rec2.top && rec1.oldbottom < rec2.oldtop;
 
+/**
+ * Permet de savoir si la collision est une collision de
+ * type haut à bas.
+ *
+ * @example
+ * // Un joueur qui saute et a une collision avec le haut d'une
+ * // plateforme
+ * @param {Object} rec1 - le rectangle pour vérifier le haut
+ * @param {Object} rec2 - le rectangle pour vérifier le bas
+ * @return {boolean} - un booléen pour savoir si le rectangle est
+ * en collision (le haut du rectangle 1 sur le bas du rectangle 2)
+ */
 export const isTopBottomCollision = (rec1, rec2) =>
   rec1.top <= rec2.bottom && rec1.oldtop > rec2.oldbottom;
 
+/**
+ * Permet de savoir si la collision est une collision de
+ * type droite à gauche.
+ *
+ * @example
+ * // Un joueur qui saute et a une collision de droite avec le coté gauche
+ * // d'une plateforme
+ * @param {Object} rec1 - le rectangle pour vérifier la droite
+ * @param {Object} rec2 - le rectangle pour vérifier la gauche
+ * @return {boolean} - un booléen pour savoir si le rectangle est
+ * en collision (la droite du rectangle 1 sur la gauche du rectangle 2)
+ */
 export const isRightLeftCollision = (rec1, rec2) =>
   rec1.right >= rec2.left && rec1.oldright < rec2.oldleft;
 
+/**
+ * Permet de savoir si la collision est une collision de
+ * type haut à bas.
+ *
+ * @example
+ * // Un joueur qui saute et a une collision de gauche avec le coté droite
+ * // d'une plateforme
+ * @param {Object} rec1 - le rectangle pour vérifier la gauche
+ * @param {Object} rec2 - le rectangle pour vérifier la droite
+ * @return {boolean} - un booléen pour savoir si le rectangle est
+ * en collision (la gauche du rectangle 1 sur la droite du rectangle 2)
+ */
 export const isLeftRightCollision = (rec1, rec2) =>
   rec1.left <= rec2.right && rec1.oldleft > rec2.oldright;
 

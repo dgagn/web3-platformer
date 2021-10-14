@@ -1,6 +1,6 @@
-import {curry, curryN} from 'utils';
+import {curry, curryN} from 'utils/curry';
 
-const sum = (a, b, c) => a + b + c;
+const sum = (a: number, b: number, c: number) => a + b + c;
 
 describe('curry', () => {
   it('should curry the function with a length of 3', () => {

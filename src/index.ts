@@ -193,7 +193,6 @@ engine(() => {
   platforms = platforms.map(platformUpdate);
 })();
 
-let frames = 0;
 engine(() => {
   context.globalAlpha = 0.6;
   context.imageSmoothingEnabled = false;
@@ -211,7 +210,7 @@ engine(() => {
 
   if (vx < 0) {
     context.save();
-    context.translate(fpx + sw / 2, fpy + sh / 2); //  déplace notre point de rotation
+    context.translate(fpx + sw / 2, fpy + sh / 2);
     context.scale(-1, 1);
     context.translate(-(fpx + sw / 2), -(fpy + sh / 2));
   }
@@ -261,5 +260,4 @@ engine(() => {
   textVec(player.position)(vector(400, 415), 'position');
   // @ts-ignore
   window.player = player;
-  frames++;
 })();

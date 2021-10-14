@@ -8,11 +8,12 @@ module.exports = {
   parserOptions: {
     ecmaVersion: 12,
     sourceType: 'module',
+    ignoreStrings: 'true',
   },
   plugins: ['@typescript-eslint'],
   rules: {
     'require-jsdoc': 'warn',
     'no-unused-vars': 'warn',
-    'max-len': 'warn',
+    'max-len': 'off',
   },
 };

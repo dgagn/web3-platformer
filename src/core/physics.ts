@@ -52,7 +52,8 @@ export const updatePhysics =
 const _addForce = (force: Vec, obj) => {
   if (!hasPhysics(obj) || force.length !== 2) {
     throw new Error(
-      'the object needs to have the physics properties and force needs to be a vector'
+      'the object needs to have the physics properties ' +
+        'and force needs to be a vector'
     );
   }
 
@@ -62,7 +63,19 @@ const _addForce = (force: Vec, obj) => {
   };
 };
 
+/**
+ * Ajoute une acceleration sur un object de type physics
+ * pour permettre l'objet de se déplacer.
+ *
+ * @function
+ * @param {[number, number]} force - un vecteur pour la force
+ * @param {Object=} obj - un objet pour appliquer
+ * @return {(Function|Object)} - retourne un version `curried` de la fonction
+ * ou un objet avec la force appliqué
+ */
 export const addForce = curry(_addForce);
+
+const forc = addForce();
 
 export const gravity = (gravity: number) => obj => {
   if (!hasPhysics(obj)) {

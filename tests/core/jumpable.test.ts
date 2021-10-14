@@ -1,6 +1,5 @@
-import {hasJumpable, jump, jumpable} from '../../src/core/jumpable';
 import {pipeWith} from '../../src/utils';
-import {movable, physics, size} from '../../src/core';
+import {physics, size, hasJumpable, jump, jumpable} from '../../src/core';
 
 describe('jumpable', () => {
   it('should say if a object is a jumpable object', () => {
@@ -52,7 +51,7 @@ describe('jump', () => {
       ...a,
     });
   });
-  it('should make the object jump if not grounded and toggle grounded with axis y 1', () => {
+  it('should make the object jump if not grounded', () => {
     const a = pipeWith({}, physics(), size(64, 64), jumpable(1));
     const newA = {
       ...a,
@@ -64,7 +63,7 @@ describe('jump', () => {
       acceleration: [0, 1],
     });
   });
-  it('should make the object jump if not grounded and toggle grounded with axis y -1 and more force', () => {
+  it('should make the object jump axis y -1 and more force', () => {
     const a = pipeWith({}, physics(), size(64, 64), jumpable(10));
     const newA = {
       ...a,
