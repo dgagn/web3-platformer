@@ -87,12 +87,6 @@ export const coinCollision = rec => obj => {
   return obj;
 };
 
-const triggerCollision = rec => obj => {
-  if (hasCollision(obj, rec)) {
-  }
-  return obj;
-};
-
 export const collision = rec => obj => {
   if (!hasRectangle(obj) || !hasRectangle(rec)) {
     throw new Error('objects must have the rectangle properties');
