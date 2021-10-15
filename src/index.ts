@@ -19,8 +19,13 @@ import {
 } from './core';
 import Input from './game/input-manager';
 import {tag} from './core/tag';
-import {coinCollision, coinEmitter} from './core/collision';
-import {createAnimations2, unsafeUpdateAnimation} from './core/animations2';
+import {
+  coinCollision,
+  coinEmitter,
+  gameEmitter,
+  triggerCollision,
+} from './core/collision';
+import {createAnimations2, unsafeUpdateAnimation} from './core/animations';
 
 const canvas = document.getElementById('canvas') as HTMLCanvasElement;
 const context = canvas.getContext('2d');
@@ -211,7 +216,6 @@ timer();
 let score = 0;
 coinEmitter.on('coin', cur => {
   score++;
-
   const maxScreens = coins.length - 1 > 50;
   if (maxScreens) {
     coins = coins.filter(c => c !== cur);
@@ -219,6 +223,10 @@ coinEmitter.on('coin', cur => {
   }
   coins = [...coins.filter(c => c !== cur), ...Array(3).fill(true).map(coin)];
 });
+
+const destroy = obj => {
+  obj.destroyed = true;
+};
 
 let frames = 0;
 engine(() => {
@@ -252,7 +260,7 @@ engine(() => {
 
   const coinUpdate = pipe(unsafeUpdateAnimation(~~frames / 1.5));
 
-  coins = coins.map(coinUpdate);
+  coins = coins.map(coinUpdate).filter(c => !c.destroyed);
 
   frames++;
 
