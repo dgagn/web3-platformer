@@ -216,17 +216,14 @@ timer();
 let score = 0;
 coinEmitter.on('coin', cur => {
   score++;
+  const destroyed = coins.filter(c => c !== cur);
   const maxScreens = coins.length - 1 > 50;
   if (maxScreens) {
-    coins = coins.filter(c => c !== cur);
+    coins = destroyed;
     return;
   }
-  coins = [...coins.filter(c => c !== cur), ...Array(3).fill(true).map(coin)];
+  coins = [...destroyed, ...Array(3).fill(true).map(coin)];
 });
-
-const destroy = obj => {
-  obj.destroyed = true;
-};
 
 let frames = 0;
 engine(() => {
