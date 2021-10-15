@@ -19,12 +19,7 @@ import {
 } from './core';
 import Input from './game/input-manager';
 import {tag} from './core/tag';
-import {
-  coinCollision,
-  coinEmitter,
-  gameEmitter,
-  triggerCollision,
-} from './core/collision';
+import {coinCollision, coinEmitter} from './core/collision';
 import {createAnimations2, unsafeUpdateAnimation} from './core/animations';
 
 const canvas = document.getElementById('canvas') as HTMLCanvasElement;
@@ -32,6 +27,7 @@ const context = canvas.getContext('2d');
 
 const drawVec = draw(context);
 
+// todo: add spritesheet information in separate (perhaps json file)
 const arg = [
   {
     state: 'idle',
@@ -97,7 +93,6 @@ const state = state => boolean => p => {
   return {
     ...p,
     state: boolean ? state : p.state,
-    oldstate: p.state,
   };
 };
 
@@ -122,6 +117,7 @@ const coin = () =>
     }),
     size(16, 16),
     state(random(1, 2) == 1 ? 'idle' : 'alternative_idle')(true),
+    // todo: find a better alternative
     rectangle,
     createAnimations2(arg2)
   );
@@ -200,8 +196,9 @@ const jumpingState = (jumpingForce: number) => player => {
 
 const idleState = state('idle')(true);
 
+// todo: this is a timer, find a more PURE way to deal with this
+// works good tough
 let time = 10;
-
 function timer() {
   if (time === 0) {
     coinEmitter.emit('gameover');
@@ -213,6 +210,10 @@ function timer() {
 
 timer();
 
+// todo: maybe look for a destroy method (atm it is impure)
+// will see for a better implementation
+
+// todo: find a better implementation for the score
 let score = 0;
 coinEmitter.on('coin', cur => {
   score++;
@@ -225,7 +226,7 @@ coinEmitter.on('coin', cur => {
   coins = [...destroyed, ...Array(3).fill(true).map(coin)];
 });
 
-let frames = 0;
+let frames = 0; // frames here? maybe I can do something about this
 engine(() => {
   player = pipeWith(
     player,
@@ -285,6 +286,7 @@ engine(t => {
     context.translate(-(fpx + sw / 2), -(fpy + sh / 2));
   }
 
+  // todo: add a way to draw image on something that has the animations properties
   context.drawImage(
     player.animation.image,
     player.current * player.animation.size[0],
@@ -329,6 +331,7 @@ engine(t => {
     );
   });
 
+  // todo: ui is gross as fuck
   context.font = '28px system-ui';
   context.fillText(`Score: ${score}`, 100, 100);
   context.fillText(`Time: ${time}`, 100, 150);
@@ -358,6 +361,7 @@ coinEmitter.on('gameover', () => {
   while (id--) {
     window.cancelAnimationFrame(id);
   }
+  // todo: update ui
   context.globalAlpha = 0.8;
   context.fillRect(0, 0, canvas.width, canvas.height);
   context.globalAlpha = 1;

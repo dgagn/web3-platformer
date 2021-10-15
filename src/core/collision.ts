@@ -79,6 +79,8 @@ export const isLeftRightCollision = (rec1, rec2) =>
 
 export const coinEmitter = emitter();
 
+// todo: add a trigger collision instead
+
 export const coinCollision = rec => obj => {
   const isCoin = rec.tag === 'coin';
   if (isCoin && hasCollision(obj, rec)) {
