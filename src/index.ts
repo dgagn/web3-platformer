@@ -19,23 +19,14 @@ import {
   hasRectangle,
 } from './core';
 import Input from './game/input-manager';
-import {createAnimations} from './core/animations';
 import {tag} from './core/tag';
+import {coinEmitter} from './core/collision';
+import {createAnimations2, unsafeUpdateAnimation} from './core/animations2';
 
 const canvas = document.getElementById('canvas') as HTMLCanvasElement;
 const context = canvas.getContext('2d');
 
-const playerImage = new Image();
-playerImage.src = 'Player.png';
-const playerRunning = new Image();
-playerRunning.src = 'Player_Running.png';
-const playerFalling = new Image();
-playerFalling.src = 'Player_Falling.png';
-const playerJumping = new Image();
-playerJumping.src = 'Player_Jumping.png';
-
 const drawVec = draw(context);
-const textVec = text(context);
 
 const arg = [
   {
@@ -46,7 +37,7 @@ const arg = [
     size: vector(32, 32),
     scale: vector(2, 2),
     original_size: vector(32, 32),
-    offset: [-15, -14],
+    offset: [-8, -7],
   },
   {
     state: 'running',
@@ -56,7 +47,7 @@ const arg = [
     size: vector(32, 32),
     scale: vector(2, 2),
     original_size: vector(32, 32),
-    offset: [-15, -14],
+    offset: [-8, -7],
   },
   {
     state: 'falling',
@@ -65,7 +56,7 @@ const arg = [
     current: 1,
     size: vector(32, 32),
     scale: vector(2, 2),
-    offset: [-15, -14],
+    offset: [-8, -7],
   },
   {
     state: 'jumping',
@@ -74,7 +65,27 @@ const arg = [
     current: 1,
     size: vector(32, 32),
     scale: vector(2, 2),
-    offset: [-15, -14],
+    offset: [-8, -7],
+  },
+];
+const arg2 = [
+  {
+    state: 'idle',
+    src: 'Coin_Default.png',
+    steps: 4,
+    current: 1,
+    size: vector(16, 16),
+    scale: vector(1, 1),
+    offset: [0, 0],
+  },
+  {
+    state: 'alternative_idle',
+    src: 'Coin.png',
+    steps: 4,
+    current: 1,
+    size: vector(16, 16),
+    scale: vector(2, 2),
+    offset: [-4, -8],
   },
 ];
 
@@ -82,6 +93,7 @@ const state = state => boolean => p => {
   return {
     ...p,
     state: boolean ? state : p.state,
+    oldstate: p.state,
   };
 };
 
@@ -93,8 +105,22 @@ let player = pipeWith(
   state('idle')(true),
   jumpable(14),
   movable(1),
-  rectangle
+  rectangle,
+  createAnimations2(arg)
 );
+
+const coin = () =>
+  pipeWith(
+    {},
+    tag('coin'),
+    physics({
+      position: [random(10, canvas.width - 30), random(10, canvas.height - 50)],
+    }),
+    size(16, 16),
+    state(random(1, 2) == 1 ? 'idle' : 'alternative_idle')(true),
+    rectangle,
+    createAnimations2(arg2)
+  );
 
 let floor = pipeWith(
   {},
@@ -104,7 +130,7 @@ let floor = pipeWith(
   rectangle
 );
 
-const platform = _ =>
+const platform = () =>
   pipeWith(
     {},
     tag('platform'),
@@ -115,6 +141,7 @@ const platform = _ =>
     rectangle
   );
 
+let coins = Array(1).fill(true).map(coin);
 let platforms = Array(10).fill(true).map(platform);
 
 const stayTopBounds = obj => {
@@ -169,7 +196,33 @@ const jumpingState = (jumpingForce: number) => player => {
 
 const idleState = state('idle')(true);
 
-engine(t => {
+let time = 10;
+
+function timer() {
+  if (time === 0) {
+    coinEmitter.emit('gameover');
+    return;
+  }
+  time--;
+  setTimeout(timer, 1000);
+}
+
+timer();
+
+let score = 0;
+coinEmitter.on('coin', cur => {
+  score++;
+
+  const maxScreens = coins.length - 1 > 50;
+  if (maxScreens) {
+    coins = coins.filter(c => c !== cur);
+    return;
+  }
+  coins = [...coins.filter(c => c !== cur), ...Array(3).fill(true).map(coin)];
+});
+
+let frames = 0;
+engine(() => {
   player = pipeWith(
     player,
     updatePhysics(0.1),
@@ -179,12 +232,13 @@ engine(t => {
     rectangle,
     pipe(...platforms.map(collision)),
     collision(floor),
+    pipe(...coins.map(collision)),
     gameBounds,
     idleState,
     runningState(2),
     jumpingState(-10),
     fallingState(5),
-    createAnimations(arg)
+    unsafeUpdateAnimation(~~frames)
   );
 
   floor = pipeWith(floor, updatePhysics(0.1), rectangle);
@@ -196,12 +250,19 @@ engine(t => {
     stayTopBounds
   );
   platforms = platforms.map(platformUpdate);
+
+  const coinUpdate = pipe(unsafeUpdateAnimation(~~frames / 1.5));
+
+  coins = coins.map(coinUpdate);
+
+  frames++;
+
+  // @ts-ignore
+  window.coins = coins;
 })();
 
 engine(t => {
-  context.globalAlpha = 0.6;
   context.imageSmoothingEnabled = false;
-
   context.fillStyle = '#d2d2d2';
   context.fillRect(0, 0, canvas.width, canvas.height);
   context.globalAlpha = 1;
@@ -222,7 +283,7 @@ engine(t => {
 
   context.drawImage(
     player.animation.image,
-    player.animation.current * player.animation.size[0],
+    player.current * player.animation.size[0],
     0,
     player.animation.size[0],
     player.animation.size[0],
@@ -234,7 +295,26 @@ engine(t => {
   context.restore();
   context.strokeStyle = '#4e62e0';
   context.strokeRect(px, py, player.width, player.height);
-  context.strokeStyle = '#000';
+
+  coins.forEach(coin => {
+    context.strokeRect(
+      coin.position[0],
+      coin.position[1],
+      coin.width,
+      coin.height
+    );
+    context.drawImage(
+      coin.animation.image,
+      coin.current * coin.animation.size[0],
+      0,
+      coin.animation.size[0],
+      coin.animation.size[0],
+      coin.animation.position[0],
+      coin.animation.position[1],
+      coin.animation.localSize[0],
+      coin.animation.localSize[1]
+    );
+  });
 
   platforms.forEach(platform => {
     context.fillRect(
@@ -244,6 +324,10 @@ engine(t => {
       platform.height
     );
   });
+
+  context.font = '28px system-ui';
+  context.fillText(`Score: ${score}`, 100, 100);
+  context.fillText(`Time: ${time}`, 100, 150);
 
   context.fillRect(
     floor.position[0],
@@ -261,9 +345,23 @@ engine(t => {
     'red'
   );
 
-  textVec(player.velocity)(vector(400, 400), 'velocity');
-  textVec(player.position)(vector(400, 415), 'position');
-  context.fillText(`fps : ${t}`, 200, 200);
   // @ts-ignore
   window.player = player;
 })();
+
+coinEmitter.on('gameover', () => {
+  let id = window.requestAnimationFrame(function () {});
+  while (id--) {
+    window.cancelAnimationFrame(id);
+  }
+  context.globalAlpha = 0.8;
+  context.fillRect(0, 0, canvas.width, canvas.height);
+  context.globalAlpha = 1;
+  context.fillStyle = '#fff';
+  context.fillText('Game Over', canvas.width / 2.4, canvas.height / 2);
+  context.fillText(
+    `Avec un score de ${score}`,
+    canvas.width / 2.8,
+    canvas.height / 1.7
+  );
+});

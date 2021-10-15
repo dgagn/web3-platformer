@@ -1,11 +1,11 @@
 import {isDefined} from '../utils';
 
-function emitter(events = new Map()) {
+export function emitter(events = new Map()) {
   return {
     events,
     on(key, handler) {
       const handlers = events.get(key);
-      isDefined(handlers) ? events.set(key, [handler]) : handlers.push(handler);
+      isDefined(handlers) ? handlers.push(handler) : events.set(key, [handler]);
     },
     off(key, handler?) {
       const handlers = events.get(key);
