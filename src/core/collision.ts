@@ -6,7 +6,6 @@ import {hasRectangle} from './rectangle';
 /**
  * Permet de savoir si il y a une collision entre deux
  * rectangles.
- *
  * @param {Object} rec1 - le premier rectangle
  * @param {Object} rec2 - le deuxième rectangle
  * @return {boolean} - un booléen pour savoir si il y a une
@@ -83,6 +82,7 @@ export const collision = rec => obj => {
   if (!hasRectangle(obj) || !hasRectangle(rec)) {
     throw new Error('objects must have the rectangle properties');
   }
+
   if (!hasCollision(obj, rec)) return obj;
 
   const {width, height} = obj;

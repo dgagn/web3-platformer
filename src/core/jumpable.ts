@@ -12,7 +12,9 @@ export const jumpable = (jumpForce: number) => obj => ({
 });
 
 export const jump = axisY => obj => {
-  if (!hasJumpable(obj) || !hasPhysics(obj)) {
+  const objectValid = ![hasJumpable, hasPhysics].every(e => e(obj));
+
+  if (objectValid) {
     throw new Error(
       'the object needs to have the jumpable and physics properties'
     );

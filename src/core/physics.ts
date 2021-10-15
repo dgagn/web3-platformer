@@ -81,5 +81,3 @@ export const gravity = (gravity: number) => obj => {
   }
   return addForce(vector(0, gravity), obj);
 };
-
-const hello = true;

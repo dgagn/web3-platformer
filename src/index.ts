@@ -1,3 +1,4 @@
+// ignore file coverage
 import {pipe, pipeWith, random} from './utils';
 import {
   addForce,
@@ -19,6 +20,7 @@ import {
 } from './core';
 import Input from './game/input-manager';
 import {createAnimations} from './core/animations';
+import {tag} from './core/tag';
 
 const canvas = document.getElementById('canvas') as HTMLCanvasElement;
 const context = canvas.getContext('2d');
@@ -85,6 +87,7 @@ const state = state => boolean => p => {
 
 let player = pipeWith(
   {},
+  tag('player'),
   physics({position: [50, 50]}),
   size(32, 50),
   state('idle')(true),
@@ -95,6 +98,7 @@ let player = pipeWith(
 
 let floor = pipeWith(
   {},
+  tag('floor'),
   physics({position: [0, canvas.height - 20]}),
   size(canvas.width, 20),
   rectangle
@@ -103,6 +107,7 @@ let floor = pipeWith(
 const platform = _ =>
   pipeWith(
     {},
+    tag('platform'),
     physics({
       position: [random(0, canvas.width), random(0, canvas.height)],
     }),
@@ -164,7 +169,7 @@ const jumpingState = (jumpingForce: number) => player => {
 
 const idleState = state('idle')(true);
 
-engine(() => {
+engine(t => {
   player = pipeWith(
     player,
     updatePhysics(0.1),
@@ -193,7 +198,7 @@ engine(() => {
   platforms = platforms.map(platformUpdate);
 })();
 
-engine(() => {
+engine(t => {
   context.globalAlpha = 0.6;
   context.imageSmoothingEnabled = false;
 
@@ -258,6 +263,7 @@ engine(() => {
 
   textVec(player.velocity)(vector(400, 400), 'velocity');
   textVec(player.position)(vector(400, 415), 'position');
+  context.fillText(`fps : ${t}`, 200, 200);
   // @ts-ignore
   window.player = player;
 })();
