@@ -12,7 +12,6 @@ import {
   collision,
   vector,
   draw,
-  text,
   engine,
   jumpable,
   movable,
@@ -20,7 +19,7 @@ import {
 } from './core';
 import Input from './game/input-manager';
 import {tag} from './core/tag';
-import {coinEmitter} from './core/collision';
+import {coinCollision, coinEmitter} from './core/collision';
 import {createAnimations2, unsafeUpdateAnimation} from './core/animations2';
 
 const canvas = document.getElementById('canvas') as HTMLCanvasElement;
@@ -232,7 +231,7 @@ engine(() => {
     rectangle,
     pipe(...platforms.map(collision)),
     collision(floor),
-    pipe(...coins.map(collision)),
+    pipe(...coins.map(coinCollision)),
     gameBounds,
     idleState,
     runningState(2),

@@ -2,6 +2,8 @@ import {add, mult} from './vector';
 import {round} from '../utils';
 
 export const createAnimations2 = (states: any[]) => obj => {
+  // todo: checks for state
+
   const animation = states.filter(s => s.state === obj.state)[0] ?? {};
   const image = new Image();
   image.src = animation.src;
@@ -25,6 +27,7 @@ export const createAnimations2 = (states: any[]) => obj => {
 };
 
 export const unsafeUpdateAnimation = frames => obj => {
+  // todo: checks for animations properties
   const filteredAnimation =
     obj.animations.filter(s => s.state === obj.state)[0] ?? {};
 

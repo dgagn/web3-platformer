@@ -2,8 +2,6 @@ import {vector} from './vector';
 import {hasRectangle} from './rectangle';
 import {emitter} from './emitter';
 
-// todo: add a tagging system for all objects to detect collision on tag
-
 /**
  * Permet de savoir si il y a une collision entre deux
  * rectangles.
@@ -81,14 +79,15 @@ export const isLeftRightCollision = (rec1, rec2) =>
 
 export const coinEmitter = emitter();
 
-export const collision = rec => obj => {
+export const coinCollision = rec => obj => {
   const isCoin = rec.tag === 'coin';
-
   if (isCoin && hasCollision(obj, rec)) {
     coinEmitter.emit('coin', rec);
-    return obj;
   }
+  return obj;
+};
 
+export const collision = rec => obj => {
   if (!hasRectangle(obj) || !hasRectangle(rec)) {
     throw new Error('objects must have the rectangle properties');
   }
