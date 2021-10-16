@@ -25,6 +25,21 @@ import {createAnimations2, unsafeUpdateAnimation} from './core/animations';
 const canvas = document.getElementById('canvas') as HTMLCanvasElement;
 const context = canvas.getContext('2d');
 
+const fimg = new Image();
+fimg.src = 'floor.png';
+
+const himg = new Image();
+himg.src = 'hills.png';
+
+const cimg = new Image();
+cimg.src = 'cover.png';
+
+const climg = new Image();
+cimg.src = 'cloud.png';
+
+const timg = new Image();
+timg.src = 'terrain.png';
+
 const drawVec = draw(context);
 
 // todo: export the entity later on for easy access to create more entities
@@ -269,10 +284,21 @@ engine(() => {
 
 engine(t => {
   context.imageSmoothingEnabled = false;
-  context.fillStyle = '#d2d2d2';
+  context.fillStyle = '#6eb9f9';
   context.fillRect(0, 0, canvas.width, canvas.height);
   context.globalAlpha = 1;
   context.fillStyle = '#181818';
+
+  context.globalAlpha = 0.8;
+  context.drawImage(climg, 0, 30, 288, 208, 0, 40, 288 * 3, 208 * 3);
+  context.globalAlpha = 1;
+
+  context.globalAlpha = 0.8;
+  context.drawImage(cimg, 0, 0, 288, 208, 0, 40, 288 * 3, 208 * 3);
+  context.globalAlpha = 1;
+  context.drawImage(himg, 0, 15, 288, 208, 0, 40, 288 * 3, 208 * 3);
+  context.drawImage(fimg, 0, 0, 288, 208, 0, 0, 288 * 3, 208 * 3);
+
   const [px, py] = player.position;
 
   const [vx] = player.velocity;
@@ -332,17 +358,13 @@ engine(t => {
     );
   });
 
+  context.drawImage(timg, 100, 0, 288, 208, 0, 420, 288 * 3, 208 * 3);
+  context.drawImage(timg, 0, 0, 288, 208, 500, 420, 288 * 3, 208 * 3);
+
   // todo: ui is gross as fuck
   context.font = '28px system-ui';
   context.fillText(`Score: ${score}`, 100, 100);
   context.fillText(`Time: ${time}`, 100, 150);
-
-  context.fillRect(
-    floor.position[0],
-    floor.position[1],
-    floor.width,
-    floor.height
-  );
 
   drawVec(player.velocity)(
     vector(
