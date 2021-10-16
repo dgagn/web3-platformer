@@ -27,6 +27,7 @@ const context = canvas.getContext('2d');
 
 const drawVec = draw(context);
 
+// todo: export the entity later on for easy access to create more entities
 // todo: add spritesheet information in separate (perhaps json file)
 const arg = [
   {
@@ -198,7 +199,7 @@ const idleState = state('idle')(true);
 
 // todo: this is a timer, find a more PURE way to deal with this
 // works good tough
-let time = 10;
+let time = 10; // in seconds
 function timer() {
   if (time === 0) {
     coinEmitter.emit('gameover');
