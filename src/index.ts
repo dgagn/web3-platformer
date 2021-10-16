@@ -24,15 +24,16 @@ import {createAnimations2, unsafeUpdateAnimation} from './core/animations';
 
 const canvas = document.getElementById('canvas') as HTMLCanvasElement;
 const context = canvas.getContext('2d');
-
+const bimg = new Image();
+bimg.src = 'wall.png';
 const fimg = new Image();
-fimg.src = 'floor.png';
+fimg.src = 'cols.png';
 
 const himg = new Image();
-himg.src = 'hills.png';
+himg.src = 'platforms_alt3.png';
 
 const cimg = new Image();
-cimg.src = 'cover.png';
+cimg.src = 'platforms_alt2.png';
 
 const climg = new Image();
 cimg.src = 'cloud.png';
@@ -41,6 +42,13 @@ const timg = new Image();
 timg.src = 'terrain.png';
 
 const drawVec = draw(context);
+
+const audio = new Audio('music.ogg');
+audio.loop = true;
+audio.volume = 0.5;
+
+const js = new Audio('collectible.wav');
+audio.volume = 1;
 
 // todo: export the entity later on for easy access to create more entities
 // todo: add spritesheet information in separate (perhaps json file)
@@ -153,7 +161,7 @@ const platform = () =>
     physics({
       position: [random(0, canvas.width), random(0, canvas.height)],
     }),
-    size(random(50, 100), random(10, 20)),
+    size(64, 16),
     rectangle
   );
 
@@ -239,6 +247,7 @@ coinEmitter.on('coin', cur => {
     coins = destroyed;
     return;
   }
+  js.play();
   coins = [...destroyed, ...Array(3).fill(true).map(coin)];
 });
 
@@ -284,20 +293,35 @@ engine(() => {
 
 engine(t => {
   context.imageSmoothingEnabled = false;
-  context.fillStyle = '#6eb9f9';
+  context.fillStyle = '#000000';
   context.fillRect(0, 0, canvas.width, canvas.height);
   context.globalAlpha = 1;
-  context.fillStyle = '#181818';
-
-  context.globalAlpha = 0.8;
-  context.drawImage(climg, 0, 30, 288, 208, 0, 40, 288 * 3, 208 * 3);
+  context.fillStyle = '#676670';
+  fimg;
+  context.globalAlpha = 0.3;
+  context.drawImage(
+    bimg,
+    player.position[0] / 40,
+    0,
+    288,
+    208,
+    0,
+    40,
+    288 * 3,
+    208 * 3
+  );
+  context.drawImage(
+    fimg,
+    player.position[0] / 40,
+    0,
+    288,
+    208,
+    0,
+    40,
+    288 * 3,
+    208 * 3
+  );
   context.globalAlpha = 1;
-
-  context.globalAlpha = 0.8;
-  context.drawImage(cimg, 0, 0, 288, 208, 0, 40, 288 * 3, 208 * 3);
-  context.globalAlpha = 1;
-  context.drawImage(himg, 0, 15, 288, 208, 0, 40, 288 * 3, 208 * 3);
-  context.drawImage(fimg, 0, 0, 288, 208, 0, 0, 288 * 3, 208 * 3);
 
   const [px, py] = player.position;
 
@@ -350,16 +374,18 @@ engine(t => {
   });
 
   platforms.forEach(platform => {
-    context.fillRect(
+    context.drawImage(
+      himg,
+      0,
+      0,
+      64,
+      16,
       platform.position[0],
       platform.position[1],
-      platform.width,
-      platform.height
+      64,
+      16
     );
   });
-
-  context.drawImage(timg, 100, 0, 288, 208, 0, 420, 288 * 3, 208 * 3);
-  context.drawImage(timg, 0, 0, 288, 208, 500, 420, 288 * 3, 208 * 3);
 
   // todo: ui is gross as fuck
   context.font = '28px system-ui';
@@ -374,6 +400,10 @@ engine(t => {
     10,
     'red'
   );
+  context.fillStyle = '#381010';
+  context.globalAlpha = 0.4;
+  context.fillRect(0, 0, canvas.width, canvas.height);
+  context.globalAlpha = 1;
 
   // @ts-ignore
   window.player = player;
@@ -395,4 +425,13 @@ coinEmitter.on('gameover', () => {
     canvas.width / 2.8,
     canvas.height / 1.7
   );
+  audio.play();
+});
+
+document.addEventListener('mousemove', () => {
+  audio.play();
+});
+
+document.addEventListener('keydown', () => {
+  audio.play();
 });

@@ -11,6 +11,9 @@ export const jumpable = (jumpForce: number) => obj => ({
   jumpForce,
 });
 
+const js = new Audio('jump.wav');
+js.volume = 0.8;
+
 export const jump = axisY => obj => {
   const objectValid = ![hasJumpable, hasPhysics].every(e => e(obj));
 
@@ -18,6 +21,10 @@ export const jump = axisY => obj => {
     throw new Error(
       'the object needs to have the jumpable and physics properties'
     );
+  }
+
+  if (obj.isGrounded && axisY) {
+    js.play();
   }
 
   return obj.isGrounded
