@@ -1,8 +1,8 @@
 import {add, mult} from './vector';
-import {round} from '../utils';
+import {hasState} from './state';
 
-export const createAnimations2 = (states: any[]) => obj => {
-  // todo: checks for state
+export const createAnimations = states => obj => {
+  if (!hasState(obj)) throw new Error('Objects is missing the state property');
 
   const animation = states.filter(s => s.state === obj.state)[0] ?? {};
   const image = new Image();
@@ -31,7 +31,7 @@ export const unsafeUpdateAnimation = frames => obj => {
   const filteredAnimation =
     obj.animations.filter(s => s.state === obj.state)[0] ?? {};
 
-  if (round(frames, 0) % filteredAnimation.steps === 0) {
+  if (frames % filteredAnimation.steps === 0) {
     obj.current =
       obj.current < filteredAnimation.steps - 1 ? obj.current + 1 : 0;
   }

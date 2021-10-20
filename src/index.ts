@@ -20,116 +20,40 @@ import {
 import Input from './game/input-manager';
 import {tag} from './core/tag';
 import {coinCollision, coinEmitter} from './core/collision';
-import {createAnimations2, unsafeUpdateAnimation} from './core/animations';
+import {createAnimations, unsafeUpdateAnimation} from './core/animations';
+import {playerSprite} from './player/sprites';
+import {coinSprite} from './sprites/coin';
+import {platformSprite} from './sprites/platform';
+import {state} from './core/state';
+import {coinSound, createSound, playSoundOnState} from './core/sound';
+import {playerSound} from './player/sounds';
 
 const canvas = document.getElementById('canvas') as HTMLCanvasElement;
 const context = canvas.getContext('2d');
 const bimg = new Image();
 bimg.src = 'wall.png';
+
 const fimg = new Image();
 fimg.src = 'cols.png';
 
 const himg = new Image();
 himg.src = 'platforms_alt3.png';
 
-const cimg = new Image();
-cimg.src = 'platforms_alt2.png';
-
-const climg = new Image();
-cimg.src = 'cloud.png';
-
-const timg = new Image();
-timg.src = 'terrain.png';
-
 const drawVec = draw(context);
 
-const audio = new Audio('music.ogg');
-audio.loop = true;
-audio.volume = 0.5;
-
-const js = new Audio('collectible.wav');
-audio.volume = 1;
-
 // todo: export the entity later on for easy access to create more entities
-// todo: add spritesheet information in separate (perhaps json file)
-const arg = [
-  {
-    state: 'idle',
-    src: 'Player.png',
-    steps: 5,
-    current: 1,
-    size: vector(32, 32),
-    scale: vector(2, 2),
-    original_size: vector(32, 32),
-    offset: [-8, -7],
-  },
-  {
-    state: 'running',
-    src: 'Player_Running.png',
-    steps: 6,
-    current: 1,
-    size: vector(32, 32),
-    scale: vector(2, 2),
-    original_size: vector(32, 32),
-    offset: [-8, -7],
-  },
-  {
-    state: 'falling',
-    src: 'Player_Falling.png',
-    steps: 1,
-    current: 1,
-    size: vector(32, 32),
-    scale: vector(2, 2),
-    offset: [-8, -7],
-  },
-  {
-    state: 'jumping',
-    src: 'Player_Jumping.png',
-    steps: 1,
-    current: 1,
-    size: vector(32, 32),
-    scale: vector(2, 2),
-    offset: [-8, -7],
-  },
-];
-const arg2 = [
-  {
-    state: 'idle',
-    src: 'Coin_Default.png',
-    steps: 4,
-    current: 1,
-    size: vector(16, 16),
-    scale: vector(1, 1),
-    offset: [0, 0],
-  },
-  {
-    state: 'alternative_idle',
-    src: 'Coin.png',
-    steps: 4,
-    current: 1,
-    size: vector(16, 16),
-    scale: vector(2, 2),
-    offset: [-4, -8],
-  },
-];
-
-const state = state => boolean => p => {
-  return {
-    ...p,
-    state: boolean ? state : p.state,
-  };
-};
 
 let player = pipeWith(
   {},
   tag('player'),
   physics({position: [50, 50]}),
   size(32, 50),
-  state('idle')(true),
+  state('idle', true),
   jumpable(14),
   movable(1),
   rectangle,
-  createAnimations2(arg)
+  createAnimations(playerSprite),
+  createSound(playerSound)
 );
 
 const coin = () =>
@@ -140,10 +64,11 @@ const coin = () =>
       position: [random(10, canvas.width - 30), random(10, canvas.height - 50)],
     }),
     size(16, 16),
-    state(random(1, 2) == 1 ? 'idle' : 'alternative_idle')(true),
+    state(random(1, 2) == 1 ? 'idle' : 'idle_alt', true),
     // todo: find a better alternative
     rectangle,
-    createAnimations2(arg2)
+    createAnimations(coinSprite),
+    createSound(coinSound)
   );
 
 let floor = pipeWith(
@@ -162,7 +87,9 @@ const platform = () =>
       position: [random(0, canvas.width), random(0, canvas.height)],
     }),
     size(64, 16),
-    rectangle
+    rectangle,
+    state(random(1, 2) === 1 ? 'idle' : 'idle_alt')(true),
+    createAnimations(platformSprite)
   );
 
 let coins = Array(1).fill(true).map(coin);
@@ -200,22 +127,22 @@ const gameBounds = obj => {
   return obj;
 };
 
-const runningState = (speed: number) => player => {
-  const [vx] = player.velocity;
-  const isRunning = vx < -speed || (vx > speed && player.isGrounded);
-  return state('running')(isRunning)(player);
+const runningState = (speed: number) => obj => {
+  const [vx] = obj.velocity;
+  const isRunning = vx < -speed || (vx > speed && obj.isGrounded);
+  return state('running', isRunning, obj);
 };
 
-const fallingState = (fallingForce: number) => player => {
-  const [, vy] = player.velocity;
-  const isFalling = !player.isGrounded && vy > fallingForce;
-  return state('falling')(isFalling)(player);
+const fallingState = (fallingForce: number) => obj => {
+  const [, vy] = obj.velocity;
+  const isFalling = !obj.isGrounded && vy > fallingForce;
+  return state('falling', isFalling, obj);
 };
 
-const jumpingState = (jumpingForce: number) => player => {
-  const [, vy] = player.velocity;
-  const isJumping = !player.isGrounded && vy < -jumpingForce;
-  return state('jumping')(isJumping)(player);
+const jumpingState = (jumpingForce: number) => obj => {
+  const [, vy] = obj.velocity;
+  const isJumping = !obj.isGrounded && vy < -jumpingForce;
+  return state('jumping', isJumping, obj);
 };
 
 const idleState = state('idle')(true);
@@ -241,13 +168,13 @@ timer();
 let score = 0;
 coinEmitter.on('coin', cur => {
   score++;
+  cur.sounds.filter(sound => sound.name === 'coin')[0]?.audio?.play();
   const destroyed = coins.filter(c => c !== cur);
   const maxScreens = coins.length - 1 > 50;
   if (maxScreens) {
     coins = destroyed;
     return;
   }
-  js.play();
   coins = [...destroyed, ...Array(3).fill(true).map(coin)];
 });
 
@@ -268,7 +195,9 @@ engine(() => {
     runningState(2),
     jumpingState(-10),
     fallingState(5),
-    unsafeUpdateAnimation(~~frames)
+    unsafeUpdateAnimation(~~frames),
+    playSoundOnState('jumping'),
+    playSoundOnState('running')
   );
 
   floor = pipeWith(floor, updatePhysics(0.1), rectangle);
@@ -277,7 +206,8 @@ engine(() => {
     updatePhysics(0.1),
     gravity(-0.2),
     rectangle,
-    stayTopBounds
+    stayTopBounds,
+    unsafeUpdateAnimation(~~frames)
   );
   platforms = platforms.map(platformUpdate);
 
@@ -291,13 +221,12 @@ engine(() => {
   window.coins = coins;
 })();
 
-engine(t => {
+engine(() => {
   context.imageSmoothingEnabled = false;
   context.fillStyle = '#000000';
   context.fillRect(0, 0, canvas.width, canvas.height);
   context.globalAlpha = 1;
   context.fillStyle = '#676670';
-  fimg;
   context.globalAlpha = 0.3;
   context.drawImage(
     bimg,
@@ -343,7 +272,7 @@ engine(t => {
     player.current * player.animation.size[0],
     0,
     player.animation.size[0],
-    player.animation.size[0],
+    player.animation.size[1],
     player.animation.position[0],
     player.animation.position[1],
     player.animation.localSize[0],
@@ -365,7 +294,7 @@ engine(t => {
       coin.current * coin.animation.size[0],
       0,
       coin.animation.size[0],
-      coin.animation.size[0],
+      coin.animation.size[1],
       coin.animation.position[0],
       coin.animation.position[1],
       coin.animation.localSize[0],
@@ -375,15 +304,15 @@ engine(t => {
 
   platforms.forEach(platform => {
     context.drawImage(
-      himg,
+      platform.animation.image,
+      platform.current * platform.animation.size[0],
       0,
-      0,
-      64,
-      16,
+      platform.animation.size[0],
+      platform.animation.size[1],
       platform.position[0],
       platform.position[1],
-      64,
-      16
+      platform.animation.localSize[0],
+      platform.animation.localSize[1]
     );
   });
 
@@ -425,13 +354,10 @@ coinEmitter.on('gameover', () => {
     canvas.width / 2.8,
     canvas.height / 1.7
   );
-  audio.play();
 });
 
-document.addEventListener('mousemove', () => {
-  audio.play();
-});
-
-document.addEventListener('keydown', () => {
-  audio.play();
-});
+const audio = new Audio('music.ogg');
+audio.loop = true;
+audio.volume = 0.5;
+document.addEventListener('mousemove', () => audio.play());
+document.addEventListener('keydown', () => audio.play());

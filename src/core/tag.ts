@@ -1,6 +1,4 @@
-export const tag = (name: string) => obj => {
-  return {
-    ...obj,
-    tag: name,
-  };
-};
+export const tag = (name: string) => obj => ({
+  ...obj,
+  tag: name,
+});

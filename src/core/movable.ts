@@ -11,16 +11,9 @@ export const movable =
     speed,
   });
 
-const js = new Audio('walk.wav');
-js.volume = 0.4;
-
 export const movement = axisX => obj => {
   if (!hasMovable(obj) || !hasPhysics(obj)) {
     throw new Error('object needs to have the movable and physics properties');
-  }
-
-  if (axisX !== 0 && obj.isGrounded) {
-    js.play();
   }
 
   return addForce(vector(axisX * obj.speed, 0), obj);
