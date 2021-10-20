@@ -10,7 +10,7 @@ export const sounds = [
 export const coinSound = [
   {
     name: 'coin',
-    src: 'collectible.wav',
+    src: 'coin/collectible.wav',
     volume: 0.8,
   },
 ];
