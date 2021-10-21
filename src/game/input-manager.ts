@@ -1,4 +1,4 @@
-import {createAxis, initButtonDown} from '../core/inputs';
+import {createAxis, initButtonDown} from '../core/input';
 
 const inputManager = {
   jump: 'Space',

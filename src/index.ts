@@ -11,7 +11,6 @@ import {
   gravity,
   collision,
   vector,
-  draw,
   engine,
   jumpable,
   movable,
@@ -20,13 +19,18 @@ import {
 import Input from './game/input-manager';
 import {tag} from './core/tag';
 import {coinCollision, coinEmitter} from './core/collision';
-import {createAnimations, unsafeUpdateAnimation} from './core/animations';
+import {
+  createAnimations,
+  drawSprite,
+  unsafeUpdateAnimation,
+} from './core/animation';
 import {playerSprite} from './player/sprites';
 import {coinSprite} from './sprites/coin';
 import {platformSprite} from './sprites/platform';
 import {state} from './core/state';
 import {coinSound, createSound, playSoundOnState} from './core/sound';
 import {playerSound} from './player/sounds';
+import {uiSprite} from './sprites/ui';
 
 const canvas = document.getElementById('canvas') as HTMLCanvasElement;
 const context = canvas.getContext('2d');
@@ -36,17 +40,12 @@ bimg.src = 'wall.png';
 const fimg = new Image();
 fimg.src = 'cols.png';
 
-const himg = new Image();
-himg.src = 'platforms_alt3.png';
-
-const drawVec = draw(context);
-
 // todo: export the entity later on for easy access to create more entities
 
 let player = pipeWith(
   {},
   tag('player'),
-  physics({position: [50, 50]}),
+  physics({position: [48, 48]}),
   size(32, 50),
   state('idle', true),
   jumpable(14),
@@ -65,11 +64,26 @@ const coin = () =>
     }),
     size(16, 16),
     state(random(1, 2) == 1 ? 'idle' : 'idle_alt', true),
-    // todo: find a better alternative
     rectangle,
     createAnimations(coinSprite),
     createSound(coinSound)
   );
+
+let timerUi = pipeWith(
+  {},
+  physics({position: [48, 48]}),
+  size(24, 24),
+  state('timer', true),
+  createAnimations(uiSprite)
+);
+
+let coinUi = pipeWith(
+  {},
+  physics({position: [48, 100]}),
+  size(24, 24),
+  state('coin', true),
+  createAnimations(uiSprite)
+);
 
 let floor = pipeWith(
   {},
@@ -149,7 +163,7 @@ const idleState = state('idle')(true);
 
 // todo: this is a timer, find a more PURE way to deal with this
 // works good tough
-let time = 10; // in seconds
+let time = 90; // in seconds
 function timer() {
   if (time === 0) {
     coinEmitter.emit('gameover');
@@ -165,17 +179,22 @@ timer();
 // will see for a better implementation
 
 // todo: find a better implementation for the score
+
+const MAXCOINS = 50;
 let score = 0;
 coinEmitter.on('coin', cur => {
   score++;
-  cur.sounds.filter(sound => sound.name === 'coin')[0]?.audio?.play();
+  cur.sounds
+    .filter(sound => sound.name === 'coin')[0]
+    ?.audio?.play()
+    .catch(e => e);
   const destroyed = coins.filter(c => c !== cur);
-  const maxScreens = coins.length - 1 > 50;
+  const maxScreens = coins.length - 1 > MAXCOINS;
   if (maxScreens) {
     coins = destroyed;
     return;
   }
-  coins = [...destroyed, ...Array(3).fill(true).map(coin)];
+  coins = [...destroyed, ...Array(2).fill(true).map(coin)];
 });
 
 let frames = 0; // frames here? maybe I can do something about this
@@ -196,9 +215,12 @@ engine(() => {
     jumpingState(-10),
     fallingState(5),
     unsafeUpdateAnimation(~~frames),
-    playSoundOnState('jumping'),
+    // playSoundOnState('jumping'),
     playSoundOnState('running')
   );
+
+  timerUi = pipeWith(timerUi, unsafeUpdateAnimation(~~frames));
+  coinUi = pipeWith(coinUi, unsafeUpdateAnimation(~~frames));
 
   floor = pipeWith(floor, updatePhysics(0.1), rectangle);
 
@@ -258,6 +280,7 @@ engine(() => {
   const [sw, sh] = player.animation.localSize;
 
   const [fpx, fpy] = player.animation.position;
+  // drawSprite(context, ui);
 
   if (vx < 0) {
     context.save();
@@ -265,70 +288,18 @@ engine(() => {
     context.scale(-1, 1);
     context.translate(-(fpx + sw / 2), -(fpy + sh / 2));
   }
-
-  // todo: add a way to draw image on something that has the animations properties
-  context.drawImage(
-    player.animation.image,
-    player.current * player.animation.size[0],
-    0,
-    player.animation.size[0],
-    player.animation.size[1],
-    player.animation.position[0],
-    player.animation.position[1],
-    player.animation.localSize[0],
-    player.animation.localSize[1]
-  );
-  context.restore();
   context.strokeStyle = '#4e62e0';
-  context.strokeRect(px, py, player.width, player.height);
-
-  coins.forEach(coin => {
-    context.strokeRect(
-      coin.position[0],
-      coin.position[1],
-      coin.width,
-      coin.height
-    );
-    context.drawImage(
-      coin.animation.image,
-      coin.current * coin.animation.size[0],
-      0,
-      coin.animation.size[0],
-      coin.animation.size[1],
-      coin.animation.position[0],
-      coin.animation.position[1],
-      coin.animation.localSize[0],
-      coin.animation.localSize[1]
-    );
-  });
-
-  platforms.forEach(platform => {
-    context.drawImage(
-      platform.animation.image,
-      platform.current * platform.animation.size[0],
-      0,
-      platform.animation.size[0],
-      platform.animation.size[1],
-      platform.position[0],
-      platform.position[1],
-      platform.animation.localSize[0],
-      platform.animation.localSize[1]
-    );
-  });
-
+  drawSprite(context, player);
+  context.restore();
+  coins.forEach(coin => drawSprite(context, coin));
+  platforms.forEach(platform => drawSprite(context, platform));
+  drawSprite(context, timerUi);
+  drawSprite(context, coinUi);
   // todo: ui is gross as fuck
-  context.font = '28px system-ui';
-  context.fillText(`Score: ${score}`, 100, 100);
-  context.fillText(`Time: ${time}`, 100, 150);
+  context.font = '24px system-ui';
+  context.fillText(`${time}`, 88, 68);
+  context.fillText(`${score}`, 88, 120);
 
-  drawVec(player.velocity)(
-    vector(
-      player.position[0] + player.width / 2,
-      player.position[1] + player.height / 2
-    ),
-    10,
-    'red'
-  );
   context.fillStyle = '#381010';
   context.globalAlpha = 0.4;
   context.fillRect(0, 0, canvas.width, canvas.height);
@@ -356,8 +327,14 @@ coinEmitter.on('gameover', () => {
   );
 });
 
+// todo: fix player jump sound
+coinEmitter.on('jump', () => {
+  player.sounds.filter(sound => sound.state === 'jumping')[0].audio.play();
+});
+
+// todo: fix game music sound
 const audio = new Audio('music.ogg');
 audio.loop = true;
 audio.volume = 0.5;
-document.addEventListener('mousemove', () => audio.play());
-document.addEventListener('keydown', () => audio.play());
+document.addEventListener('mousemove', () => audio.play().catch(e => e));
+document.addEventListener('keydown', () => audio.play().catch(e => e));

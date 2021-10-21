@@ -35,6 +35,6 @@ export const playSoundOnState = state => obj => {
   const sound = obj.sounds.filter(
     sound => sound.state === state && obj.state === state
   )[0];
-  sound?.audio?.play();
+  sound?.audio?.play().catch(e => {});
   return obj;
 };

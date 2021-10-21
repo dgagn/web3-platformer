@@ -1,12 +1,8 @@
-import {add, mult} from './vector';
+import {add, draw, mult, vector} from './vector';
 import {hasState} from './state';
 
 export const createAnimations = states => obj => {
   if (!hasState(obj)) throw new Error('Objects is missing the state property');
-
-  const animation = states.filter(s => s.state === obj.state)[0] ?? {};
-  const image = new Image();
-  image.src = animation.src;
 
   const allStates = states.map(s => {
     const image = new Image();
@@ -27,7 +23,6 @@ export const createAnimations = states => obj => {
 };
 
 export const unsafeUpdateAnimation = frames => obj => {
-  // todo: checks for animations properties
   const filteredAnimation =
     obj.animations.filter(s => s.state === obj.state)[0] ?? {};
 
@@ -43,4 +38,27 @@ export const unsafeUpdateAnimation = frames => obj => {
       position: add(obj.position, filteredAnimation.newOffset),
     },
   };
+};
+
+const drawDebug = (context, obj) => {
+  context.strokeRect(obj.position[0], obj.position[1], obj.width, obj.height);
+  draw(context)(obj.velocity)(
+    vector(obj.position[0] + obj.width / 2, obj.position[1] + obj.height / 2),
+    10,
+    'red'
+  );
+};
+export const drawSprite = (context, obj) => {
+  // drawDebug(context, obj);
+  context.drawImage(
+    obj.animation.image,
+    obj.current * obj.animation.size[0],
+    obj.animation.yoffset ?? 0,
+    obj.animation.size[0],
+    obj.animation.size[1],
+    obj.animation.position[0],
+    obj.animation.position[1],
+    obj.animation.localSize[0],
+    obj.animation.localSize[1]
+  );
 };
