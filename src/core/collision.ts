@@ -1,6 +1,7 @@
 import {vector} from './vector';
 import {hasRectangle} from './rectangle';
 import {emitter} from './emitter';
+import {game} from './game';
 
 /**
  * Permet de savoir si il y a une collision entre deux
@@ -77,14 +78,12 @@ export const isRightLeftCollision = (rec1, rec2) =>
 export const isLeftRightCollision = (rec1, rec2) =>
   rec1.left <= rec2.right && rec1.oldleft > rec2.oldright;
 
-export const coinEmitter = emitter();
-
 // todo: add a trigger collision instead
 
 export const coinCollision = rec => obj => {
   const isCoin = rec.tag === 'coin';
   if (isCoin && hasCollision(obj, rec)) {
-    coinEmitter.emit('coin', rec);
+    game.emit('coin', rec);
   }
   return obj;
 };

@@ -49,9 +49,9 @@ const drawDebug = (context, obj) => {
   );
 };
 export const drawSprite = (context, obj) => {
-  // drawDebug(context, obj);
+  drawDebug(context, obj);
   context.drawImage(
-    obj.animation.image,
+    obj.animation?.image,
     obj.current * obj.animation.size[0],
     obj.animation.yoffset ?? 0,
     obj.animation.size[0],

@@ -1,7 +1,8 @@
 import {isDefined} from '../utils';
 import {addForce, hasPhysics} from './physics';
 import {vector} from './vector';
-import {coinEmitter} from './collision';
+import {gameEmitter} from './collision';
+import {game} from './game';
 
 export const hasJumpable = obj =>
   [obj.isGrounded, obj.jumpForce].every(isDefined);
@@ -21,7 +22,7 @@ export const jump = axisY => obj => {
     );
   }
 
-  obj.isGrounded && axisY && coinEmitter.emit('jump');
+  obj.isGrounded && axisY && game.emit('jump');
 
   return obj.isGrounded
     ? {
