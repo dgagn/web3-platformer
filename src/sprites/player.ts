@@ -1,6 +1,6 @@
 import {vector} from '../core';
 
-export const playerSprite = [
+export const spritePlayer = [
   {
     state: 'idle',
     src: 'player/player_idle.png',
@@ -39,7 +39,7 @@ export const playerSprite = [
   },
 ];
 
-export const holySprite = [
+export const spriteHoly = [
   {
     state: 'idle',
     src: 'player/holy_idle.png',

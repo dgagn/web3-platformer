@@ -1,6 +1,6 @@
 import {vector} from '../core';
 
-export const coinSprite = [
+export const spriteCoin = [
   {
     state: 'idle',
     src: 'coin/coin.png',

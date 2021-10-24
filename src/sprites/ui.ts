@@ -1,4 +1,4 @@
-export const uiSprite = [
+export const spriteUi = [
   {
     state: 'timer',
     src: 'ui.png',

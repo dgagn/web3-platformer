@@ -1,12 +1,12 @@
 import {add, draw, mult, vector} from './vector';
 import {hasState} from './state';
+import {createImage} from './image';
 
 export const createAnimations = states => obj => {
   if (!hasState(obj)) throw new Error('Objects is missing the state property');
 
   const allStates = states.map(s => {
-    const image = new Image();
-    image.src = s.src;
+    const image = createImage(s.src);
     return {
       ...s,
       image,

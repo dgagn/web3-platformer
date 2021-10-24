@@ -1,4 +1,3 @@
-import {hasPhysics, hasSize} from './index';
 import {isDefined} from '../utils';
 
 export const hasRectangle = obj =>
@@ -14,10 +13,6 @@ export const hasRectangle = obj =>
   ].every(isDefined);
 
 export const rectangle = obj => {
-  if (!hasPhysics(obj) || !hasSize(obj)) {
-    throw new Error('the object must have physics and size properties');
-  }
-
   const [px, py] = obj.position;
   const [ox, oy] = obj.oldpos;
   const {width, height} = obj;

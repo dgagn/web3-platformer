@@ -7,21 +7,21 @@ export const hasPhysics = obj =>
   );
 
 export const physics =
-  ({
-    mass = 1,
-    position = Vector.zero,
-    velocity = Vector.zero,
-    acceleration = Vector.zero,
-    oldpos = Vector.zero,
-  } = {}) =>
+  ({mass = 1, velocity = Vector.zero, acceleration = Vector.zero} = {}) =>
   (obj = {}) => ({
     ...obj,
     mass,
-    position,
     velocity,
     acceleration,
+  });
+
+export function position(position = Vector.zero, oldpos = Vector.zero) {
+  return obj => ({
+    ...obj,
+    position,
     oldpos,
   });
+}
 
 export const updatePhysics =
   (friction: number = 0.1) =>

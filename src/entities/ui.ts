@@ -1,27 +1,28 @@
 import {pipeWith} from '../utils';
-import {physics, size} from '../core';
+import {size} from '../core';
 import {state} from '../core/state';
 import {createAnimations, unsafeUpdateAnimation} from '../core/animation';
-import {uiSprite} from '../sprites/ui';
+import {spriteUi} from '../sprites/ui';
 import {update} from '../core/engine';
+import {position} from '../core/physics';
 
 export function createTimerUI() {
   return pipeWith(
     {},
-    physics({position: [48, 48]}),
+    position([48, 48]),
     size(24, 24),
     state('timer', true),
-    createAnimations(uiSprite)
+    createAnimations(spriteUi)
   );
 }
 
 export function createCoinUI() {
   return pipeWith(
     {},
-    physics({position: [48, 100]}),
+    position([48, 100]),
     size(24, 24),
     state('coin', true),
-    createAnimations(uiSprite)
+    createAnimations(spriteUi)
   );
 }
 
