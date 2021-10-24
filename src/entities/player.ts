@@ -20,7 +20,7 @@ import {
   stateIdle,
   stateJumping,
   stateRunning,
-} from '../core/states';
+} from '../core/state-manager';
 import {createAnimations, unsafeUpdateAnimation} from '../core/animation';
 import {createSound, playSoundOnState} from '../core/sound';
 import {tag} from '../core/tag';
