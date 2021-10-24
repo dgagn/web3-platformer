@@ -31,9 +31,23 @@ import {state} from './core/state';
 import {coinSound, createSound, playSoundOnState} from './core/sound';
 import {playerSound} from './player/sounds';
 import {uiSprite} from './sprites/ui';
+import {createGame} from './core/game';
+import $ from 'jquery';
+import {
+  stateFalling,
+  stateIdle,
+  stateJumping,
+  stateRunning,
+} from './player/states';
+import {constraintBounds, fromTopBoundsToBottom} from './core/bounds';
 
 const canvas = document.getElementById('canvas') as HTMLCanvasElement;
 const context = canvas.getContext('2d');
+
+const can = $(`<canvas width='800' height='600' />`);
+const game = createGame(can);
+console.log(game);
+
 const bimg = new Image();
 bimg.src = 'wall.png';
 
@@ -109,58 +123,6 @@ const platform = () =>
 let coins = Array(1).fill(true).map(coin);
 let platforms = Array(10).fill(true).map(platform);
 
-const stayTopBounds = obj => {
-  if (obj.bottom <= 0) {
-    return {
-      ...obj,
-      position: [random(0, canvas.width - obj.width), canvas.height],
-    };
-  }
-  return obj;
-};
-
-const gameBounds = obj => {
-  // rectangle checks for physics and size
-  if (!hasRectangle(obj)) {
-    throw new Error('the object must have the rectangle properties');
-  }
-  if (obj.right >= canvas.width) {
-    return addForce(vector(-10, 0), obj);
-  }
-  if (obj.left <= 0) {
-    return addForce(vector(10, 0), obj);
-  }
-  if (obj.top <= 0) {
-    return {
-      ...obj,
-      position: [random(0, canvas.width - obj.width - 20), canvas.height - 100],
-      velocity: [0, 0],
-      acceleration: [0, 0],
-    };
-  }
-  return obj;
-};
-
-const runningState = (speed: number) => obj => {
-  const [vx] = obj.velocity;
-  const isRunning = vx < -speed || (vx > speed && obj.isGrounded);
-  return state('running', isRunning, obj);
-};
-
-const fallingState = (fallingForce: number) => obj => {
-  const [, vy] = obj.velocity;
-  const isFalling = !obj.isGrounded && vy > fallingForce;
-  return state('falling', isFalling, obj);
-};
-
-const jumpingState = (jumpingForce: number) => obj => {
-  const [, vy] = obj.velocity;
-  const isJumping = !obj.isGrounded && vy < -jumpingForce;
-  return state('jumping', isJumping, obj);
-};
-
-const idleState = state('idle')(true);
-
 // todo: this is a timer, find a more PURE way to deal with this
 // works good tough
 let time = 90; // in seconds
@@ -209,13 +171,12 @@ engine(() => {
     pipe(...platforms.map(collision)),
     collision(floor),
     pipe(...coins.map(coinCollision)),
-    gameBounds,
-    idleState,
-    runningState(2),
-    jumpingState(-10),
-    fallingState(5),
+    constraintBounds([canvas.width, canvas.height]),
+    stateIdle,
+    stateRunning(2),
+    stateJumping(-10),
+    stateFalling(5),
     unsafeUpdateAnimation(~~frames),
-    // playSoundOnState('jumping'),
     playSoundOnState('running')
   );
 
@@ -228,7 +189,7 @@ engine(() => {
     updatePhysics(0.1),
     gravity(-0.2),
     rectangle,
-    stayTopBounds,
+    fromTopBoundsToBottom([canvas.width, canvas.height]),
     unsafeUpdateAnimation(~~frames)
   );
   platforms = platforms.map(platformUpdate);
@@ -274,13 +235,10 @@ engine(() => {
   );
   context.globalAlpha = 1;
 
-  const [px, py] = player.position;
-
   const [vx] = player.velocity;
   const [sw, sh] = player.animation.localSize;
 
   const [fpx, fpy] = player.animation.position;
-  // drawSprite(context, ui);
 
   if (vx < 0) {
     context.save();
@@ -310,7 +268,7 @@ engine(() => {
 })();
 
 coinEmitter.on('gameover', () => {
-  let id = window.requestAnimationFrame(function () {});
+  let id = window.requestAnimationFrame(() => {});
   while (id--) {
     window.cancelAnimationFrame(id);
   }
