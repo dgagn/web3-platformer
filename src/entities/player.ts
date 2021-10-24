@@ -12,7 +12,7 @@ import {
   size,
   updatePhysics,
 } from '../core';
-import Input from '../game/input-manager';
+import Input from '../core/input-manager';
 import {coinCollision} from '../core/collision';
 import {constraintBounds} from '../core/bounds';
 import {
@@ -20,13 +20,13 @@ import {
   stateIdle,
   stateJumping,
   stateRunning,
-} from '../player/states';
+} from '../core/states';
 import {createAnimations, unsafeUpdateAnimation} from '../core/animation';
 import {createSound, playSoundOnState} from '../core/sound';
 import {tag} from '../core/tag';
 import {state} from '../core/state';
-import {playerSprite} from '../player/sprites';
-import {playerSound} from '../player/sounds';
+import {playerSprite} from '../sprites/player';
+import {playerSound} from '../sounds/player';
 
 export function createPlayer() {
   return pipeWith(

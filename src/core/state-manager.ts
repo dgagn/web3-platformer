@@ -1,4 +1,4 @@
-import {state} from '../core/state';
+import {state} from './state';
 
 export const stateIdle = state('idle', true);
 

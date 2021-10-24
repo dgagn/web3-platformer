@@ -9,7 +9,7 @@ import {
   collision,
   engine,
 } from './core';
-import Input from './game/input-manager';
+import Input from './core/input-manager';
 import {coinCollision, coinEmitter} from './core/collision';
 import {drawSprite, unsafeUpdateAnimation} from './core/animation';
 import {coinSound, createSound, playSoundOnState} from './core/sound';
@@ -20,7 +20,7 @@ import {
   stateIdle,
   stateJumping,
   stateRunning,
-} from './player/states';
+} from './core/state-manager';
 import {constraintBounds, fromTopBoundsToBottom} from './core/bounds';
 import {createCoinUI, createTimerUI} from './entities/ui';
 import {createPlayer} from './entities/player';
@@ -61,6 +61,7 @@ export function timer() {
   time--;
   setTimeout(timer, 1000);
 }
+
 timer();
 
 const MAXCOINS = 50;

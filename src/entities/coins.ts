@@ -3,7 +3,7 @@ import {tag} from '../core/tag';
 import {physics, rectangle, size} from '../core';
 import {state} from '../core/state';
 import {createAnimations, unsafeUpdateAnimation} from '../core/animation';
-import {coinSprite} from '../coins/sprites';
+import {coinSprite} from '../sprites/coin';
 import {coinSound, createSound} from '../core/sound';
 import {update} from '../core/engine';
 
