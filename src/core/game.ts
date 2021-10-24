@@ -1,16 +1,10 @@
 import $ from 'jquery';
-import {
-  createCoin,
-  createCoinUI,
-  createFloor,
-  createPlatform,
-  createPlayer,
-  createTimerUI,
-} from '../scratch/t1';
+import {createCoinUI, createTimerUI, updateUi} from '../entities/ui';
 import {engine} from './engine';
-import {updatePlayer} from '../player';
-import {updateCoins} from '../coins';
-import {updateFloor} from '../floor';
+import {createPlayer, updatePlayer} from '../entities/player';
+import {createCoin, updateCoins} from '../entities/coins';
+import {createFloor, updateFloor} from '../entities/floor';
+import {createPlatform, updatePlatform} from '../entities/platforms';
 
 const createEntities = canvas => {
   const player = createPlayer();
@@ -52,12 +46,12 @@ export function createGame(selector) {
       game,
       frames,
     };
+
     updatePlayer(obj);
     updateCoins(obj);
     updateFloor(obj);
-
-    // @ts-ignore
-    window.player2 = game.entities.player;
+    updatePlatform(obj);
+    updateUi(obj);
   })();
 
   return game;

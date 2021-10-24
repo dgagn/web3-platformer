@@ -22,14 +22,11 @@ import {
   stateRunning,
 } from './player/states';
 import {constraintBounds, fromTopBoundsToBottom} from './core/bounds';
-import {
-  createCoin,
-  createCoinUI,
-  createFloor,
-  createPlatform,
-  createPlayer,
-  createTimerUI,
-} from './scratch/t1';
+import {createCoinUI, createTimerUI} from './entities/ui';
+import {createPlayer} from './entities/player';
+import {createFloor} from './entities/floor';
+import {createPlatform} from './entities/platforms';
+import {createCoin} from './entities/coins';
 
 const canvas = document.getElementById('canvas') as HTMLCanvasElement;
 const context = canvas.getContext('2d');
