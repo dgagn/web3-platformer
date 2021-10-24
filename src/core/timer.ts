@@ -1,6 +1,6 @@
 import {emitterGame} from '../entities/emitter';
 
-export function timer() {
+export function startTimer() {
   emitterGame.emit('timer');
-  setTimeout(timer, 1000);
+  setTimeout(startTimer, 1000);
 }

@@ -1,7 +1,9 @@
-export function playerName(obj) {
-  const player = JSON.parse(localStorage.getItem('player-name'));
+function getPlayer() {
+  return JSON.parse(localStorage.getItem('player')) ?? {};
+}
+
+export function player() {
   return {
-    ...obj,
-    name: player,
+    player: getPlayer(),
   };
 }

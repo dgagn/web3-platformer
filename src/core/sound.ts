@@ -7,14 +7,6 @@ export const sounds = [
   },
 ];
 
-export const coinSound = [
-  {
-    name: 'coin',
-    src: 'coin/collectible.wav',
-    volume: 0.8,
-  },
-];
-
 export const createSound = sounds => obj => {
   const withSounds = sounds.map(sound => {
     const audio = new Audio(sound.src);

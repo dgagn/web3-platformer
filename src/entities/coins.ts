@@ -8,12 +8,13 @@ import {
   unsafeUpdateAnimation,
 } from '../core/animation';
 import {spriteCoin} from '../sprites/coin';
-import {coinSound, createSound} from '../core/sound';
+import {createSound} from '../core/sound';
 import {update} from '../core/engine';
 import {position} from '../core/physics';
 import {emitterGame} from './emitter';
 import {destroy, isDestroyed} from '../core/collision';
 import {createArray} from '../utils/lang';
+import {soundCoin} from '../sounds/coin';
 
 export function createCoin(canvas) {
   return pipeWith(
@@ -26,7 +27,7 @@ export function createCoin(canvas) {
     state(random(1, 2) == 1 ? 'idle' : 'idle_alt', true),
     rectangle,
     createAnimations(spriteCoin),
-    createSound(coinSound)
+    createSound(soundCoin)
   );
 }
 
@@ -39,7 +40,7 @@ export function drawCoins({context, entities: {coins}}) {
   coins.forEach(coin => drawSprite(context, coin));
 }
 
-export function collectCoins(game) {
+export function eventCollectCoins(game) {
   const maxCoins = 50;
 
   emitterGame.on('trigger', ({collider, obj}) => {
@@ -57,6 +58,7 @@ export function collectCoins(game) {
     const withoutCoin = game.entities.coins.filter(isDestroyed);
     const newCoinOnCollect = withoutCoin.length < maxCoins ? 2 : 0;
     const newCoins = createArray(newCoinOnCollect).map(game.entities.coin);
+
     game.entities.coins = [...withoutCoin, ...newCoins];
   });
 }

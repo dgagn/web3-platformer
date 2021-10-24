@@ -1,14 +1,17 @@
 import $ from 'jquery';
-import {updateUi} from '../entities/ui';
+import {drawUi, updateUi} from '../entities/ui';
 import {engine} from './engine';
 import {drawPlayer, updatePlayer} from '../entities/player';
-import {collectCoins, drawCoins, updateCoins} from '../entities/coins';
+import {drawCoins, eventCollectCoins, updateCoins} from '../entities/coins';
 import {updateFloor} from '../entities/floor';
 import {drawPlatforms, updatePlatform} from '../entities/platforms';
 import {createEntities} from './entities';
-import {drawSprite} from './animation';
 import {drawInitialSettings} from '../entities/utils';
 import {drawBackground} from '../entities/background';
+import {eventGameOver, eventTimerGameOver} from '../other/gameover';
+import {startTimer} from './timer';
+import {eventScore} from '../other/score';
+import {eventTime} from '../other/time';
 
 export function createGame(selector) {
   const canvas = $(selector).get(0);
@@ -19,9 +22,15 @@ export function createGame(selector) {
     canvas,
     context,
     entities,
+    maxTime: 10,
   };
 
-  collectCoins(game);
+  startTimer();
+  eventCollectCoins(game);
+  eventTimerGameOver(game);
+  eventGameOver(game);
+  eventTime(game);
+  eventScore();
 
   engine(frames => {
     const obj = {
@@ -44,14 +53,7 @@ export function createGame(selector) {
     drawPlayer(game);
     drawCoins(game);
     drawPlatforms(game);
-    drawSprite(context, game.entities.timerUi);
-    drawSprite(context, game.entities.coinUi);
-
-    // todo: ui is gross as fuck
-    context.fillStyle = '#676670';
-    context.font = '24px system-ui';
-    context.fillText(`${0}`, 88, 68);
-    context.fillText(`${0}`, 88, 120);
+    drawUi(game);
 
     context.fillStyle = '#381010';
     context.globalAlpha = 0.4;

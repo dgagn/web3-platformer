@@ -30,14 +30,15 @@ import {createSound, playSoundOnState} from '../core/sound';
 import {hasTag, tag} from '../core/tag';
 import {state} from '../core/state';
 import {spritePlayer} from '../sprites/player';
-import {playerSound} from '../sounds/player';
+import {soundPlayer} from '../sounds/player';
 import {position} from '../core/physics';
 import {emitter} from '../core/emitter';
 import {emitterGame} from './emitter';
+import {player} from '../core/name';
 
 export function createPlayer() {
   return pipeWith(
-    {},
+    player(),
     tag('player'),
     position([48, 48]),
     physics(),
@@ -47,7 +48,7 @@ export function createPlayer() {
     movable(1),
     rectangle,
     createAnimations(spritePlayer),
-    createSound(playerSound)
+    createSound(soundPlayer)
   );
 }
 

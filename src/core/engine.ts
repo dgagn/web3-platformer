@@ -9,15 +9,12 @@ export const engine = fn => {
   return cb;
 };
 
-export const engine2 = fn => {
-  // ignore coverage because request animation frame is not defined in node
-  let id;
-  const cb = (time?: number) => {
-    id = requestAnimationFrame(cb);
-    fn(~~time);
-  };
-  return [id, cb];
-};
+export function clearEngine() {
+  let id = window.requestAnimationFrame(() => {});
+  while (id--) {
+    window.cancelAnimationFrame(id);
+  }
+}
 
 export function update(fn) {
   return p2 => {

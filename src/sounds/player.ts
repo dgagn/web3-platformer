@@ -1,4 +1,4 @@
-export const playerSound = [
+export const soundPlayer = [
   {
     name: 'walk',
     state: 'running',
