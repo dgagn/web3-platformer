@@ -1,36 +1,18 @@
 // ignore file coverage
-import {pipe, pipeWith, random} from './utils';
+import {pipe, pipeWith} from './utils';
 import {
-  addForce,
-  physics,
   updatePhysics,
-  size,
   rectangle,
   jump,
   movement,
   gravity,
   collision,
-  vector,
   engine,
-  jumpable,
-  movable,
-  hasRectangle,
 } from './core';
 import Input from './game/input-manager';
-import {tag} from './core/tag';
 import {coinCollision, coinEmitter} from './core/collision';
-import {
-  createAnimations,
-  drawSprite,
-  unsafeUpdateAnimation,
-} from './core/animation';
-import {playerSprite} from './player/sprites';
-import {coinSprite} from './sprites/coin';
-import {platformSprite} from './sprites/platform';
-import {state} from './core/state';
+import {drawSprite, unsafeUpdateAnimation} from './core/animation';
 import {coinSound, createSound, playSoundOnState} from './core/sound';
-import {playerSound} from './player/sounds';
-import {uiSprite} from './sprites/ui';
 import {createGame} from './core/game';
 import $ from 'jquery';
 import {
@@ -40,6 +22,14 @@ import {
   stateRunning,
 } from './player/states';
 import {constraintBounds, fromTopBoundsToBottom} from './core/bounds';
+import {
+  createCoin,
+  createCoinUI,
+  createFloor,
+  createPlatform,
+  createPlayer,
+  createTimerUI,
+} from './scratch/t1';
 
 const canvas = document.getElementById('canvas') as HTMLCanvasElement;
 const context = canvas.getContext('2d');
@@ -54,79 +44,19 @@ bimg.src = 'wall.png';
 const fimg = new Image();
 fimg.src = 'cols.png';
 
-// todo: export the entity later on for easy access to create more entities
+let player = createPlayer();
+let timerUi = createTimerUI();
+let coinUi = createCoinUI();
+let floor = createFloor(canvas);
 
-let player = pipeWith(
-  {},
-  tag('player'),
-  physics({position: [48, 48]}),
-  size(32, 50),
-  state('idle', true),
-  jumpable(14),
-  movable(1),
-  rectangle,
-  createAnimations(playerSprite),
-  createSound(playerSound)
-);
-
-const coin = () =>
-  pipeWith(
-    {},
-    tag('coin'),
-    physics({
-      position: [random(10, canvas.width - 30), random(10, canvas.height - 50)],
-    }),
-    size(16, 16),
-    state(random(1, 2) == 1 ? 'idle' : 'idle_alt', true),
-    rectangle,
-    createAnimations(coinSprite),
-    createSound(coinSound)
-  );
-
-let timerUi = pipeWith(
-  {},
-  physics({position: [48, 48]}),
-  size(24, 24),
-  state('timer', true),
-  createAnimations(uiSprite)
-);
-
-let coinUi = pipeWith(
-  {},
-  physics({position: [48, 100]}),
-  size(24, 24),
-  state('coin', true),
-  createAnimations(uiSprite)
-);
-
-let floor = pipeWith(
-  {},
-  tag('floor'),
-  physics({position: [0, canvas.height - 20]}),
-  size(canvas.width, 20),
-  rectangle
-);
-
-const platform = () =>
-  pipeWith(
-    {},
-    tag('platform'),
-    physics({
-      position: [random(0, canvas.width), random(0, canvas.height)],
-    }),
-    size(64, 16),
-    rectangle,
-    state(random(1, 2) === 1 ? 'idle' : 'idle_alt')(true),
-    createAnimations(platformSprite)
-  );
+const coin = () => createCoin(canvas);
+const platform = () => createPlatform(canvas);
 
 let coins = Array(1).fill(true).map(coin);
 let platforms = Array(10).fill(true).map(platform);
 
-// todo: this is a timer, find a more PURE way to deal with this
-// works good tough
 let time = 90; // in seconds
-function timer() {
+export function timer() {
   if (time === 0) {
     coinEmitter.emit('gameover');
     return;
@@ -134,13 +64,7 @@ function timer() {
   time--;
   setTimeout(timer, 1000);
 }
-
 timer();
-
-// todo: maybe look for a destroy method (atm it is impure)
-// will see for a better implementation
-
-// todo: find a better implementation for the score
 
 const MAXCOINS = 50;
 let score = 0;
@@ -171,7 +95,7 @@ engine(() => {
     pipe(...platforms.map(collision)),
     collision(floor),
     pipe(...coins.map(coinCollision)),
-    constraintBounds([canvas.width, canvas.height]),
+    constraintBounds(canvas),
     stateIdle,
     stateRunning(2),
     stateJumping(-10),
@@ -189,7 +113,7 @@ engine(() => {
     updatePhysics(0.1),
     gravity(-0.2),
     rectangle,
-    fromTopBoundsToBottom([canvas.width, canvas.height]),
+    fromTopBoundsToBottom(canvas),
     unsafeUpdateAnimation(~~frames)
   );
   platforms = platforms.map(platformUpdate);
@@ -199,9 +123,6 @@ engine(() => {
   coins = coins.map(coinUpdate).filter(c => !c.destroyed);
 
   frames++;
-
-  // @ts-ignore
-  window.coins = coins;
 })();
 
 engine(() => {

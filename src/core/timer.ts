@@ -1,0 +1,1 @@
+import {coinEmitter} from './collision';
