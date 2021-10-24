@@ -1,18 +1,18 @@
 // ignore file coverage
 import {pipe, pipeWith} from './utils';
 import {
-  updatePhysics,
-  rectangle,
-  jump,
-  movement,
-  gravity,
   collision,
   engine,
+  gravity,
+  jump,
+  movement,
+  rectangle,
+  updatePhysics,
 } from './core';
 import Input from './core/input-manager';
 import {coinCollision, coinEmitter} from './core/collision';
 import {drawSprite, unsafeUpdateAnimation} from './core/animation';
-import {coinSound, createSound, playSoundOnState} from './core/sound';
+import {playSoundOnState} from './core/sound';
 import {createGame} from './core/game';
 import $ from 'jquery';
 import {

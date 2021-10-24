@@ -1,4 +1,4 @@
-import {hasSize, hasPhysics} from './index';
+import {hasPhysics, hasSize} from './index';
 import {isDefined} from '../utils';
 
 export const hasRectangle = obj =>

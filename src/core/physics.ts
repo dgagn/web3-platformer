@@ -1,4 +1,4 @@
-import Vector, {add, vector, scale, Vec} from './vector';
+import Vector, {add, scale, Vec, vector} from './vector';
 import {curry, isDefined} from '../utils';
 
 export const hasPhysics = obj =>
