@@ -18,7 +18,7 @@ import {
   drawSprite,
   unsafeUpdateAnimation,
 } from '../core/animation';
-import {holySprite} from '../player/sprites';
+import {holySprite, mrManSprite, playerSprite} from '../player/sprites';
 import {createSound, playSoundOnState} from '../core/sound';
 import {playerSound} from '../player/sounds';
 import {draw, update} from '../core/game';
@@ -44,7 +44,7 @@ export let player = pipeWith(
   jumpable(14),
   movable(1),
   rectangle,
-  createAnimations(holySprite),
+  createAnimations(mrManSprite),
   createSound(playerSound)
 );
 

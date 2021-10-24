@@ -22,13 +22,21 @@ export const update = fn => {
   game.update.push(fn);
 };
 
-export const engine = () => {
+export const engine = fn => {
   let frames = 0;
   const cb = () => {
     requestAnimationFrame(cb);
-    game.update.forEach(f => f(~~frames));
-    game.draws.forEach(f => f(game.context));
+    fn(~~frames);
     frames++;
   };
   return cb;
 };
+
+export const draws = engine(() => {
+  game.draws.forEach(f => f(game.context));
+});
+
+export const updates = engine(frames => {
+  console.log(frames);
+  game.update.forEach(f => f(frames));
+});

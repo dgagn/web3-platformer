@@ -36,7 +36,10 @@ update(frames => {
 });
 
 draw(context => {
-  coins.forEach(c => drawSprite(context, c));
+  coins.forEach(c => {
+    console.log(c);
+  });
+  // coins.forEach(c => drawSprite(context, c));
 });
 
 const MAXCOINS = 50;
