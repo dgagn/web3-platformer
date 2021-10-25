@@ -30,7 +30,7 @@ export function createGame(selector) {
   startTimer();
   eventCollectCoins(game);
   eventTimerGameOver();
-  eventGameOver();
+  eventGameOver(game);
   eventTime(game);
   eventScore();
   startMusic();

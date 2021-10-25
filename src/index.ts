@@ -1,14 +1,12 @@
 import $ from 'jquery';
-import {createHomePage} from './pages/home';
-import {eventPlayButton} from './components/btn';
+import {createHomePage, setHomePage} from './pages/home';
 import '../styles/main.scss';
-import {parallax} from './components/parallax';
+
+import {eventModal} from './components/modal';
 
 function main() {
-  const homePage = createHomePage();
-  $('body').append(homePage);
-  eventPlayButton();
-  parallax();
+  setHomePage();
+  eventModal();
 }
 
 $(main);

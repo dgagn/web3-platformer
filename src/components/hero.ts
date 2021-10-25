@@ -12,7 +12,7 @@ export function createHero() {
       de Web 3. Bouger la souris pour voir un effet parallaxe. Créer par
       Dany Gagnon.
     </p>
-    <button class='link-fx-4 px-md pointer' id='play'>Jouer une partie</button>
+    <button class='link-fx-4 px-md pointer mb-lg' id='play'>Jouer une partie</button>
   </div>
   <div class='hero__image parallax anim' role='img' id='hero'>
     <div class='curtain parallax'></div>
