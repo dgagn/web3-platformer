@@ -2,7 +2,6 @@ import {emitterGame} from '../entities/emitter';
 import {clearEngine} from '../core/engine';
 import {time} from './time';
 import {pauseMusic} from './gamestart';
-import {eventLeaderboard} from './leaderboard';
 
 export function eventTimerGameOver() {
   emitterGame.on('timer', () => {

@@ -1,7 +1,7 @@
 import {update} from '../core/engine';
 import {pipe, pipeWith} from '../utils';
 import Input from '../core/input-manager';
-import {coinCollision, collision, collisionTrigger} from '../core/collision';
+import {collision, collisionTrigger} from '../core/collision';
 import {constraintBounds} from '../core/bounds';
 import {
   stateFalling,
@@ -20,7 +20,6 @@ import {state} from '../core/state';
 import {spritePlayer} from '../sprites/player';
 import {soundPlayer} from '../sounds/player';
 import {gravity, physics, position, updatePhysics} from '../core/physics';
-import {emitter} from '../core/emitter';
 import {emitterGame} from './emitter';
 import {player} from '../core/info';
 import {size} from '../core/size';

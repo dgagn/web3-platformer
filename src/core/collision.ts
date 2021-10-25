@@ -1,6 +1,5 @@
 import {vector} from './vector';
 import {hasRectangle} from './rectangle';
-import {emitter} from './emitter';
 import {emitterGame} from '../entities/emitter';
 
 /**
