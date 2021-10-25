@@ -10,7 +10,7 @@ import {
   unsafeUpdateAnimation,
 } from '../core/animation';
 import {spriteCoin} from '../sprites/coin';
-import {createSound} from '../core/sound';
+import {createSounds} from '../core/sound';
 import {update} from '../core/engine';
 import {position} from '../core/physics';
 import {emitterGame} from './emitter';
@@ -29,7 +29,7 @@ export function createCoin(canvas) {
     state(random(1, 2) == 1 ? 'idle' : 'idle_alt', true),
     rectangle,
     createAnimations(spriteCoin),
-    createSound(soundCoin)
+    createSounds(soundCoin)
   );
 }
 

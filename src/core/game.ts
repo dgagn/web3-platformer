@@ -12,6 +12,8 @@ import {eventGameOver, eventTimerGameOver} from '../other/gameover';
 import {startTimer} from './timer';
 import {eventScore} from '../other/score';
 import {eventTime} from '../other/time';
+import {startMusic} from '../other/gamestart';
+import {eventLeaderboard} from '../other/leaderboard';
 
 export function createGame(selector) {
   const canvas = $(selector).get(0);
@@ -28,9 +30,10 @@ export function createGame(selector) {
   startTimer();
   eventCollectCoins(game);
   eventTimerGameOver();
-  eventGameOver();
+  eventGameOver(game);
   eventTime(game);
   eventScore();
+  startMusic();
 
   engine(frames => {
     const obj = {

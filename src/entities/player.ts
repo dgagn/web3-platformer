@@ -14,7 +14,7 @@ import {
   drawSprite,
   unsafeUpdateAnimation,
 } from '../core/animation';
-import {createSound, playSoundOnState} from '../core/sound';
+import {createSounds, playSoundOnState} from '../core/sound';
 import {hasTag, tag} from '../core/tag';
 import {state} from '../core/state';
 import {spritePlayer} from '../sprites/player';
@@ -22,7 +22,7 @@ import {soundPlayer} from '../sounds/player';
 import {gravity, physics, position, updatePhysics} from '../core/physics';
 import {emitter} from '../core/emitter';
 import {emitterGame} from './emitter';
-import {player} from '../core/name';
+import {player} from '../core/info';
 import {size} from '../core/size';
 import {jump, jumpable} from '../core/jumpable';
 import {movable, movement} from '../core/movable';
@@ -40,7 +40,7 @@ export function createPlayer() {
     movable(1),
     rectangle,
     createAnimations(spritePlayer),
-    createSound(soundPlayer)
+    createSounds(soundPlayer)
   );
 }
 

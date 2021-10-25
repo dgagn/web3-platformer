@@ -43,7 +43,7 @@ export const updateUi = update(({game, frames}) => {
   );
 });
 
-export function drawUi({context, entities: {timerUi, coinUi, player}}) {
+export function drawUi({context, canvas, entities: {timerUi, coinUi, player}}) {
   context.globalAlpha = 1;
   drawSprite(context, timerUi);
   drawSprite(context, coinUi);
@@ -52,8 +52,7 @@ export function drawUi({context, entities: {timerUi, coinUi, player}}) {
   context.font = '24px system-ui';
   context.fillText(`${time}`, 88, 68);
   context.fillText(`${score}`, 88, 120);
-
-  console.log(player.name);
+  context.fillText(`${player.info}`, canvas.width / 2 - 24, 30);
 }
 
 export function drawGameOverUi({context, canvas}) {
