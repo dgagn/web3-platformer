@@ -1,6 +1,8 @@
 import {curry, isDefined} from '../utils';
 
-export const hasState = obj => isDefined(obj.state);
+export function hasState(obj) {
+  return isDefined(obj.state);
+}
 
 const _state = (key, boolean, obj) => ({
   ...obj,

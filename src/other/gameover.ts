@@ -10,10 +10,9 @@ export function eventTimerGameOver() {
   });
 }
 
-export function eventGameOver(game) {
+export function eventGameOver() {
   emitterGame.on('gameover', () => {
     clearEngine();
     pauseMusic();
-    eventLeaderboard(game);
   });
 }

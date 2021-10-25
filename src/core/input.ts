@@ -1,13 +1,11 @@
 import {vector} from './vector';
 
-// todo: add unit test for inputs
-
-const createKeyManager = () => {
+function createKeyManager() {
   const keyManager = {};
   document.addEventListener('keydown', ({code}) => (keyManager[code] = true));
   document.addEventListener('keyup', ({code}) => delete keyManager[code]);
   return keyManager;
-};
+}
 
 const keyManager = createKeyManager();
 

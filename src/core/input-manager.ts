@@ -7,6 +7,7 @@ const inputManager = {
 };
 
 const getButtonDown = initButtonDown(inputManager);
+
 const getAxis = () => createAxis(inputManager)('left', 'right', 'jump');
 const getAxisX = () => getAxis()[0];
 const getAxisY = () => getAxis()[1];

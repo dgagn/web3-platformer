@@ -11,13 +11,14 @@ import {emitterGame} from '../entities/emitter';
  * @return {boolean} - un booléen pour savoir si il y a une
  * collision entre deux rectangles.
  */
-export const hasCollision = (rec1, rec2) =>
-  !(
+export function hasCollision(rec1, rec2) {
+  return !(
     rec1.bottom < rec2.top ||
     rec1.top > rec2.bottom ||
     rec1.left > rec2.right ||
     rec1.right < rec2.left
   );
+}
 
 /**
  * Permet de savoir si la collision est une collision de
@@ -30,8 +31,9 @@ export const hasCollision = (rec1, rec2) =>
  * @return {boolean} - un booléen pour savoir si le rectangle est
  * en collision (le bas du rectangle 1 sur le haut du rectangle 2)
  */
-export const isBottomTopCollision = (rec1, rec2) =>
-  rec1.bottom >= rec2.top && rec1.oldbottom < rec2.oldtop;
+export function isBottomTopCollision(rec1, rec2) {
+  return rec1.bottom >= rec2.top && rec1.oldbottom < rec2.oldtop;
+}
 
 /**
  * Permet de savoir si la collision est une collision de
@@ -45,8 +47,9 @@ export const isBottomTopCollision = (rec1, rec2) =>
  * @return {boolean} - un booléen pour savoir si le rectangle est
  * en collision (le haut du rectangle 1 sur le bas du rectangle 2)
  */
-export const isTopBottomCollision = (rec1, rec2) =>
-  rec1.top <= rec2.bottom && rec1.oldtop > rec2.oldbottom;
+export function isTopBottomCollision(rec1, rec2) {
+  return rec1.top <= rec2.bottom && rec1.oldtop > rec2.oldbottom;
+}
 
 /**
  * Permet de savoir si la collision est une collision de
@@ -60,8 +63,9 @@ export const isTopBottomCollision = (rec1, rec2) =>
  * @return {boolean} - un booléen pour savoir si le rectangle est
  * en collision (la droite du rectangle 1 sur la gauche du rectangle 2)
  */
-export const isRightLeftCollision = (rec1, rec2) =>
-  rec1.right >= rec2.left && rec1.oldright < rec2.oldleft;
+export function isRightLeftCollision(rec1, rec2) {
+  return rec1.right >= rec2.left && rec1.oldright < rec2.oldleft;
+}
 
 /**
  * Permet de savoir si la collision est une collision de
@@ -75,25 +79,8 @@ export const isRightLeftCollision = (rec1, rec2) =>
  * @return {boolean} - un booléen pour savoir si le rectangle est
  * en collision (la gauche du rectangle 1 sur la droite du rectangle 2)
  */
-export const isLeftRightCollision = (rec1, rec2) =>
-  rec1.left <= rec2.right && rec1.oldleft > rec2.oldright;
-
-export const coinEmitter = emitter();
-
-export const coinCollision = rec => obj => {
-  const isCoin = rec.tag === 'coin';
-  if (isCoin && hasCollision(obj, rec)) {
-    coinEmitter.emit('coin', rec);
-  }
-  return obj;
-};
-
-export function destroy(obj) {
-  obj.destroyed = true;
-}
-
-export function isDestroyed(obj) {
-  return !obj.destroyed;
+export function isLeftRightCollision(rec1, rec2) {
+  return rec1.left <= rec2.right && rec1.oldleft > rec2.oldright;
 }
 
 export function collisionTrigger(rec) {
@@ -105,52 +92,54 @@ export function collisionTrigger(rec) {
   };
 }
 
-export const collision = rec => obj => {
-  if (!hasRectangle(obj) || !hasRectangle(rec)) {
-    throw new Error('objects must have the rectangle properties');
-  }
+export function collision(rec) {
+  return obj => {
+    if (!hasRectangle(obj) || !hasRectangle(rec)) {
+      throw new Error('objects must have the rectangle properties');
+    }
 
-  if (!hasCollision(obj, rec)) return obj;
+    if (!hasCollision(obj, rec)) return obj;
 
-  const {width, height} = obj;
-  const [[px, py], [vx, vy], [rvx, rvy]] = [
-    obj.position,
-    obj.velocity,
-    rec.velocity,
-  ];
+    const {width, height} = obj;
+    const [[px, py], [vx, vy], [rvx, rvy]] = [
+      obj.position,
+      obj.velocity,
+      rec.velocity,
+    ];
 
-  if (isBottomTopCollision(obj, rec)) {
-    return {
-      ...obj,
-      position: vector(px, rec.top - 0.1 - height),
-      velocity: vector(vx, rvy),
-      isGrounded: true,
-    };
-  }
+    if (isBottomTopCollision(obj, rec)) {
+      return {
+        ...obj,
+        position: vector(px, rec.top - 0.1 - height),
+        velocity: vector(vx, rvy),
+        isGrounded: true,
+      };
+    }
 
-  if (isTopBottomCollision(obj, rec)) {
-    return {
-      ...obj,
-      position: vector(px, rec.bottom + 0.1),
-      velocity: vector(vx, rvy),
-    };
-  }
+    if (isTopBottomCollision(obj, rec)) {
+      return {
+        ...obj,
+        position: vector(px, rec.bottom + 0.1),
+        velocity: vector(vx, rvy),
+      };
+    }
 
-  if (isRightLeftCollision(obj, rec)) {
-    return {
-      ...obj,
-      position: vector(rec.left - 0.1 - width, py),
-      velocity: vector(rvx, vy),
-    };
-  }
+    if (isRightLeftCollision(obj, rec)) {
+      return {
+        ...obj,
+        position: vector(rec.left - 0.1 - width, py),
+        velocity: vector(rvx, vy),
+      };
+    }
 
-  if (isLeftRightCollision(obj, rec)) {
-    return {
-      ...obj,
-      position: vector(rec.right + 0.1, py),
-      velocity: vector(rvx, vy),
-    };
-  }
+    if (isLeftRightCollision(obj, rec)) {
+      return {
+        ...obj,
+        position: vector(rec.right + 0.1, py),
+        velocity: vector(rvx, vy),
+      };
+    }
 
-  return obj;
-};
+    return obj;
+  };
+}

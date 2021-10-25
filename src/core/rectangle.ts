@@ -1,7 +1,7 @@
 import {isDefined} from '../utils';
 
-export const hasRectangle = obj =>
-  [
+export function hasRectangle(obj) {
+  return [
     obj.top,
     obj.bottom,
     obj.left,
@@ -11,8 +11,9 @@ export const hasRectangle = obj =>
     obj.oldleft,
     obj.oldright,
   ].every(isDefined);
+}
 
-export const rectangle = obj => {
+export function rectangle(obj) {
   const [px, py] = obj.position;
   const [ox, oy] = obj.oldpos;
   const {width, height} = obj;
@@ -28,4 +29,4 @@ export const rectangle = obj => {
     oldleft: ox,
     oldright: ox + width,
   };
-};
+}

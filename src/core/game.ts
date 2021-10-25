@@ -30,10 +30,11 @@ export function createGame(selector) {
   startTimer();
   eventCollectCoins(game);
   eventTimerGameOver();
-  eventGameOver(game);
+  eventGameOver();
   eventTime(game);
   eventScore();
   startMusic();
+  eventLeaderboard(game);
 
   engine(frames => {
     const obj = {

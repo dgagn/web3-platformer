@@ -14,7 +14,7 @@ import {createSounds} from '../core/sound';
 import {update} from '../core/engine';
 import {position} from '../core/physics';
 import {emitterGame} from './emitter';
-import {destroy, isDestroyed} from '../core/collision';
+import {destroy, isDestroyed} from '../core/destroy';
 import {createArray} from '../utils/lang';
 import {soundCoin} from '../sounds/coin';
 

@@ -1,4 +1,4 @@
-export const engine = fn => {
+export function engine(fn) {
   let frame = 0;
   const cb = () => {
     requestAnimationFrame(cb);
@@ -6,7 +6,7 @@ export const engine = fn => {
     frame++;
   };
   return cb;
-};
+}
 
 export function clearEngine() {
   let id = window.requestAnimationFrame(() => {});
