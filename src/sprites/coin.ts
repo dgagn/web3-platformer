@@ -1,4 +1,4 @@
-import {vector} from '../core';
+import {vector} from '../core/vector';
 
 export const spriteCoin = [
   {

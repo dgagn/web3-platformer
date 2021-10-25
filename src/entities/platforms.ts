@@ -1,6 +1,5 @@
 import {update} from '../core/engine';
 import {pipe, pipeWith, random} from '../utils';
-import {gravity, physics, rectangle, size, updatePhysics} from '../core';
 import {fromTopBoundsToBottom} from '../core/bounds';
 import {
   createAnimations,
@@ -10,7 +9,9 @@ import {
 import {tag} from '../core/tag';
 import {state} from '../core/state';
 import {spritePlatform} from '../sprites/platform';
-import {position} from '../core/physics';
+import {gravity, physics, position, updatePhysics} from '../core/physics';
+import {size} from '../core/size';
+import {rectangle} from '../core/rectangle';
 
 export function createPlatform(canvas) {
   return pipeWith(

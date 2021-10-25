@@ -1,5 +1,5 @@
 import {pipeWith} from '../utils';
-import {size} from '../core';
+import {size} from '../core/size';
 import {state} from '../core/state';
 import {
   createAnimations,

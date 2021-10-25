@@ -6,7 +6,7 @@ import {drawCoins, eventCollectCoins, updateCoins} from '../entities/coins';
 import {updateFloor} from '../entities/floor';
 import {drawPlatforms, updatePlatform} from '../entities/platforms';
 import {createEntities} from './entities';
-import {drawInitialSettings} from '../entities/utils';
+import {drawColorCorrect, drawInitialSettings} from '../entities/utils';
 import {drawBackground} from '../entities/background';
 import {eventGameOver, eventTimerGameOver} from '../other/gameover';
 import {startTimer} from './timer';
@@ -27,8 +27,8 @@ export function createGame(selector) {
 
   startTimer();
   eventCollectCoins(game);
-  eventTimerGameOver(game);
-  eventGameOver(game);
+  eventTimerGameOver();
+  eventGameOver();
   eventTime(game);
   eventScore();
 
@@ -37,7 +37,6 @@ export function createGame(selector) {
       game,
       frames,
     };
-
     updatePlayer(obj);
     updateCoins(obj);
     updateFloor(obj);
@@ -46,19 +45,13 @@ export function createGame(selector) {
   })();
 
   engine(() => {
-    const {context} = game;
-
     drawInitialSettings(game);
     drawBackground(game);
     drawPlayer(game);
     drawCoins(game);
     drawPlatforms(game);
     drawUi(game);
-
-    context.fillStyle = '#381010';
-    context.globalAlpha = 0.4;
-    context.fillRect(0, 0, game.canvas.width, game.canvas.height);
-    context.globalAlpha = 1;
+    drawColorCorrect(game);
   })();
 
   return game;

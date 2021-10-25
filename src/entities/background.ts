@@ -1,4 +1,4 @@
-import {mult} from '../core';
+import {mult} from '../core/vector';
 import {createImage} from '../core/image';
 import {spriteBackgrounds} from '../sprites/background';
 

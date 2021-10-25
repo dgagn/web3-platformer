@@ -49,7 +49,7 @@ export const updatePhysics =
     };
   };
 
-const _addForce = (force: Vec, obj) => {
+const _addForce = (force, obj) => {
   if (!hasPhysics(obj) || force.length !== 2) {
     throw new Error(
       'the object needs to have the physics properties ' +

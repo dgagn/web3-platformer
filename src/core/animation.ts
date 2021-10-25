@@ -1,4 +1,4 @@
-import {add, draw, mult, vector} from './vector';
+import {add, mult} from './vector';
 import {hasState} from './state';
 import {createImage} from './image';
 
@@ -40,16 +40,7 @@ export const unsafeUpdateAnimation = frames => obj => {
   };
 };
 
-const drawDebug = (context, obj) => {
-  context.strokeRect(obj.position[0], obj.position[1], obj.width, obj.height);
-  draw(context)(obj.velocity)(
-    vector(obj.position[0] + obj.width / 2, obj.position[1] + obj.height / 2),
-    10,
-    'red'
-  );
-};
 export const drawSprite = (context, obj) => {
-  // drawDebug(context, obj);
   context.drawImage(
     obj.animation.image,
     obj.current * obj.animation.size[0],

@@ -1,6 +1,8 @@
 import {pipe, pipeWith, random} from '../utils';
 import {tag} from '../core/tag';
-import {rectangle, size, vector} from '../core';
+import {vector} from '../core/vector';
+import {rectangle} from '../core/rectangle';
+import {size} from '../core/size';
 import {state} from '../core/state';
 import {
   createAnimations,

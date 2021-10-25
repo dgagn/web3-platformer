@@ -1,7 +1,6 @@
 export const engine = fn => {
   let frame = 0;
-  // ignore coverage because request animation frame is not defined in node
-  const cb = (time?: number) => {
+  const cb = () => {
     requestAnimationFrame(cb);
     fn(~~frame);
     frame++;

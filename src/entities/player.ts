@@ -1,19 +1,7 @@
 import {update} from '../core/engine';
 import {pipe, pipeWith} from '../utils';
-import {
-  collision,
-  gravity,
-  jump,
-  jumpable,
-  movable,
-  movement,
-  physics,
-  rectangle,
-  size,
-  updatePhysics,
-} from '../core';
 import Input from '../core/input-manager';
-import {coinCollision, collisionTrigger} from '../core/collision';
+import {coinCollision, collision, collisionTrigger} from '../core/collision';
 import {constraintBounds} from '../core/bounds';
 import {
   stateFalling,
@@ -31,10 +19,14 @@ import {hasTag, tag} from '../core/tag';
 import {state} from '../core/state';
 import {spritePlayer} from '../sprites/player';
 import {soundPlayer} from '../sounds/player';
-import {position} from '../core/physics';
+import {gravity, physics, position, updatePhysics} from '../core/physics';
 import {emitter} from '../core/emitter';
 import {emitterGame} from './emitter';
 import {player} from '../core/name';
+import {size} from '../core/size';
+import {jump, jumpable} from '../core/jumpable';
+import {movable, movement} from '../core/movable';
+import {rectangle} from '../core/rectangle';
 
 export function createPlayer() {
   return pipeWith(

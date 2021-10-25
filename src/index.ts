@@ -1,5 +1,5 @@
 // ignore file coverage
-import {createGame} from './core/game';
+import {createGame} from './core';
 import $ from 'jquery';
 
 const can = $(`<canvas width='800' height='600' />`);

@@ -1,8 +1,9 @@
 import {update} from '../core/engine';
 import {pipeWith} from '../utils';
-import {physics, rectangle, size, updatePhysics} from '../core';
 import {tag} from '../core/tag';
-import {position} from '../core/physics';
+import {physics, position, updatePhysics} from '../core/physics';
+import {size} from '../core/size';
+import {rectangle} from '../core/rectangle';
 
 export function createFloor(canvas) {
   return pipeWith(
