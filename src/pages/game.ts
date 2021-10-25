@@ -2,7 +2,6 @@ import $ from 'jquery';
 import {createGame} from '../core';
 import {app} from '../components/app';
 import {setPlayer} from '../core/info';
-import {clearGame} from '../core/game';
 
 export function createGamePage() {
   const game = $('#game');

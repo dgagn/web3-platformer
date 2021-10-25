@@ -1,5 +1,3 @@
-import {startTimer} from './timer';
-
 export function engine(fn) {
   let frame = 0;
   const cb = () => {

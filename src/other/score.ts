@@ -6,3 +6,7 @@ export function eventScore() {
     score += inc;
   });
 }
+
+export function resetScore() {
+  score = 0;
+}

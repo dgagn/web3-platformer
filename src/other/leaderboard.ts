@@ -1,5 +1,4 @@
 import {score} from './score';
-import {emitterGame} from '../entities/emitter';
 
 export function getLeaderboard() {
   return JSON.parse(localStorage.getItem('leaderboard')) ?? [];

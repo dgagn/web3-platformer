@@ -5,15 +5,16 @@ import {eventModalOpen} from './modal-open';
 import {eventModalStart} from './modal-start';
 import {eventModalError} from './modal-error';
 
-export function createModal(name, title, subtitle, button, emoji) {
+export function createModal(name, title, subtitle, button, emoji, info) {
   return $(`
   <div class='modal z-max' id='modal'>
   <div class='content rounded relative p-sm@!sm'>
-    <h3 class='mt-sm'>
-      <span role='img' aria-label='emoji pour un étoile'> ${emoji} </span>
+    <h3 class='mt-sm text-center'>
+      <span role='img' aria-label='emoji'> ${emoji} </span>
       ${title}
     </h3>
-    <p class='mt-sm'>${subtitle}</p>
+    <p class="text-md text-center text-contrast-500 mt-sm font-bold">${info}</p>
+    <p class='mt-sm text-center'>${subtitle}</p>
     <span class='block mt-lg'>
       <label for='nom' class='form__label'> Votre nom </label>
       <input type='text' id='nom' class='form__control' value='${name}' />
@@ -23,7 +24,7 @@ export function createModal(name, title, subtitle, button, emoji) {
       <p class='text-sm text-error-500 mt-xs' id='error'></p>
     </span>
     <div
-      class='
+      class="
         flex
         mt-md
         mb-sm
@@ -31,7 +32,7 @@ export function createModal(name, title, subtitle, button, emoji) {
         justify-center
         flex-wrap
         gap-y-md
-      '
+      "
     >
       <button
         class='button-reset text-bg-fx text-bg-fx&#45;&#45;scale-y mr-lg'
