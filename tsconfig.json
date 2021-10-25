@@ -4,7 +4,9 @@
     "target": "es5",
     "sourceMap": true,
     "esModuleInterop": true,
-    "baseUrl": "./src"
+    "baseUrl": "./src",
+    "emitDeclarationOnly": true,
+    "declaration": true
   },
   "exclude": ["node_modules"]
 }

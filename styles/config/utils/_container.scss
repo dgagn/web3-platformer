@@ -1,0 +1,7 @@
+@use '../spacing' as *;
+
+.container {
+  width: calc(100% - 2 * #{spacing-get(md)});
+  margin-right: auto;
+  margin-left: auto;
+}

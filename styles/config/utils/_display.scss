@@ -1,0 +1,75 @@
+@use '../display' as *;
+@use '../breakpoints' as *;
+@use '../spacing' as *;
+
+@each $display in $displays {
+  .#{$display} {
+    display: $display;
+  }
+}
+
+@each $breakpoint-key, $breakpoint-value in $breakpoints {
+  @each $display in $displays {
+    .#{$display}\@#{$breakpoint-key} {
+      @include breakpoint($breakpoint-key) {
+        display: $display;
+      }
+    }
+  }
+}
+
+.relative {
+  position: relative;
+}
+
+.align-center {
+  align-items: center;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.flex-wrap {
+  flex-wrap: wrap;
+}
+
+.space-between {
+  justify-content: space-between;
+}
+
+.w-full {
+  width: 100%;
+}
+
+.blur {
+  backdrop-filter: blur(10px);
+}
+
+.flex-wrap\@sm {
+  @include breakpoint(sm, 'not all') {
+    flex-wrap: wrap;
+  }
+}
+
+.pointer {
+  cursor: pointer;
+}
+
+.flex-1 {
+  flex: 1;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.rounded {
+  border-radius: 8px;
+}
+
+.display\@lg {
+  @include breakpoint(lg, 'not all') {
+    display: none;
+  }
+}

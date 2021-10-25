@@ -1,0 +1,79 @@
+@use '../config/colors' as *;
+@use '../config/spacing' as *;
+@use '../config/breakpoints' as *;
+
+.blockquote {
+  border-left: 3px solid color-get(primary, 500);
+}
+
+.h-50 {
+  height: 50px;
+}
+
+:root {
+  --eye-color-bg: var(--color-primary-100);
+  --eye-color-icon: var(--color-primary-400);
+  --button-color-bg: var(--color-contrast-50);
+  --button-color-text: var(--color-contrast-900);
+}
+
+.button-bg {
+  color: var(--button-color-text);
+  background-color: var(--button-color-bg);
+}
+
+.self-end {
+  align-self: flex-end;
+}
+
+.bg-blur {
+  @include breakpoint(sm) {
+    padding: spacing-get(xl);
+  }
+
+  background-color: hsla(240, 6%, 10%, 0.3);
+  border-radius: 16px;
+}
+
+.hidden {
+  visibility: hidden;
+}
+
+.icon {
+  width: 20px;
+  height: 20px;
+}
+
+.eye {
+  position: absolute;
+  top: spacing-get(xs);
+  color: var(--eye-color-icon);
+  background-color: var(--eye-color-bg);
+  transition: background-color 0.3s var(--ease-out);
+  transform: scale(0.85);
+
+  &--left {
+    left: spacing-get(xs);
+  }
+
+  &--right {
+    right: spacing-get(xs);
+  }
+
+  &--right-xl {
+    right: calc(#{spacing-get(lg)} + #{spacing-get(xs)});
+  }
+
+  &:hover {
+    color: color-get(primary, 500) !important;
+    background-color: color-get(primary, 200) !important;
+  }
+}
+
+.justify-center {
+  justify-content: center;
+}
+
+.rounded-full {
+  border-radius: 50%;
+}

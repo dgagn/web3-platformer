@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>core/collision.ts</title>
+
+    <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="./build/entry.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link
+      href="https://fonts.googleapis.com/css?family=Roboto:100,400,700|Inconsolata,700"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://use.fontawesome.com/releases/v5.6.3/css/all.css"
+      integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/"
+      crossorigin="anonymous"
+    />
+    <link
+      type="text/css"
+      rel="stylesheet"
+      href="https://jmblog.github.io/color-themes-for-google-code-prettify/themes/tomorrow-night.min.css"
+    />
+    <link type="text/css" rel="stylesheet" href="styles/app.min.css" />
+    <link type="text/css" rel="stylesheet" href="styles/iframe.css" />
+    <link type="text/css" rel="stylesheet" href="" />
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
+  </head>
+
+  <body class="layout small-header">
+    <div id="stickyNavbarOverlay"></div>
+
+    <div class="top-nav">
+      <div class="inner">
+        <a
+          id="hamburger"
+          role="button"
+          class="navbar-burger"
+          aria-label="menu"
+          aria-expanded="false"
+        >
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+        </a>
+        <div class="logo"></div>
+        <div class="menu">
+          <div class="navigation">
+            <a href="index.html" class="link"> API Documentation </a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="main">
+      <div class="sidebar" id="sidebarNav">
+        <nav>
+          <h2><a href="index.html">Documentation</a></h2>
+          <div class="category">
+            <h3>Global</h3>
+            <ul>
+              <li><a href="global.html#addForce">addForce</a></li>
+              <li>
+                <a href="global.html#createAnimations">createAnimations</a>
+              </li>
+              <li><a href="global.html#hasCollision">hasCollision</a></li>
+              <li>
+                <a href="global.html#isBottomTopCollision"
+                  >isBottomTopCollision</a
+                >
+              </li>
+              <li>
+                <a href="global.html#isLeftRightCollision"
+                  >isLeftRightCollision</a
+                >
+              </li>
+              <li>
+                <a href="global.html#isRightLeftCollision"
+                  >isRightLeftCollision</a
+                >
+              </li>
+              <li>
+                <a href="global.html#isTopBottomCollision"
+                  >isTopBottomCollision</a
+                >
+              </li>
+              <li><a href="global.html#pipe">pipe</a></li>
+              <li><a href="global.html#pipeWith">pipeWith</a></li>
+            </ul>
+          </div>
+        </nav>
+      </div>
+      <div class="core" id="main-content-wrapper">
+        <div class="content">
+          <header class="page-title">
+            <p>Source</p>
+            <h1>core/collision.ts</h1>
+          </header>
+
+          <section>
+            <article>
+              <pre
+                class="prettyprint source linenums"
+              ><code>import {vector} from './vector';
+import {hasRectangle} from './rectangle';
+import {emitterGame} from '../entities/emitter';
+
+/**
+ * Permet de savoir si il y a une collision entre deux
+ * rectangles.
+ * @param {Object} rec1 - le premier rectangle
+ * @param {Object} rec2 - le deuxième rectangle
+ * @return {boolean} - un booléen pour savoir si il y a une
+ * collision entre deux rectangles.
+ */
+export function hasCollision(rec1, rec2) {
+  return !(
+    rec1.bottom &lt; rec2.top ||
+    rec1.top > rec2.bottom ||
+    rec1.left > rec2.right ||
+    rec1.right &lt; rec2.left
+  );
+}
+
+/**
+ * Permet de savoir si la collision est une collision de
+ * type bas à haut.
+ *
+ * @example
+ * // Un joueur en haut d'une plateforme
+ * @param {Object} rec1 - le rectangle pour vérifier le bas
+ * @param {Object} rec2 - le rectangle pour vérifier le haut
+ * @return {boolean} - un booléen pour savoir si le rectangle est
+ * en collision (le bas du rectangle 1 sur le haut du rectangle 2)
+ */
+export function isBottomTopCollision(rec1, rec2) {
+  return rec1.bottom >= rec2.top &amp;&amp; rec1.oldbottom &lt; rec2.oldtop;
+}
+
+/**
+ * Permet de savoir si la collision est une collision de
+ * type haut à bas.
+ *
+ * @example
+ * // Un joueur qui saute et a une collision avec le haut d'une
+ * // plateforme
+ * @param {Object} rec1 - le rectangle pour vérifier le haut
+ * @param {Object} rec2 - le rectangle pour vérifier le bas
+ * @return {boolean} - un booléen pour savoir si le rectangle est
+ * en collision (le haut du rectangle 1 sur le bas du rectangle 2)
+ */
+export function isTopBottomCollision(rec1, rec2) {
+  return rec1.top &lt;= rec2.bottom &amp;&amp; rec1.oldtop > rec2.oldbottom;
+}
+
+/**
+ * Permet de savoir si la collision est une collision de
+ * type droite à gauche.
+ *
+ * @example
+ * // Un joueur qui saute et a une collision de droite avec le coté gauche
+ * // d'une plateforme
+ * @param {Object} rec1 - le rectangle pour vérifier la droite
+ * @param {Object} rec2 - le rectangle pour vérifier la gauche
+ * @return {boolean} - un booléen pour savoir si le rectangle est
+ * en collision (la droite du rectangle 1 sur la gauche du rectangle 2)
+ */
+export function isRightLeftCollision(rec1, rec2) {
+  return rec1.right >= rec2.left &amp;&amp; rec1.oldright &lt; rec2.oldleft;
+}
+
+/**
+ * Permet de savoir si la collision est une collision de
+ * type haut à bas.
+ *
+ * @example
+ * // Un joueur qui saute et a une collision de gauche avec le coté droite
+ * // d'une plateforme
+ * @param {Object} rec1 - le rectangle pour vérifier la gauche
+ * @param {Object} rec2 - le rectangle pour vérifier la droite
+ * @return {boolean} - un booléen pour savoir si le rectangle est
+ * en collision (la gauche du rectangle 1 sur la droite du rectangle 2)
+ */
+export function isLeftRightCollision(rec1, rec2) {
+  return rec1.left &lt;= rec2.right &amp;&amp; rec1.oldleft > rec2.oldright;
+}
+
+export function collisionTrigger(rec) {
+  return obj => {
+    if (hasCollision(obj, rec)) {
+      emitterGame.emit('trigger', {collider: rec, obj});
+    }
+    return obj;
+  };
+}
+
+export function collision(rec) {
+  return obj => {
+    if (!hasRectangle(obj) || !hasRectangle(rec)) {
+      throw new Error('objects must have the rectangle properties');
+    }
+
+    if (!hasCollision(obj, rec)) return obj;
+
+    const {width, height} = obj;
+    const [[px, py], [vx, vy], [rvx, rvy]] = [
+      obj.position,
+      obj.velocity,
+      rec.velocity,
+    ];
+
+    if (isBottomTopCollision(obj, rec)) {
+      return {
+        ...obj,
+        position: vector(px, rec.top - 0.1 - height),
+        velocity: vector(vx, rvy),
+        isGrounded: true,
+      };
+    }
+
+    if (isTopBottomCollision(obj, rec)) {
+      return {
+        ...obj,
+        position: vector(px, rec.bottom + 0.1),
+        velocity: vector(vx, rvy),
+      };
+    }
+
+    if (isRightLeftCollision(obj, rec)) {
+      return {
+        ...obj,
+        position: vector(rec.left - 0.1 - width, py),
+        velocity: vector(rvx, vy),
+      };
+    }
+
+    if (isLeftRightCollision(obj, rec)) {
+      return {
+        ...obj,
+        position: vector(rec.right + 0.1, py),
+        velocity: vector(rvx, vy),
+      };
+    }
+
+    return obj;
+  };
+}
+</code></pre>
+            </article>
+          </section>
+        </div>
+
+        <footer class="footer">
+          <div class="content has-text-centered">
+            <p>
+              Documentation generated by
+              <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.7</a>
+            </p>
+            <p class="sidebar-created-by">
+              <a
+                href="https://github.com/SoftwareBrothers/better-docs"
+                target="_blank"
+                >BetterDocs theme</a
+              >
+              provided with <i class="fas fa-heart"></i> by
+              <a href="http://softwarebrothers.co" target="_blank"
+                >SoftwareBrothers - JavaScript Development Agency</a
+              >
+            </p>
+          </div>
+        </footer>
+      </div>
+      <div id="side-nav" class="side-nav"></div>
+    </div>
+    <script src="scripts/app.min.js"></script>
+    <script>
+      PR.prettyPrint();
+    </script>
+    <script src="scripts/linenumber.js"></script>
+  </body>
+</html>

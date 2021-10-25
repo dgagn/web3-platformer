@@ -1,8 +1,14 @@
-// ignore file coverage
-import {createGame} from './core';
 import $ from 'jquery';
+import {createHomePage} from './pages/home';
+import {eventPlayButton} from './components/btn';
+import '../styles/main.scss';
+import {parallax} from './components/parallax';
 
-const can = $(`<canvas width='800' height='600' />`);
-// @ts-ignore
-$('body').html(can);
-createGame(can);
+function main() {
+  const homePage = createHomePage();
+  $('body').append(homePage);
+  eventPlayButton();
+  parallax();
+}
+
+$(main);

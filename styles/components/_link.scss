@@ -1,0 +1,402 @@
+@use '../config/colors' as *;
+@use '../config/breakpoints' as *;
+@use '../config/spacing' as *;
+
+:root {
+  --ease-out: cubic-bezier(0.215, 0.61, 0.355, 1);
+  --link-color: var(--color-primary-200);
+}
+
+.text-bg-fx {
+  cursor: pointer;
+  background-repeat: no-repeat;
+  transition: background-size 0.3s;
+  will-change: background-size;
+  color: var(--base-color);
+
+  &:hover {
+    background-size: 100% 100%;
+  }
+}
+
+.text-bg-fx--scale-x {
+  padding: var(--spacing-4xs) 0;
+  background-image: linear-gradient(var(--link-color), var(--link-color));
+  background-size: 0% 100%;
+}
+
+.text-bg-fx--scale-y {
+  text-decoration: none;
+  background-image: linear-gradient(var(--link-color), var(--link-color));
+  background-position: center bottom;
+  background-size: 100% 2px;
+}
+
+.text-bg-fx--underline,
+.text-bg-fx--underline-bold {
+  text-decoration: none;
+  background-size: 0% 100%;
+}
+
+.text-bg-fx--underline {
+  // text underline size = 1px
+  background-image: linear-gradient(
+    transparent calc(100% - 3px),
+    currentColor calc(100% - 3px),
+    currentColor calc(100% - 2px),
+    transparent 2px
+  );
+}
+
+.text-bg-fx--underline-bold {
+  background-image: linear-gradient(
+    transparent 50%,
+    color-get(primary, 200) 50%
+  );
+}
+
+.text-bg-fx--text-shadow {
+  // you can use this with the .text-bg-fx--underline effect
+  text-shadow: 1.5px 1px var(--color-bg), -1.5px 1px var(--color-bg),
+    0 1px var(--color-bg);
+}
+
+.link-fx-1 {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  height: 32px; // !important - set fixed height
+  padding: 0 6px;
+  text-decoration: none;
+
+  .icone {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    font-size: 32px; // icon size = link size 👆
+    transform: translateX(100%) rotate(90deg);
+
+    circle {
+      stroke-dasharray: 100;
+      stroke-dashoffset: 100;
+      transition: stroke-dashoffset 0.2s;
+    }
+
+    line {
+      transition: transform 0.4s;
+      transform-origin: 13px 15px;
+    }
+
+    line:last-child {
+      transform-origin: 19px 15px;
+    }
+  }
+
+  &::before {
+    // border bottom
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    content: '';
+    background-color: currentColor;
+    transition: transform 0.2s 0.1s;
+    transform-origin: right center;
+  }
+
+  &:hover {
+    .icone {
+      circle {
+        stroke-dashoffset: 200;
+        transition: stroke-dashoffset 0.2s 0.1s;
+      }
+
+      line {
+        transform: rotate(-180deg);
+      }
+
+      line:last-child {
+        transform: rotate(180deg);
+      }
+    }
+
+    &::before {
+      transition: transform 0.2s;
+      transform: translateX(17px) scaleX(0);
+    }
+  }
+}
+
+// v2
+.link-fx-2 {
+  position: relative;
+  display: inline-block;
+  padding: 4px 6px;
+  color: var(--color-contrast-higher);
+  text-decoration: none;
+  background-image: linear-gradient(
+    var(--color-contrast-900),
+    var(--color-contrast-900)
+  );
+  background-repeat: repeat-x;
+  background-position: left bottom;
+  background-size: 100% 1px;
+  transition: background-size 0.3s var(--ease-out);
+  will-change: background-size;
+
+  &::after {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    padding: inherit;
+    clip-path: polygon(0% 100%, 100% 100%, 100% 100%, 0% 100%);
+    color: var(--color-bg);
+    content: attr(data-link-fx-clone);
+    transition: clip-path 0.3s, transform 0.3s;
+    transition-timing-function: var(--ease-out);
+    transform: translateY(4px);
+    will-change: clip-path, transform;
+  }
+
+  &:hover {
+    background-size: 100% 100%;
+
+    &::after {
+      clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
+      transform: translateY(0);
+    }
+  }
+}
+
+// v3
+.link-fx-3 {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 6px;
+  text-decoration: none;
+
+  .icone {
+    position: relative;
+    display: block;
+    margin-left: 8px;
+    font-size: 12px; // icon size
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.3s, transform 0.3s var(--ease-out), visibility 0s 0.3s;
+    transform: translateY(10px);
+    will-change: transform;
+
+    line {
+      transition: transform 0.3s var(--ease-out);
+      transform-origin: 9px 6px;
+      will-change: transform;
+    }
+
+    line:first-child {
+      transform: rotate(20deg);
+    }
+
+    line:last-child {
+      transform: rotate(-20deg);
+    }
+
+    @include breakpoint(sm, 'not all') {
+      display: none;
+    }
+  }
+
+  &::before {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: calc(100% - 18px); // 18px = icon size (12px) + padding right (6px)
+    height: 2px;
+    content: '';
+    background-color: var(--color-primary-500);
+    opacity: 0.5;
+    transition: 0.3s var(--ease-out);
+
+    @include breakpoint(sm, 'not all') {
+      width: 100%;
+      transform: translateX(0);
+    }
+  }
+
+  &:hover {
+    .icone {
+      color: var(--color-primary-500);
+      visibility: visible;
+      opacity: 0.5;
+      transition: opacity 0.3s, transform 0.3s var(--ease-out);
+      transform: translateY(0);
+
+      line:first-child,
+      line:last-child {
+        transform: rotate(0);
+      }
+    }
+
+    color: var(--color-primary-500);
+
+    &::before {
+      width: 100%;
+    }
+  }
+}
+
+// v4
+.link-fx-4 {
+  position: relative;
+  display: inline-block;
+  padding: 6px 10px;
+  color: var(--color-contrast-900);
+  text-decoration: none;
+  background-color: var(--color-contrast-50);
+  &::before {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    clip-path: polygon(0% 0%, 1px 0%, 1px 100%, 0% 100%);
+    color: var(--color-bg);
+    content: attr(data-link-fx-clone);
+    background-color: var(--color-contrast-900);
+    transition: clip-path 0.3s var(--ease-out);
+    will-change: clip-path;
+  }
+
+  &:hover {
+    &::before {
+      clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
+    }
+  }
+}
+
+.link-fx-5 {
+  display: inline-block;
+  padding: 4px 0;
+  text-decoration: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='4' viewBox='0 0 16 4'%3E%3Cpath d='M0,3.5c4,0,4-3,8-3s4,3,8,3' fill='none' stroke='%232a6df4' opacity='0.5' stroke-miterlimit='10'/%3E%3C/svg%3E"); // 👈 edit stroke='%232a6df4' (last 6 digits - hexadecimal color) to change the color of the SVG decoration
+  background-repeat: repeat-x;
+  background-position: 0 100%;
+  background-size: 0;
+
+  &:hover {
+    background-size: 16px 4px;
+    animation: link-fx-5-animation 0.4s linear infinite;
+  }
+}
+
+@keyframes link-fx-5-animation {
+  from {
+    background-position: 0 100%;
+  }
+
+  to {
+    background-position: 16px 100%;
+  }
+}
+
+.reverse {
+  transform: rotate(180deg);
+}
+
+.icone {
+  width: 12px;
+  height: 12px;
+}
+
+// v3
+.link-fx-3--inverse {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 6px;
+  text-decoration: none;
+
+  .icone {
+    position: relative;
+    display: block;
+    margin-right: 8px;
+    font-size: 12px; // icon size
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.3s, transform 0.3s var(--ease-out), visibility 0s 0.3s;
+    transform: translateY(10px);
+    will-change: transform;
+
+    line {
+      transition: transform 0.3s var(--ease-out);
+      transform-origin: 9px 6px;
+      will-change: transform;
+    }
+
+    line:first-child {
+      transform: rotate(20deg);
+    }
+
+    line:last-child {
+      transform: rotate(-20deg);
+    }
+
+    @include breakpoint(sm, 'not all') {
+      display: none;
+    }
+  }
+
+  &::before {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: calc(100% - 18px);
+    height: 2px;
+    content: '';
+    background-color: var(--color-primary-500);
+    opacity: 0.5;
+    transition: 0.3s var(--ease-out);
+    transform: translateX(
+      17px
+    ); // 18px = icon size (12px) + padding right (6px)
+
+    @include breakpoint(sm, 'not all') {
+      width: 100%;
+      transform: translateX(0);
+    }
+  }
+
+  &:hover {
+    .icone {
+      color: var(--color-primary-500);
+      visibility: visible;
+      opacity: 0.5;
+      transition: opacity 0.3s, transform 0.3s var(--ease-out);
+      transform: translateY(0);
+
+      line:first-child,
+      line:last-child {
+        transform: rotate(0);
+      }
+    }
+
+    color: var(--color-primary-500);
+
+    &::before {
+      width: 100%;
+      transform: translateX(0);
+    }
+  }
+}
+
+.space-around {
+  flex-wrap: wrap;
+  justify-content: space-around;
+}

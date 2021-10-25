@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>core/physics.ts</title>
+
+    <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="./build/entry.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link
+      href="https://fonts.googleapis.com/css?family=Roboto:100,400,700|Inconsolata,700"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://use.fontawesome.com/releases/v5.6.3/css/all.css"
+      integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/"
+      crossorigin="anonymous"
+    />
+    <link
+      type="text/css"
+      rel="stylesheet"
+      href="https://jmblog.github.io/color-themes-for-google-code-prettify/themes/tomorrow-night.min.css"
+    />
+    <link type="text/css" rel="stylesheet" href="styles/app.min.css" />
+    <link type="text/css" rel="stylesheet" href="styles/iframe.css" />
+    <link type="text/css" rel="stylesheet" href="" />
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
+  </head>
+
+  <body class="layout small-header">
+    <div id="stickyNavbarOverlay"></div>
+
+    <div class="top-nav">
+      <div class="inner">
+        <a
+          id="hamburger"
+          role="button"
+          class="navbar-burger"
+          aria-label="menu"
+          aria-expanded="false"
+        >
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+        </a>
+        <div class="logo"></div>
+        <div class="menu">
+          <div class="navigation">
+            <a href="index.html" class="link"> API Documentation </a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="main">
+      <div class="sidebar" id="sidebarNav">
+        <nav>
+          <h2><a href="index.html">Documentation</a></h2>
+          <div class="category">
+            <h3>Global</h3>
+            <ul>
+              <li><a href="global.html#addForce">addForce</a></li>
+              <li>
+                <a href="global.html#createAnimations">createAnimations</a>
+              </li>
+              <li><a href="global.html#pipe">pipe</a></li>
+              <li><a href="global.html#pipeWith">pipeWith</a></li>
+            </ul>
+          </div>
+        </nav>
+      </div>
+      <div class="core" id="main-content-wrapper">
+        <div class="content">
+          <header class="page-title">
+            <p>Source</p>
+            <h1>core/physics.ts</h1>
+          </header>
+
+          <section>
+            <article>
+              <pre
+                class="prettyprint source linenums"
+              ><code>import Vector, {add, scale, vector} from './vector';
+import {curry, isDefined} from '../utils';
+
+export function hasPhysics(obj) {
+  return [
+    obj.mass,
+    obj.position,
+    obj.velocity,
+    obj.acceleration,
+    obj.oldpos,
+  ].every(isDefined);
+}
+
+export function physics({
+  mass = 1,
+  velocity = Vector.zero,
+  acceleration = Vector.zero,
+} = {}) {
+  return (obj = {}) => ({
+    ...obj,
+    mass,
+    velocity,
+    acceleration,
+  });
+}
+
+export function position(position = Vector.zero, oldpos = Vector.zero) {
+  return obj => ({
+    ...obj,
+    position,
+    oldpos,
+  });
+}
+
+export function updatePhysics(friction = 0.1) {
+  return obj => {
+    if (!hasPhysics(obj)) {
+      throw new Error('object must have physics properties');
+    }
+
+    const [[px, py], [vx, vy], [ax, ay]] = [
+      obj.position,
+      obj.velocity,
+      obj.acceleration,
+    ];
+    const oldpos = vector(px, py);
+    const [uvx, uvy] = vector(
+      (vx + ax) * (1 - friction),
+      (vy + ay) * (1 - friction)
+    );
+    return {
+      ...obj,
+      position: vector(px + uvx, py + uvy),
+      velocity: vector(uvx, uvy),
+      acceleration: Vector.zero,
+      oldpos,
+    };
+  };
+}
+
+const _addForce = (force, obj) => {
+  if (!hasPhysics(obj) || force.length !== 2) {
+    throw new Error(
+      'the object needs to have the physics properties ' +
+        'and force needs to be a vector'
+    );
+  }
+
+  return {
+    ...obj,
+    acceleration: add(scale(force, obj.mass), obj.acceleration),
+  };
+};
+
+/**
+ * Ajoute une acceleration sur un object de type physics
+ * pour permettre l'objet de se déplacer.
+ *
+ * @function
+ * @param {[number, number]} force - un vecteur pour la force
+ * @param {Object=} obj - un objet pour appliquer
+ * @return {(Function|Object)} - retourne un version `curried` de la fonction
+ * ou un objet avec la force appliqué
+ */
+export const addForce = curry(_addForce);
+
+export function gravity(gravity) {
+  return obj => {
+    if (!hasPhysics(obj)) {
+      throw new Error('the object must have the physics properties');
+    }
+    return addForce(vector(0, gravity), obj);
+  };
+}
+</code></pre>
+            </article>
+          </section>
+        </div>
+
+        <footer class="footer">
+          <div class="content has-text-centered">
+            <p>
+              Documentation generated by
+              <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.7</a>
+            </p>
+            <p class="sidebar-created-by">
+              <a
+                href="https://github.com/SoftwareBrothers/better-docs"
+                target="_blank"
+                >BetterDocs theme</a
+              >
+              provided with <i class="fas fa-heart"></i> by
+              <a href="http://softwarebrothers.co" target="_blank"
+                >SoftwareBrothers - JavaScript Development Agency</a
+              >
+            </p>
+          </div>
+        </footer>
+      </div>
+      <div id="side-nav" class="side-nav"></div>
+    </div>
+    <script src="scripts/app.min.js"></script>
+    <script>
+      PR.prettyPrint();
+    </script>
+    <script src="scripts/linenumber.js"></script>
+  </body>
+</html>

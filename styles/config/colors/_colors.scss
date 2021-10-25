@@ -1,0 +1,47 @@
+@use 'purple' as *;
+@use 'pink' as *;
+@use 'yellow' as *;
+@use 'cool-gray' as *;
+@use 'warm-gray' as *;
+@use 'true-gray' as *;
+@use 'blue-gray' as *;
+@use 'blue' as *;
+@use 'amber' as *;
+@use 'gray' as *;
+@use 'cyan' as *;
+@use 'emerald' as *;
+@use 'fuchsia' as *;
+@use 'green' as *;
+@use 'indigo' as *;
+@use 'orange' as *;
+@use 'lime' as *;
+@use 'red' as *;
+@use 'sky' as *;
+@use 'teal' as *;
+@use 'violet' as *;
+@use 'rose' as *;
+
+$colors: (
+  'purple': $purple,
+  'pink': $pink,
+  'yellow': $yellow,
+  'cool-gray': $cool-gray,
+  'warm-gray': $warm-gray,
+  'true-gray': $true-gray,
+  'blue-gray': $blue-gray,
+  'blue': $blue,
+  'amber': $amber,
+  'gray': $gray,
+  'cyan': $cyan,
+  'emerald': $emerald,
+  'fuchsia': $fuchsia,
+  'green': $green,
+  'indigo': $indigo,
+  'orange': $orange,
+  'lime': $lime,
+  'red': $red,
+  'sky': $sky,
+  'teal': $teal,
+  'violet': $violet,
+  'rose': $rose,
+) !default;

@@ -25,7 +25,7 @@ export function createAnimations(states) {
   };
 }
 
-export function unsafeUpdateAnimation(frames) {
+export function unsafeUpdateAnimation(frames: number) {
   return obj => {
     const filteredAnimation =
       obj.animations.filter(s => s.state === obj.state)[0] ?? {};

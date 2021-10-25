@@ -1,0 +1,20 @@
+@use 'sass:map';
+
+$spacing-prefix: --spacing- !default;
+$spacing: (
+  4xs: 0.125em,
+  3xs: 0.25em,
+  2xs: 0.375em,
+  xs: 0.5em,
+  sm: 0.75em,
+  md: 1.25em,
+  lg: 2em,
+  xl: 3.25em,
+  2xl: 5.25em,
+  3xl: 8.5em,
+  4xl: 13.75em,
+) !default;
+
+@function spacing-get($key) {
+  @return var(#{$spacing-prefix}#{$key}, map.get($spacing, $key));
+}

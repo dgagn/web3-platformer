@@ -1,11 +1,11 @@
 import {score} from './score';
 import {emitterGame} from '../entities/emitter';
 
-function getLeaderboard() {
+export function getLeaderboard() {
   return JSON.parse(localStorage.getItem('leaderboard')) ?? [];
 }
 
-function setLeaderboard(leaderboard) {
+export function setLeaderboard(leaderboard) {
   localStorage.setItem('leaderboard', JSON.stringify(leaderboard));
 }
 
