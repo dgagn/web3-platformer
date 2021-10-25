@@ -16,5 +16,6 @@ module.exports = {
     'valid-jsdoc': 'off',
     'no-unused-vars': 'warn',
     'max-len': 'off',
+    'no-console': 'error',
   },
 };

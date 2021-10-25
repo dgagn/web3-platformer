@@ -2,9 +2,9 @@ import {createHero} from '../components/hero';
 import {createLeaderboard} from '../components/leaderboard';
 import {getLeaderboard} from '../other/leaderboard';
 import {eventPlayButton} from '../components/btn';
-import {eventModal} from '../components/modal';
 import {parallax} from '../components/parallax';
 import {app} from '../components/app';
+import {clearGame} from '../core/game';
 
 export function createHomePage() {
   const list = getLeaderboard();

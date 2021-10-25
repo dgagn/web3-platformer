@@ -1,0 +1,67 @@
+import $ from 'jquery';
+
+import {eventModalClose} from './modal-close';
+import {eventModalOpen} from './modal-open';
+import {eventModalStart} from './modal-start';
+import {eventModalError} from './modal-error';
+
+export function createModal(name, title, subtitle, button, emoji) {
+  return $(`
+  <div class='modal z-max' id='modal'>
+  <div class='content rounded relative p-sm@!sm'>
+    <h3 class='mt-sm'>
+      <span role='img' aria-label='emoji pour un étoile'> ${emoji} </span>
+      ${title}
+    </h3>
+    <p class='mt-sm'>${subtitle}</p>
+    <span class='block mt-lg'>
+      <label for='nom' class='form__label'> Votre nom </label>
+      <input type='text' id='nom' class='form__control' value='${name}' />
+      <p class='text-sm text-contrast-500 mt-xs'>
+        Un maximum de 20 caractères
+      </p>
+      <p class='text-sm text-error-500 mt-xs' id='error'></p>
+    </span>
+    <div
+      class='
+        flex
+        mt-md
+        mb-sm
+        align-center
+        justify-center
+        flex-wrap
+        gap-y-md
+      '
+    >
+      <button
+        class='button-reset text-bg-fx text-bg-fx&#45;&#45;scale-y mr-lg'
+        id='close'
+      >
+        Annuler
+      </button>
+      <button
+        class='
+          button-reset
+          text-bg-fx text-bg-fx&#45;&#45;scale-y
+          button-bg
+          px-md
+          py-sm
+          rounded
+          h-50
+        '
+        id='start'
+      >
+        ${button}
+      </button>
+    </div>
+  </div>
+</div>
+`);
+}
+
+export function eventModal() {
+  eventModalOpen();
+  eventModalClose();
+  eventModalStart();
+  eventModalError();
+}

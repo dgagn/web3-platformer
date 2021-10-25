@@ -17,5 +17,8 @@ export function emitter(events = new Map()) {
       const handlers = events.get(key);
       if (isDefined(handlers)) handlers.slice().map(h => h(evt));
     },
+    clear() {
+      events.clear();
+    },
   };
 }

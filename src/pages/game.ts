@@ -1,12 +1,14 @@
 import $ from 'jquery';
 import {createGame} from '../core';
 import {app} from '../components/app';
-import {eventPlayButton} from '../components/btn';
-import {parallax} from '../components/parallax';
-import {createHomePage} from './home';
 import {setPlayer} from '../core/info';
+import {clearGame} from '../core/game';
 
 export function createGamePage() {
+  const game = $('#game');
+  if (game.length > 0) {
+    game.remove();
+  }
   const canvas = $(`<canvas id='game' width='800' height='600' />`);
   createGame(canvas);
   return canvas;
