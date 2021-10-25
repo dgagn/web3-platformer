@@ -8,21 +8,25 @@ export function createSound(sound) {
   };
 }
 
-export const createSounds = sounds => obj => {
-  const withSounds = sounds.map(createSound);
-  return {
-    ...obj,
-    sounds: withSounds,
+export function createSounds(sounds) {
+  return obj => {
+    const withSounds = sounds.map(createSound);
+    return {
+      ...obj,
+      sounds: withSounds,
+    };
   };
-};
+}
 
-export const playSoundOnState = state => obj => {
-  const sound = obj.sounds.filter(
-    sound => sound.state === state && obj.state === state
-  )[0];
-  playSound(sound);
-  return obj;
-};
+export function playSoundOnState(state) {
+  return obj => {
+    const sound = obj.sounds.filter(
+      sound => sound.state === state && obj.state === state
+    )[0];
+    playSound(sound);
+    return obj;
+  };
+}
 
 export function playSound(sound) {
   sound?.audio.play().catch(_ => {});
