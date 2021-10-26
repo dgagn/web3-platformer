@@ -8,18 +8,13 @@
     "includePattern": ".+\\.(t|j)s(doc|x)?$",
     "excludePattern": "(^|\\/|\\\\)_"
   },
-  "plugins": [
-    "plugins/markdown",
-    "node_modules/better-docs/category",
-    "node_modules/better-docs/typescript"
-  ],
+  "plugins": ["plugins/markdown"],
   "templates": {
     "cleverLinks": true,
     "monospaceLinks": true
   },
   "opts": {
     "destination": "docs",
-    "recurse": true,
-    "template": "node_modules/better-docs"
+    "recurse": true
   }
 }

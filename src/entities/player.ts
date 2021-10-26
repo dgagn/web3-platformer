@@ -27,6 +27,11 @@ import {jump, jumpable} from '../core/jumpable';
 import {movable, movement} from '../core/movable';
 import {rectangle} from '../core/rectangle';
 
+/**
+ * Creates the player entity.
+ *
+ * @return {Object} - the player entity
+ */
 export function createPlayer() {
   return pipeWith(
     player(),
@@ -43,6 +48,12 @@ export function createPlayer() {
   );
 }
 
+/**
+ * Updates the player every frame.
+ *
+ * @function
+ * @type {Update}
+ */
 export const updatePlayer = update(
   ({game, frames}) =>
     (game.entities.player = pipeWith(
@@ -65,6 +76,10 @@ export const updatePlayer = update(
     ))
 );
 
+/**
+ * Draws the player every frame.
+ * @param {Object} game - the game object
+ */
 export function drawPlayer(game) {
   const {
     context,
@@ -88,9 +103,16 @@ export function drawPlayer(game) {
   window.player = player;
 }
 
-emitterGame.on('jump', obj => {
-  if (!hasTag('player', obj)) {
-    return;
-  }
-  obj.sounds.filter(sound => sound.state === 'jumping')[0].audio.play();
-});
+/**
+ * Adds a sound when the player jumps.
+ */
+function playerSoundJump() {
+  emitterGame.on('jump', obj => {
+    if (!hasTag('player', obj)) {
+      return;
+    }
+    obj.sounds.filter(sound => sound.state === 'jumping')[0].audio.play();
+  });
+}
+
+playerSoundJump();

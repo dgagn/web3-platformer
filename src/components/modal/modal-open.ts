@@ -3,6 +3,10 @@ import {createModal} from './modal';
 import {app} from '../app';
 import {eventCloseButton, eventStartButton} from '../btn';
 
+/**
+ * Listens to the `modalopen` event on the modal to
+ * make sure the modal opens when needed.
+ */
 export function eventModalOpen() {
   emitterHome.on(
     'modalopen',

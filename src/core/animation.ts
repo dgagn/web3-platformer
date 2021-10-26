@@ -2,6 +2,21 @@ import {add, mult} from './vector';
 import {hasState} from './state';
 import {createImage} from './image';
 
+/**
+ * @callback EntityCB
+ * @param {Object} obj - the entity to apply the
+ * transformations
+ * @return {Object} - the entity
+ * @typedef {EntityCB}
+ */
+
+/**
+ * Adds the animation properties to a object.
+ *
+ * @param {Object} states - the states of the animations
+ * @return {EntityCB} - a function that takes in the
+ * object and adds the animations properties to it
+ */
 export function createAnimations(states) {
   return obj => {
     if (!hasState(obj))
@@ -25,7 +40,14 @@ export function createAnimations(states) {
   };
 }
 
-export function unsafeUpdateAnimation(frames: number) {
+/**
+ * Updates the animations of a entity.
+ *
+ * @param {number} frames - the game frames
+ * @return {EntityCB} - a function that takes in the
+ * object and updates the animations properties to it
+ */
+export function unsafeUpdateAnimation(frames) {
   return obj => {
     const filteredAnimation =
       obj.animations.filter(s => s.state === obj.state)[0] ?? {};
@@ -45,6 +67,12 @@ export function unsafeUpdateAnimation(frames: number) {
   };
 }
 
+/**
+ * Draws a sprite on screen with their properties.
+ *
+ * @param {HTMLCanvasElement} context - the canvas context
+ * @param {Object} obj - the entity
+ */
 export function drawSprite(context, obj) {
   context.drawImage(
     obj.animation.image,

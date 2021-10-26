@@ -1,3 +1,7 @@
+/**
+ * The music sound.
+ * @type {Sound}
+ */
 export const soundMusic = {
   name: 'music',
   src: 'music.ogg',

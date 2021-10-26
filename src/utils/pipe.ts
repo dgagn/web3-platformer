@@ -1,13 +1,20 @@
 import {curryN} from './curry';
 
 /**
+ * @callback Pipe
+ * @param {*} x - anything to start with the composition
+ * @return {*} - returns the `curried` function
+ * @typedef {Pipe}
+ */
+
+/**
  * Performs a left-to-right function compostion.
  * This function returns a function with the
  * default value to pass to it.
  *
  * @param {Function[]} fns - the functions to run
  * in a composition manner.
- * @return {(x) => any}
+ * @return {Pipe}
  */
 export function pipe(...fns) {
   return x => fns.reduce((v, f) => f(v), x);
@@ -24,12 +31,12 @@ function _pipeWith(x, ...fns) {
  * value.
  *
  * @function
- * @param {any} x - the default value to pass to
+ * @param {*} x - the default value to pass to
  * the function composition.
  * @param {Function[]} fns - the functions to run
  * in a composition manner.
- * @returns {any} - returns the result of the
+ * @returns {*} - returns the result of the
  * composition or the next step.
- * @type {(...args: any[]) => any}
+ * @type {*}
  */
 export const pipeWith = curryN(2, _pipeWith);

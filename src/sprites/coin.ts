@@ -1,5 +1,9 @@
 import {vector} from '../core/vector';
 
+/**
+ * The coin sprites.
+ * @type {Sprite[]}
+ */
 export const spriteCoin = [
   {
     state: 'idle',

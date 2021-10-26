@@ -1,30 +1,92 @@
-export const vector = (x, y) => [x, y];
+/**
+ * @typedef {number[]} Vector
+ * @description the vector is represented with a `Tuple` of two
+ * numbers [number, number].
+ */
 
+/**
+ * Creates a vector with a `x` and a `y`.
+ *
+ * @param {number} x - the x value
+ * @param {number} y - the y value
+ * @return {Vector} - the new vector
+ */
+export function vector(x, y) {
+  return [x, y];
+}
+
+/**
+ * The zero vector (0, 0)
+ * @type {Vector}
+ */
 const zero = vector(0, 0);
+/**
+ * The zero vector (0, 0)
+ * @type {Vector}
+ */
 const up = vector(0, 1);
+/**
+ * The down vector (0, -1)
+ * @type {Vector}
+ */
 const down = vector(0, -1);
+/**
+ * The left vector (-1, 0)
+ * @type {Vector}
+ */
 const left = vector(-1, 0);
+/**
+ * The right vector (1, 0)
+ * @type {Vector}
+ */
 const right = vector(1, 0);
 
-export const scale = ([x, y], scalar) => vector(scalar * x, scalar * y);
+/**
+ * Scales a vector by a `scalar`.
+ *
+ * @param {Vector} vector - a vector to scale
+ * @param {number} scalar - the scaling amount
+ * @return {Vector} - the scaled vector
+ */
+export function scale([x, y], scalar) {
+  return vector(scalar * x, scalar * y);
+}
 
-export const add = (...vx) =>
-  vx.reduce(([ax, ay], [vx, vy]) => vector(ax + vx, ay + vy), vector(0, 0));
+/**
+ * Adds all the vectors together.
+ *
+ * @param {Vector[]} vx - all the vectors to add together
+ * @return {Vector} - the result of the vector
+ */
+export function add(...vx) {
+  return vx.reduce(
+    ([ax, ay], [vx, vy]) => vector(ax + vx, ay + vy),
+    vector(0, 0)
+  );
+}
 
-export const sub = (...vx) =>
-  vx.reduce(([ax, ay], [vx, vy]) => vector(ax - vx, ay - vy));
+/**
+ * Subtracts all the vectors together.
+ *
+ * @param {Vector[]} vx - all the vectors to subtract together
+ * @return {Vector} - the result of the vector
+ */
+export function sub(...vx) {
+  return vx.reduce(([ax, ay], [vx, vy]) => vector(ax - vx, ay - vy));
+}
 
-export const mult = (...vx) =>
-  vx.reduce(([ax, ay], [vx, vy]) => vector(ax * vx, ay * vy), vector(1, 1));
-
-export const dot = ([x1, y1], [x2, y2]) => x1 * x2 + y1 * y2;
-
-export const normalize = v => scale(v, 1 / (mag(v) || 1));
-
-export const mag = ([x, y]) => Math.sqrt(x * x + y * y);
-
-export const dist = ([x1, y1], [x2, y2]) =>
-  Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
+/**
+ * Multiplies all the vectors together.
+ *
+ * @param {Vector[]} vx - all the vectors to multiply together
+ * @return {Vector} - the result of the vector
+ */
+export function mult(...vx) {
+  return vx.reduce(
+    ([ax, ay], [vx, vy]) => vector(ax * vx, ay * vy),
+    vector(1, 1)
+  );
+}
 
 export default {
   vector,
@@ -36,8 +98,4 @@ export default {
   scale,
   add,
   sub,
-  dot,
-  normalize,
-  mag,
-  dist,
 };

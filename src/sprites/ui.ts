@@ -1,5 +1,9 @@
 import {vector} from '../core/vector';
 
+/**
+ * The UI sprites.
+ * @type {Sprite[]}
+ */
 export const spriteUi = [
   {
     state: 'timer',

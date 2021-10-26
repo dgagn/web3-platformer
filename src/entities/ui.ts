@@ -12,6 +12,10 @@ import {position} from '../core/physics';
 import {score} from '../other/score';
 import {time} from '../other/time';
 
+/**
+ * Creates the timer ui.
+ * @return {Object} - the timer ui
+ */
 export function createTimerUI() {
   return pipeWith(
     {},
@@ -22,6 +26,10 @@ export function createTimerUI() {
   );
 }
 
+/**
+ * Creates the coin ui.
+ * @return {Object} - the coin ui
+ */
 export function createCoinUI() {
   return pipeWith(
     {},
@@ -32,6 +40,12 @@ export function createCoinUI() {
   );
 }
 
+/**
+ * Updates the UI every frames.
+ *
+ * @function
+ * @type {Update}
+ */
 export const updateUi = update(({game, frames}) => {
   game.entities.timerUi = pipeWith(
     game.entities.timerUi,
@@ -43,6 +57,11 @@ export const updateUi = update(({game, frames}) => {
   );
 });
 
+/**
+ * Draws the UI every frames.
+ *
+ * @param {Object} game - the game object
+ */
 export function drawUi({context, canvas, entities: {timerUi, coinUi, player}}) {
   context.globalAlpha = 1;
   drawSprite(context, timerUi);
@@ -53,16 +72,4 @@ export function drawUi({context, canvas, entities: {timerUi, coinUi, player}}) {
   context.fillText(`${time}`, 88, 68);
   context.fillText(`${score}`, 88, 120);
   context.fillText(`${player.info}`, canvas.width / 2 - 24, 30);
-}
-
-export function drawGameOverUi({context, canvas}) {
-  context.globalAlpha = 0.8;
-  context.fillRect(0, 0, canvas.width, canvas.height);
-  context.fillStyle = '#fff';
-  context.fillText('Game Over', canvas.width / 2.4, canvas.height / 2);
-  context.fillText(
-    `Avec un score de ${score}`,
-    canvas.width / 2.8,
-    canvas.height / 1.7
-  );
 }

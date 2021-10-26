@@ -14,6 +14,12 @@ import {eventScore} from '../other/score';
 import {eventTime} from '../other/time';
 import {pauseMusic, startMusic} from '../other/gamestart';
 
+/**
+ * Creates the game on the specified selector.
+ *
+ * @param {jQuery|string} selector - the canvas element or a selector
+ * @return {Object} - the game object with the options
+ */
 export function createGame(selector) {
   const canvas = $(selector).get(0);
   const context = canvas.getContext('2d');
@@ -63,6 +69,11 @@ export function createGame(selector) {
   };
 }
 
+/**
+ * Clears all the side effects from the game.
+ *
+ * @param {Object} game - the game object
+ */
 export function clearGame(game) {
   clearInterval(game.handle);
   clearEngine();

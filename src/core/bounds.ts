@@ -2,6 +2,16 @@ import {random} from '../utils';
 import {addForce} from './physics';
 import {vector} from './vector';
 
+/**
+ * Apply bounds to the top. When reaching top, put the
+ * entity back to its bottom.
+ *
+ * @example
+ * // platforms
+ * @param {HTMLCanvasElement} canvas - the canvas element
+ * @return {EntityCB} - return a function applying
+ * the bounds
+ */
 export function fromTopBoundsToBottom(canvas) {
   return obj =>
     obj.bottom <= 0
@@ -12,6 +22,14 @@ export function fromTopBoundsToBottom(canvas) {
       : obj;
 }
 
+/**
+ * Constraints a entity to fit inside a canvas
+ * size.
+ *
+ * @param {HTMLCanvasElement} canvas - the game canvas
+ * @return {EntityCB} - returns a function applying
+ * the constraints on the side
+ */
 export function constraintBounds(canvas) {
   return obj => {
     if (obj.right >= canvas.width) {

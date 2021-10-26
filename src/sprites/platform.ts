@@ -1,5 +1,9 @@
 import {vector} from '../core/vector';
 
+/**
+ * The platform sprites.
+ * @type {Sprite[]}
+ */
 export const spritePlatform = [
   {
     state: 'idle',

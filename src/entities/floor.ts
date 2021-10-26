@@ -5,6 +5,12 @@ import {physics, position, updatePhysics} from '../core/physics';
 import {size} from '../core/size';
 import {rectangle} from '../core/rectangle';
 
+/**
+ * Creates the floor entity.
+ *
+ * @param {HTMLCanvasElement} canvas
+ * @return {Object} - the floor entity
+ */
 export function createFloor(canvas) {
   return pipeWith(
     {},
@@ -16,6 +22,11 @@ export function createFloor(canvas) {
   );
 }
 
+/**
+ * Updates the floor every frame.
+ * @function
+ * @type {Update}
+ */
 export const updateFloor = update(({game}) => {
   game.entities.floor = pipeWith(
     game.entities.floor,

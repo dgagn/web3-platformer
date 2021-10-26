@@ -18,6 +18,12 @@ import {destroy, isDestroyed} from '../core/destroy';
 import {createArray} from '../utils/lang';
 import {soundCoin} from '../sounds/coin';
 
+/**
+ * Creates the coin entity.
+ *
+ * @param {HTMLCanvasElement} canvas - the game canvas
+ * @return {Object} - the coin entity
+ */
 export function createCoin(canvas) {
   return pipeWith(
     {},
@@ -33,15 +39,31 @@ export function createCoin(canvas) {
   );
 }
 
+/**
+ * Updates the coin every frame.
+ * @function
+ * @type {Update}
+ */
 export const updateCoins = update(({game, frames}) => {
   const coinUpdate = pipe(unsafeUpdateAnimation(~~frames / 1.5));
   game.entities.coins = game.entities.coins.map(coinUpdate).filter(isDestroyed);
 });
 
+/**
+ * Draws the coin every frame.
+ *
+ * @type {Update}
+ */
 export function drawCoins({context, entities: {coins}}) {
   coins.forEach(coin => drawSprite(context, coin));
 }
 
+/**
+ * Collects the coin and listen on the `trigger` event to
+ * compare to the coin tag.
+ *
+ * @param {Object} game - the game object
+ */
 export function eventCollectCoins(game) {
   const maxCoins = 50;
 

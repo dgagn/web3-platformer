@@ -1,5 +1,13 @@
 import $ from 'jquery';
 
+/**
+ * Creates a backtop component. The backtop creates a button
+ * that brings the user back to the top of the page when
+ * clicked.
+ *
+ * @return {JQuery<HTMLAnchorElement>} - returns a jquery element
+ * of the backtop.
+ */
 export function createBacktop() {
   return $(`
 <a href="javascript:void(0)" class="back-top">
@@ -24,8 +32,6 @@ export function createBacktop() {
 /**
  * Creates a back-top component from a jQuery selector.
  *
- * @function
- * @category components
  * @param {string} selector - jquery selector for the element
  * @param {{offset: number, scrollDuration: number}} options - the options are
  * optionals. Offset is the height at which it shows and the scroll duration
@@ -65,15 +71,14 @@ export function backtop(selector, {offset = 300, scrollDuration = 700} = {}) {
 
 /**
  * Creates a smooth ease in out quad for javascript animations.
- * @category utils
- * @function
+ *
  * @param {number} t - the progress of a animation
  * @param {number} b - the start of a animation
  * @param {number} c - the difference between the end and start of animation
  * @param {number} d - the animation duration
  * @return {number} - the smooth value of the animation
  */
-export function easeInOutQuad(t, b, c, d) {
+function easeInOutQuad(t, b, c, d) {
   t /= d / 2;
   if (t < 1) return (c / 2) * t * t + b;
   t--;
@@ -83,13 +88,12 @@ export function easeInOutQuad(t, b, c, d) {
 /**
  * Scrolls to a specified y position in a certain
  * duration. Makes the scroll smooth.
- * @category utils
- * @function
+ *
  * @param {number} final - the final y value
  * @param {number} duration - the duration in ms
  * @param {Function=} cb - a callback when it has scroll to the position
  */
-export function scrollTo(final, duration, cb = undefined) {
+function scrollTo(final, duration, cb = undefined) {
   const start = window.scrollY || document.documentElement.scrollTop;
   let currentTime = null;
 

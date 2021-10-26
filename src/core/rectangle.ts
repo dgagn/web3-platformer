@@ -1,5 +1,11 @@
 import {isDefined} from '../utils';
 
+/**
+ * Checks for rectangle properties.
+ * @param {Object} obj - the entity
+ * @return {boolean} - if the entity has rectangle
+ * properties
+ */
 export function hasRectangle(obj) {
   return [
     obj.top,
@@ -13,6 +19,12 @@ export function hasRectangle(obj) {
   ].every(isDefined);
 }
 
+/**
+ * Adds the rectangle properties to a entity.
+ * @param {Object} obj - the entity
+ * @return {Object} - the entity object with the
+ * rectangle properties
+ */
 export function rectangle(obj) {
   const [px, py] = obj.position;
   const [ox, oy] = obj.oldpos;

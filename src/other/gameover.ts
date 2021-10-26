@@ -4,17 +4,33 @@ import {eventLeaderboard, getLeaderboard} from './leaderboard';
 import {clearGame} from '../core/game';
 import {resetScore, score} from './score';
 
+/**
+ * Emits the `gameover` event when the time is over.
+ */
 export function eventTimerGameOver() {
   emitterGame.on('timer', () => {
     if (time === 1) emitterGame.emit('gameover');
   });
 }
 
+/**
+ * Formats the position number with french
+ * syntactic meaning.
+ *
+ * @param {number} position - the position on the leaderboard
+ * @return {string} - a html string of the formated
+ * position on the leaderboard
+ */
 const formatNumber = position =>
   position === 1
     ? `premier`
     : `<span class="text-md">${position}</span><sup>ième</sup>`;
 
+/**
+ * Listens when the `gameover` event is fired and respond
+ * with the steps to finish the game.
+ * @param {Object} game - the game object
+ */
 export function eventGameOver(game) {
   emitterGame.on('gameover', () => {
     clearGame(game);

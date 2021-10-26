@@ -1,6 +1,11 @@
 import $ from 'jquery';
 import {emitterHome} from '../../entities/emitter';
 
+/**
+ * Triggers a event when the play button is clicked.
+ *
+ * **Note:** emits the `modalopen` event
+ */
 export function eventPlayButton() {
   const playElement = $('#play');
   playElement.on('click', () => {

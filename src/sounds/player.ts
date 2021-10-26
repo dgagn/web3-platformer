@@ -1,3 +1,7 @@
+/**
+ * The player sounds.
+ * @type {Sound[]}
+ */
 export const soundPlayer = [
   {
     name: 'walk',

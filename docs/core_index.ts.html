@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>JSDoc: Source: core/index.ts</title>
+
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link
+      type="text/css"
+      rel="stylesheet"
+      href="styles/prettify-tomorrow.css"
+    />
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css" />
+  </head>
+
+  <body>
+    <div id="main">
+      <h1 class="page-title">Source: core/index.ts</h1>
+
+      <section>
+        <article>
+          <pre
+            class="prettyprint source linenums"
+          ><code>export {createGame} from './game';
+
+/**
+ * @file Core
+ * @author Dany Gagnon
+ */
+</code></pre>
+        </article>
+      </section>
+    </div>
+
+    <nav>
+      <h2><a href="index.html">Home</a></h2>
+      <h3>Global</h3>
+      <ul>
+        <li><a href="global.html#_addForce">_addForce</a></li>
+        <li><a href="global.html#_state">_state</a></li>
+        <li><a href="global.html#add">add</a></li>
+        <li><a href="global.html#addForce">addForce</a></li>
+        <li><a href="global.html#app">app</a></li>
+        <li><a href="global.html#audio">audio</a></li>
+        <li><a href="global.html#backgrounds">backgrounds</a></li>
+        <li><a href="global.html#backtop">backtop</a></li>
+        <li><a href="global.html#clearEngine">clearEngine</a></li>
+        <li><a href="global.html#clearGame">clearGame</a></li>
+        <li><a href="global.html#collision">collision</a></li>
+        <li><a href="global.html#constraintBounds">constraintBounds</a></li>
+        <li><a href="global.html#createAnimations">createAnimations</a></li>
+        <li><a href="global.html#createAxis">createAxis</a></li>
+        <li><a href="global.html#createBackgrounds">createBackgrounds</a></li>
+        <li><a href="global.html#createBacktop">createBacktop</a></li>
+        <li><a href="global.html#createCoin">createCoin</a></li>
+        <li><a href="global.html#createCoinUI">createCoinUI</a></li>
+        <li><a href="global.html#createEntities">createEntities</a></li>
+        <li><a href="global.html#createFloor">createFloor</a></li>
+        <li><a href="global.html#createGame">createGame</a></li>
+        <li><a href="global.html#createHero">createHero</a></li>
+        <li><a href="global.html#createImage">createImage</a></li>
+        <li><a href="global.html#createKeyManager">createKeyManager</a></li>
+        <li><a href="global.html#createLeaderboard">createLeaderboard</a></li>
+        <li><a href="global.html#createModal">createModal</a></li>
+        <li><a href="global.html#createNoScore">createNoScore</a></li>
+        <li><a href="global.html#createPlatform">createPlatform</a></li>
+        <li><a href="global.html#createPlayer">createPlayer</a></li>
+        <li><a href="global.html#createScore">createScore</a></li>
+        <li><a href="global.html#createSound">createSound</a></li>
+        <li><a href="global.html#createSounds">createSounds</a></li>
+        <li><a href="global.html#createTimerUI">createTimerUI</a></li>
+        <li><a href="global.html#destroy">destroy</a></li>
+        <li><a href="global.html#down">down</a></li>
+        <li><a href="global.html#drawBackground">drawBackground</a></li>
+        <li><a href="global.html#drawCoins">drawCoins</a></li>
+        <li><a href="global.html#drawColorCorrect">drawColorCorrect</a></li>
+        <li>
+          <a href="global.html#drawInitialSettings">drawInitialSettings</a>
+        </li>
+        <li><a href="global.html#drawPlatforms">drawPlatforms</a></li>
+        <li><a href="global.html#drawPlayer">drawPlayer</a></li>
+        <li><a href="global.html#drawSprite">drawSprite</a></li>
+        <li><a href="global.html#drawUi">drawUi</a></li>
+        <li><a href="global.html#easeInOutQuad">easeInOutQuad</a></li>
+        <li><a href="global.html#emitter">emitter</a></li>
+        <li><a href="global.html#emitterGame">emitterGame</a></li>
+        <li><a href="global.html#emitterHome">emitterHome</a></li>
+        <li><a href="global.html#engine">engine</a></li>
+        <li><a href="global.html#eventCloseButton">eventCloseButton</a></li>
+        <li><a href="global.html#eventCollectCoins">eventCollectCoins</a></li>
+        <li><a href="global.html#eventGameOver">eventGameOver</a></li>
+        <li><a href="global.html#eventModal">eventModal</a></li>
+        <li><a href="global.html#eventModalClose">eventModalClose</a></li>
+        <li><a href="global.html#eventModalError">eventModalError</a></li>
+        <li><a href="global.html#eventModalOpen">eventModalOpen</a></li>
+        <li><a href="global.html#eventModalStart">eventModalStart</a></li>
+        <li><a href="global.html#eventPlayButton">eventPlayButton</a></li>
+        <li><a href="global.html#eventStartButton">eventStartButton</a></li>
+        <li><a href="global.html#eventTimerGameOver">eventTimerGameOver</a></li>
+        <li><a href="global.html#fade">fade</a></li>
+        <li><a href="global.html#formatNumber">formatNumber</a></li>
+        <li>
+          <a href="global.html#fromTopBoundsToBottom">fromTopBoundsToBottom</a>
+        </li>
+        <li><a href="global.html#getAxis">getAxis</a></li>
+        <li><a href="global.html#getAxisX">getAxisX</a></li>
+        <li><a href="global.html#getAxisY">getAxisY</a></li>
+        <li><a href="global.html#getButtonDown">getButtonDown</a></li>
+        <li><a href="global.html#getPlayer">getPlayer</a></li>
+        <li><a href="global.html#gravity">gravity</a></li>
+        <li><a href="global.html#hasCollision">hasCollision</a></li>
+        <li><a href="global.html#hasJumpable">hasJumpable</a></li>
+        <li><a href="global.html#hasMovable">hasMovable</a></li>
+        <li><a href="global.html#hasPhysics">hasPhysics</a></li>
+        <li><a href="global.html#hasRectangle">hasRectangle</a></li>
+        <li><a href="global.html#hasSize">hasSize</a></li>
+        <li><a href="global.html#hasState">hasState</a></li>
+        <li><a href="global.html#hasTag">hasTag</a></li>
+        <li><a href="global.html#initButtonDown">initButtonDown</a></li>
+        <li><a href="global.html#inputManager">inputManager</a></li>
+        <li>
+          <a href="global.html#isBottomTopCollision">isBottomTopCollision</a>
+        </li>
+        <li><a href="global.html#isDestroyed">isDestroyed</a></li>
+        <li>
+          <a href="global.html#isLeftRightCollision">isLeftRightCollision</a>
+        </li>
+        <li>
+          <a href="global.html#isRightLeftCollision">isRightLeftCollision</a>
+        </li>
+        <li>
+          <a href="global.html#isTopBottomCollision">isTopBottomCollision</a>
+        </li>
+        <li><a href="global.html#jump">jump</a></li>
+        <li><a href="global.html#jumpable">jumpable</a></li>
+        <li><a href="global.html#keyManager">keyManager</a></li>
+        <li><a href="global.html#left">left</a></li>
+        <li><a href="global.html#leftAnimation">leftAnimation</a></li>
+        <li><a href="global.html#mouseParallax">mouseParallax</a></li>
+        <li><a href="global.html#movable">movable</a></li>
+        <li><a href="global.html#movement">movement</a></li>
+        <li><a href="global.html#mult">mult</a></li>
+        <li><a href="global.html#parallax">parallax</a></li>
+        <li><a href="global.html#pauseMusic">pauseMusic</a></li>
+        <li><a href="global.html#pauseSound">pauseSound</a></li>
+        <li><a href="global.html#physics">physics</a></li>
+        <li><a href="global.html#pipe">pipe</a></li>
+        <li><a href="global.html#pipeWith">pipeWith</a></li>
+        <li><a href="global.html#player">player</a></li>
+        <li><a href="global.html#playerSoundJump">playerSoundJump</a></li>
+        <li><a href="global.html#playSound">playSound</a></li>
+        <li><a href="global.html#playSoundOnState">playSoundOnState</a></li>
+        <li><a href="global.html#position">position</a></li>
+        <li><a href="global.html#rectangle">rectangle</a></li>
+        <li><a href="global.html#right">right</a></li>
+        <li><a href="global.html#scale">scale</a></li>
+        <li><a href="global.html#scrollParallax">scrollParallax</a></li>
+        <li><a href="global.html#scrollTo">scrollTo</a></li>
+        <li><a href="global.html#setPlayer">setPlayer</a></li>
+        <li><a href="global.html#size">size</a></li>
+        <li><a href="global.html#startMusic">startMusic</a></li>
+        <li><a href="global.html#startTimer">startTimer</a></li>
+        <li><a href="global.html#state">state</a></li>
+        <li><a href="global.html#stateFalling">stateFalling</a></li>
+        <li><a href="global.html#stateIdle">stateIdle</a></li>
+        <li><a href="global.html#stateJumping">stateJumping</a></li>
+        <li><a href="global.html#stateRunning">stateRunning</a></li>
+        <li><a href="global.html#sub">sub</a></li>
+        <li><a href="global.html#tag">tag</a></li>
+        <li>
+          <a href="global.html#unsafeUpdateAnimation">unsafeUpdateAnimation</a>
+        </li>
+        <li><a href="global.html#up">up</a></li>
+        <li><a href="global.html#update">update</a></li>
+        <li><a href="global.html#updateCoins">updateCoins</a></li>
+        <li><a href="global.html#updateFloor">updateFloor</a></li>
+        <li><a href="global.html#updatePhysics">updatePhysics</a></li>
+        <li><a href="global.html#updatePlatform">updatePlatform</a></li>
+        <li><a href="global.html#updatePlayer">updatePlayer</a></li>
+        <li><a href="global.html#updateUi">updateUi</a></li>
+        <li><a href="global.html#vector">vector</a></li>
+        <li><a href="global.html#zero">zero</a></li>
+      </ul>
+    </nav>
+
+    <br class="clear" />
+
+    <footer>
+      Documentation generated by
+      <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Mon Oct 25
+      2021 20:39:53 GMT-0400 (Eastern Daylight Time)
+    </footer>
+
+    <script>
+      prettyPrint();
+    </script>
+    <script src="scripts/linenumber.js"></script>
+  </body>
+</html>

@@ -4,6 +4,12 @@ import {createFloor} from '../entities/floor';
 import {createCoin} from '../entities/coins';
 import {createPlatform} from '../entities/platforms';
 
+/**
+ * Creates all the entities in the game.
+ *
+ * @param {HTMLCanvasElement} canvas - the game canvas
+ * @return {Object} - the entities list
+ */
 export function createEntities(canvas) {
   const player = createPlayer();
   const timerUi = createTimerUI();

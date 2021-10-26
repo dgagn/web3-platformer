@@ -2,6 +2,10 @@ import {emitterHome} from '../../entities/emitter';
 import $ from 'jquery';
 import {setGamePage} from '../../pages/game';
 
+/**
+ * Listens to the `modalstart` event to start
+ * the game.
+ */
 export function eventModalStart() {
   emitterHome.on('modalstart', () => {
     const input = $('#nom');

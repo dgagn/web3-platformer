@@ -50,7 +50,7 @@
     "build": "NODE_ENV=production webpack",
     "release": "standard-version",
     "test": "jest --collect-coverage",
-    "doc": "jsdoc --configure jsdoc.json"
+    "doc": "jsdoc --configure jsdoc.json && npx serve ./docs"
   },
   "dependencies": {
     "jquery": "^3.6.0"
