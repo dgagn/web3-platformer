@@ -31,7 +31,7 @@ export function createGame(selector) {
     canvas,
     context,
     entities,
-    maxTime: 5,
+    maxTime: 90,
     handle,
   };
   eventCollectCoins(game);

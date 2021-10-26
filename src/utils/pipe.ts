@@ -20,6 +20,22 @@ export function pipe(...fns) {
   return x => fns.reduce((v, f) => f(v), x);
 }
 
+/**
+ * Performs a left-to-right function composition.
+ * This function is a curried function and makes
+ * sure the composition is ran with a default
+ * value.
+ *
+ * @internal
+ * @function
+ * @param {*} x - the default value to pass to
+ * the function composition.
+ * @param {Function[]} fns - the functions to run
+ * in a composition manner.
+ * @return {*} - returns the result of the
+ * composition or the next step.
+ * @type {*}
+ */
 function _pipeWith(x, ...fns) {
   return pipe(...fns)(x);
 }
@@ -35,7 +51,7 @@ function _pipeWith(x, ...fns) {
  * the function composition.
  * @param {Function[]} fns - the functions to run
  * in a composition manner.
- * @returns {*} - returns the result of the
+ * @return {*} - returns the result of the
  * composition or the next step.
  * @type {*}
  */

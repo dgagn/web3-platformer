@@ -2,6 +2,7 @@ import {emitterHome} from '../../entities/emitter';
 import {createModal} from './modal';
 import {app} from '../app';
 import {eventCloseButton, eventStartButton} from '../btn';
+import $ from 'jquery';
 
 /**
  * Listens to the `modalopen` event on the modal to
@@ -19,6 +20,7 @@ export function eventModalOpen() {
       info = '',
     } = {}) => {
       const modal = createModal(name, title, subtitle, button, emoji, info);
+      if ($('#modal').length > 0) return;
       app.append(modal.hide().fadeIn(200));
       eventCloseButton();
       eventStartButton();

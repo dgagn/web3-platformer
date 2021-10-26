@@ -21,7 +21,9 @@ export function createLeaderboard(list) {
 <section class="clip bg-contrast-900">
   <h2 class="text-contrast-50 pt-xl text-center mb-xs">Classement</h2>
   <p class="text-contrast-300 text-center mb-2xl">
-    Le classement des 10 meilleurs performances pour le jeu de Collecteur
+    Le classement des ${
+      list.length
+    } meilleurs performances pour le jeu de Collecteur
   </p>
   ${
     list.length === 0

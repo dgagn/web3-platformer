@@ -25,6 +25,7 @@ export function createGamePage() {
  * page.
  */
 export function setGamePage(playerName) {
+  app.addClass('game');
   setPlayer(playerName);
   const game = createGamePage();
   // @ts-ignore

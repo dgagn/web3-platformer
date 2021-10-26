@@ -25,6 +25,8 @@
 .idea/**/gradle.xml
 .idea/**/libraries
 
+dist
+
 # Gradle and Maven with auto-import
 # When using Gradle or Maven with auto-import, you should exclude module files,
 # since they will be recreated, and may cause churn.  Uncomment if using
@@ -268,7 +270,7 @@ dist
 .AppleDouble
 .LSOverride
 
-# Icon must end with two 
+# Icon must end with two
 Icon
 
 # Thumbnails

@@ -20,7 +20,7 @@ import {eventModalError} from './modal-error';
 export function createModal(name, title, subtitle, button, emoji, info) {
   return $(`
   <div class="modal z-max" id="modal">
-  <div class="content rounded relative p-sm@!sm">
+  <form class="content rounded relative p-sm@!sm">
     <h3 class="mt-sm text-center">
       <span role="img" aria-label="emoji"> ${emoji} </span>
       ${title}
@@ -47,12 +47,14 @@ export function createModal(name, title, subtitle, button, emoji, info) {
       "
     >
       <button
+        type="button"
         class="button-reset text-bg-fx text-bg-fx&#45;&#45;scale-y mr-lg"
         id="close"
       >
         Annuler
       </button>
       <button
+        type="submit"
         class="
           button-reset
           text-bg-fx text-bg-fx&#45;&#45;scale-y
@@ -67,7 +69,7 @@ export function createModal(name, title, subtitle, button, emoji, info) {
         ${button}
       </button>
     </div>
-  </div>
+  </form>
 </div>
 `);
 }

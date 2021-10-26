@@ -66,6 +66,15 @@ export function isLeftRightCollision(rec1, rec2) {
   return rec1.left <= rec2.right && rec1.oldleft > rec2.oldright;
 }
 
+/**
+ * Detects a trigger collision. Doesn't apply any transformation, so
+ * returns the object intact.
+ * *Emits the `trigger` event when the entity triggers with another
+ * entity.
+ * @param {Object} rec - the rectangle to add the trigger collision
+ * to
+ * @return {EntityCB}
+ */
 export function collisionTrigger(rec) {
   return obj => {
     if (hasCollision(obj, rec)) {

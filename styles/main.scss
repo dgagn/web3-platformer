@@ -129,11 +129,15 @@
   justify-self: flex-end;
 }
 
-body.game {
+#app.game {
   display: flex;
   align-content: center;
   align-items: center;
   justify-content: center;
   height: 100vh;
   background-color: #1e1010;
+}
+
+.justify-center {
+  justify-content: center;
 }

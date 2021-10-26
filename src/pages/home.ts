@@ -25,6 +25,8 @@ export function createHomePage() {
  * Sets the current page to the home page.
  */
 export function setHomePage() {
+  app.removeClass('game');
+
   const homePage = createHomePage();
   // @ts-ignore
   app.html(homePage);

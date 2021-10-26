@@ -17,7 +17,7 @@ module.exports = {
       template: './pages/index.html',
     }),
     new CopyWebpackPlugin({
-      patterns: [{from: 'assets'}],
+      patterns: [{from: 'assets'}, {from: 'docs', to: 'docs'}],
     }),
   ],
   module: {

@@ -13,10 +13,6 @@
   column-gap: spacing-get(md);
 }
 
-textarea {
-  max-height: 300px;
-}
-
 .form__control {
   width: 100%;
   min-height: spacing-get(xl);
@@ -28,16 +24,9 @@ textarea {
   border-radius: 4px;
   outline: none;
 
-  .form__control--sm {
-    width: 65px;
-  }
-
   &:focus {
     border-color: var(--control-color-border-focus);
     box-shadow: 0 0 0 2px var(--control-color-shadow-focus);
     transition: all 0.3s;
   }
-}
-
-.form__label {
 }

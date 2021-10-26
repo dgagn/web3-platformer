@@ -1,8 +1,5 @@
 @use 'typography';
-@use 'nav';
-@use 'table';
 @use 'form';
 @use 'link';
-@use 'blockquote';
 @use 'back-top' with ($back-top-icon-url: './backtop.svg');
 @use 'modal';
