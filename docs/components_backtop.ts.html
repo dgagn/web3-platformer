@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: components/backtop.ts</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: components/backtop.ts</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import $ from 'jquery';
+
+/**
+ * Creates a backtop component. The backtop creates a button
+ * that brings the user back to the top of the page when
+ * clicked.
+ *
+ * @return {JQuery&lt;HTMLAnchorElement>} - returns a jquery element
+ * of the backtop.
+ */
+export function createBacktop() {
+  return $(`
+&lt;a href="javascript:void(0)" class="back-top">
+  &lt;svg
+    width="16"
+    height="16"
+    focusable="false"
+    class="back-top-icon"
+    color="#609d4e"
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 448 512"
+  >
+    &lt;path
+      fill="currentColor"
+      d="M240.971 130.524l194.343 194.343c9.373 9.373 9.373 24.569 0 33.941l-22.667 22.667c-9.357 9.357-24.522 9.375-33.901.04L224 227.495 69.255 381.516c-9.379 9.335-24.544 9.317-33.901-.04l-22.667-22.667c-9.373-9.373-9.373-24.569 0-33.941L207.03 130.525c9.372-9.373 24.568-9.373 33.941-.001z"
+    >&lt;/path>
+  &lt;/svg>
+&lt;/a>
+`);
+}
+
+/**
+ * Creates a back-top component from a jQuery selector.
+ *
+ * @param {string} selector - jquery selector for the element
+ * @param {{offset: number, scrollDuration: number}} options - the options are
+ * optionals. Offset is the height at which it shows and the scroll duration
+ * is the time the animation takes to go back to the top.
+ */
+export function backtop(selector, {offset = 300, scrollDuration = 700} = {}) {
+  const $backtop = $(selector);
+  let scrolling = false;
+
+  if (!$backtop) {
+    return;
+  }
+
+  $(window).on('scroll', () => {
+    if (!scrolling) {
+      scrolling = true;
+      requestAnimationFrame(backtopLogic);
+    }
+  });
+
+  $backtop.on('click', e => {
+    e.preventDefault();
+    scrollTo(0, scrollDuration);
+  });
+
+  /**
+   * Adds or remove the main class to make the back-top visibility toggle.
+   */
+  function backtopLogic() {
+    const windowTop = window.scrollY || document.documentElement.scrollTop;
+    windowTop > offset
+      ? $backtop.addClass('back-top--visible')
+      : $backtop.removeClass('back-top--visible');
+    scrolling = false;
+  }
+}
+
+/**
+ * Creates a smooth ease in out quad for javascript animations.
+ *
+ * @param {number} t - the progress of a animation
+ * @param {number} b - the start of a animation
+ * @param {number} c - the difference between the end and start of animation
+ * @param {number} d - the animation duration
+ * @return {number} - the smooth value of the animation
+ */
+function easeInOutQuad(t, b, c, d) {
+  t /= d / 2;
+  if (t &lt; 1) return (c / 2) * t * t + b;
+  t--;
+  return (-c / 2) * (t * (t - 2) - 1) + b;
+}
+
+/**
+ * Scrolls to a specified y position in a certain
+ * duration. Makes the scroll smooth.
+ *
+ * @param {number} final - the final y value
+ * @param {number} duration - the duration in ms
+ * @param {Function=} cb - a callback when it has scroll to the position
+ */
+function scrollTo(final, duration, cb = undefined) {
+  const start = window.scrollY || document.documentElement.scrollTop;
+  let currentTime = null;
+
+  const animateScroll = function (timestamp) {
+    if (!currentTime) currentTime = timestamp;
+    let progress = timestamp - currentTime;
+    if (progress > duration) progress = duration;
+    const val = easeInOutQuad(progress, start, final - start, duration);
+    window.scrollTo(0, val);
+    if (progress &lt; duration) {
+      requestAnimationFrame(animateScroll);
+    } else {
+      cb &amp;&amp; cb();
+    }
+  };
+
+  requestAnimationFrame(animateScroll);
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#_addForce">_addForce</a></li><li><a href="global.html#_pipeWith">_pipeWith</a></li><li><a href="global.html#_state">_state</a></li><li><a href="global.html#add">add</a></li><li><a href="global.html#addForce">addForce</a></li><li><a href="global.html#app">app</a></li><li><a href="global.html#audio">audio</a></li><li><a href="global.html#backgrounds">backgrounds</a></li><li><a href="global.html#backtop">backtop</a></li><li><a href="global.html#clearEngine">clearEngine</a></li><li><a href="global.html#clearGame">clearGame</a></li><li><a href="global.html#collision">collision</a></li><li><a href="global.html#collisionTrigger">collisionTrigger</a></li><li><a href="global.html#constraintBounds">constraintBounds</a></li><li><a href="global.html#createAnimations">createAnimations</a></li><li><a href="global.html#createArray">createArray</a></li><li><a href="global.html#createAxis">createAxis</a></li><li><a href="global.html#createBackgrounds">createBackgrounds</a></li><li><a href="global.html#createBacktop">createBacktop</a></li><li><a href="global.html#createCoin">createCoin</a></li><li><a href="global.html#createCoinUI">createCoinUI</a></li><li><a href="global.html#createEntities">createEntities</a></li><li><a href="global.html#createFloor">createFloor</a></li><li><a href="global.html#createGame">createGame</a></li><li><a href="global.html#createGamePage">createGamePage</a></li><li><a href="global.html#createHero">createHero</a></li><li><a href="global.html#createHomePage">createHomePage</a></li><li><a href="global.html#createImage">createImage</a></li><li><a href="global.html#createKeyManager">createKeyManager</a></li><li><a href="global.html#createLeaderboard">createLeaderboard</a></li><li><a href="global.html#createModal">createModal</a></li><li><a href="global.html#createNoScore">createNoScore</a></li><li><a href="global.html#createPlatform">createPlatform</a></li><li><a href="global.html#createPlayer">createPlayer</a></li><li><a href="global.html#createScore">createScore</a></li><li><a href="global.html#createSound">createSound</a></li><li><a href="global.html#createSounds">createSounds</a></li><li><a href="global.html#createTimerUI">createTimerUI</a></li><li><a href="global.html#curry">curry</a></li><li><a href="global.html#curryN">curryN</a></li><li><a href="global.html#destroy">destroy</a></li><li><a href="global.html#down">down</a></li><li><a href="global.html#drawBackground">drawBackground</a></li><li><a href="global.html#drawCoins">drawCoins</a></li><li><a href="global.html#drawColorCorrect">drawColorCorrect</a></li><li><a href="global.html#drawInitialSettings">drawInitialSettings</a></li><li><a href="global.html#drawPlatforms">drawPlatforms</a></li><li><a href="global.html#drawPlayer">drawPlayer</a></li><li><a href="global.html#drawSprite">drawSprite</a></li><li><a href="global.html#drawUi">drawUi</a></li><li><a href="global.html#easeInOutQuad">easeInOutQuad</a></li><li><a href="global.html#emitter">emitter</a></li><li><a href="global.html#emitterGame">emitterGame</a></li><li><a href="global.html#emitterHome">emitterHome</a></li><li><a href="global.html#engine">engine</a></li><li><a href="global.html#eventCloseButton">eventCloseButton</a></li><li><a href="global.html#eventCollectCoins">eventCollectCoins</a></li><li><a href="global.html#eventGameOver">eventGameOver</a></li><li><a href="global.html#eventLeaderboard">eventLeaderboard</a></li><li><a href="global.html#eventModal">eventModal</a></li><li><a href="global.html#eventModalClose">eventModalClose</a></li><li><a href="global.html#eventModalError">eventModalError</a></li><li><a href="global.html#eventModalOpen">eventModalOpen</a></li><li><a href="global.html#eventModalStart">eventModalStart</a></li><li><a href="global.html#eventPlayButton">eventPlayButton</a></li><li><a href="global.html#eventScore">eventScore</a></li><li><a href="global.html#eventStartButton">eventStartButton</a></li><li><a href="global.html#eventTime">eventTime</a></li><li><a href="global.html#eventTimerGameOver">eventTimerGameOver</a></li><li><a href="global.html#fade">fade</a></li><li><a href="global.html#formatNumber">formatNumber</a></li><li><a href="global.html#fromTopBoundsToBottom">fromTopBoundsToBottom</a></li><li><a href="global.html#getAxis">getAxis</a></li><li><a href="global.html#getAxisX">getAxisX</a></li><li><a href="global.html#getAxisY">getAxisY</a></li><li><a href="global.html#getButtonDown">getButtonDown</a></li><li><a href="global.html#getLeaderboard">getLeaderboard</a></li><li><a href="global.html#getPlayer">getPlayer</a></li><li><a href="global.html#gravity">gravity</a></li><li><a href="global.html#hasCollision">hasCollision</a></li><li><a href="global.html#hasJumpable">hasJumpable</a></li><li><a href="global.html#hasMovable">hasMovable</a></li><li><a href="global.html#hasPhysics">hasPhysics</a></li><li><a href="global.html#hasRectangle">hasRectangle</a></li><li><a href="global.html#hasSize">hasSize</a></li><li><a href="global.html#hasState">hasState</a></li><li><a href="global.html#hasTag">hasTag</a></li><li><a href="global.html#initButtonDown">initButtonDown</a></li><li><a href="global.html#inputManager">inputManager</a></li><li><a href="global.html#isBottomTopCollision">isBottomTopCollision</a></li><li><a href="global.html#isDefined">isDefined</a></li><li><a href="global.html#isDestroyed">isDestroyed</a></li><li><a href="global.html#isHighScore">isHighScore</a></li><li><a href="global.html#isLeftRightCollision">isLeftRightCollision</a></li><li><a href="global.html#isRightLeftCollision">isRightLeftCollision</a></li><li><a href="global.html#isTopBottomCollision">isTopBottomCollision</a></li><li><a href="global.html#jump">jump</a></li><li><a href="global.html#jumpable">jumpable</a></li><li><a href="global.html#keyManager">keyManager</a></li><li><a href="global.html#left">left</a></li><li><a href="global.html#leftAnimation">leftAnimation</a></li><li><a href="global.html#main">main</a></li><li><a href="global.html#mouseParallax">mouseParallax</a></li><li><a href="global.html#movable">movable</a></li><li><a href="global.html#movement">movement</a></li><li><a href="global.html#mult">mult</a></li><li><a href="global.html#parallax">parallax</a></li><li><a href="global.html#pauseMusic">pauseMusic</a></li><li><a href="global.html#pauseSound">pauseSound</a></li><li><a href="global.html#physics">physics</a></li><li><a href="global.html#pipe">pipe</a></li><li><a href="global.html#pipeWith">pipeWith</a></li><li><a href="global.html#player">player</a></li><li><a href="global.html#playerSoundJump">playerSoundJump</a></li><li><a href="global.html#playSound">playSound</a></li><li><a href="global.html#playSoundOnState">playSoundOnState</a></li><li><a href="global.html#position">position</a></li><li><a href="global.html#random">random</a></li><li><a href="global.html#rectangle">rectangle</a></li><li><a href="global.html#resetScore">resetScore</a></li><li><a href="global.html#right">right</a></li><li><a href="global.html#round">round</a></li><li><a href="global.html#scale">scale</a></li><li><a href="global.html#score">score</a></li><li><a href="global.html#scrollParallax">scrollParallax</a></li><li><a href="global.html#scrollTo">scrollTo</a></li><li><a href="global.html#setGamePage">setGamePage</a></li><li><a href="global.html#setHomePage">setHomePage</a></li><li><a href="global.html#setLeaderboard">setLeaderboard</a></li><li><a href="global.html#setPlayer">setPlayer</a></li><li><a href="global.html#size">size</a></li><li><a href="global.html#soundCoin">soundCoin</a></li><li><a href="global.html#soundMusic">soundMusic</a></li><li><a href="global.html#soundPlayer">soundPlayer</a></li><li><a href="global.html#spriteBackgrounds">spriteBackgrounds</a></li><li><a href="global.html#spriteCoin">spriteCoin</a></li><li><a href="global.html#spritePlatform">spritePlatform</a></li><li><a href="global.html#spritePlayer">spritePlayer</a></li><li><a href="global.html#spriteUi">spriteUi</a></li><li><a href="global.html#startMusic">startMusic</a></li><li><a href="global.html#startTimer">startTimer</a></li><li><a href="global.html#state">state</a></li><li><a href="global.html#stateFalling">stateFalling</a></li><li><a href="global.html#stateIdle">stateIdle</a></li><li><a href="global.html#stateJumping">stateJumping</a></li><li><a href="global.html#stateRunning">stateRunning</a></li><li><a href="global.html#sub">sub</a></li><li><a href="global.html#tag">tag</a></li><li><a href="global.html#time">time</a></li><li><a href="global.html#unsafeUpdateAnimation">unsafeUpdateAnimation</a></li><li><a href="global.html#up">up</a></li><li><a href="global.html#update">update</a></li><li><a href="global.html#updateCoins">updateCoins</a></li><li><a href="global.html#updateFloor">updateFloor</a></li><li><a href="global.html#updatePhysics">updatePhysics</a></li><li><a href="global.html#updatePlatform">updatePlatform</a></li><li><a href="global.html#updatePlayer">updatePlayer</a></li><li><a href="global.html#updateUi">updateUi</a></li><li><a href="global.html#vector">vector</a></li><li><a href="global.html#zero">zero</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Mon Oct 25 2021 22:05:43 GMT-0400 (Eastern Daylight Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
