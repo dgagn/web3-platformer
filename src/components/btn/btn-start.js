@@ -8,7 +8,8 @@ import {emitterHome} from '../../entities/emitter';
  */
 export function eventStartButton() {
   const startElement = $('#start');
-  startElement.on('click', () => {
+  startElement.on('click', e => {
+    e.preventDefault();
     emitterHome.emit('modalstart');
   });
 }

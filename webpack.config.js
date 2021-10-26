@@ -7,7 +7,7 @@ const mode =
 
 module.exports = {
   mode,
-  entry: './src/index.ts',
+  entry: './src/index.js',
   output: {
     filename: '[name].js',
     path: path.resolve(__dirname, 'dist'),
@@ -23,7 +23,7 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.js|ts$/,
+        test: /\.js$/,
         exclude: /node_modules/,
         use: {
           loader: 'babel-loader',
@@ -42,6 +42,6 @@ module.exports = {
   },
 
   resolve: {
-    extensions: ['.js', '.ts'],
+    extensions: ['.js'],
   },
 };

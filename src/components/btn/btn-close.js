@@ -8,7 +8,8 @@ import {emitterHome} from '../../entities/emitter';
  */
 export function eventCloseButton() {
   const closeElement = $('#close');
-  closeElement.on('click', () => {
+  closeElement.on('click', e => {
+    e.preventDefault();
     emitterHome.emit('modalclose');
   });
 }

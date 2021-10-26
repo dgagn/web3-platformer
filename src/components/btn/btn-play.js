@@ -8,7 +8,8 @@ import {emitterHome} from '../../entities/emitter';
  */
 export function eventPlayButton() {
   const playElement = $('#play');
-  playElement.on('click', () => {
+  playElement.on('click', e => {
+    e.preventDefault();
     emitterHome.emit('modalopen', {
       title: 'Commencer la partie',
       subtitle: 'Essayer de battre votre top-score de Collecteur.',

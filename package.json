@@ -45,7 +45,7 @@
   "scripts": {
     "prepare": "husky install",
     "style": "prettier --write .",
-    "lint": "eslint --ext .ts --fix src tests",
+    "lint": "eslint --fix src",
     "dev": "webpack serve",
     "build": "NODE_ENV=production webpack",
     "release": "standard-version",
