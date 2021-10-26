@@ -1,0 +1,28 @@
+name: Deploy to github pages
+
+on:
+  push:
+    branches: [master]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Set Node.js v14.x
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14
+      - name: Install yarn globally
+        run: npm i -g yarn
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+      - name: Building the app
+        run: |
+          yarn build
+      - name: Deploy to github pages 🚀
+        uses: JamesIves/github-pages-deploy-action@4.1.4
+        with:
+          branch: gh-pages
+          folder: dist
