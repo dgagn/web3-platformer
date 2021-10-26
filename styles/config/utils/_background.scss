@@ -1,0 +1,40 @@
+@use '../colors' as *;
+@use '../colors/colors' as c;
+
+@each $color-type, $color-map in $colors {
+  @each $color-intensity, $hsl in $color-map {
+    .bg-#{$color-type}-#{$color-intensity} {
+      background-color: color-get($color-type, $color-intensity) !important;
+    }
+  }
+}
+
+@each $color-name, $color-map in c.$colors {
+  @each $value, $intensity in $color-map {
+    .bg-#{$color-name}-#{$value} {
+      background-color: $intensity;
+    }
+    .bg-hover-#{$color-name}-#{$value} {
+      background-color: $intensity;
+      transition: background-color 0.3s var(--ease-out);
+
+      &:hover {
+        @if $value == 50 {
+          background-color: map-get($color-map, $value + 50);
+        } @else if $value == 900 {
+          background-color: map-get($color-map, 800);
+        } @else {
+          background-color: map-get($color-map, $value + 100);
+        }
+      }
+    }
+  }
+}
+
+.color-icon {
+  color: var(--icon-contrast);
+}
+
+.color-info {
+  color: var(--color-text-info);
+}

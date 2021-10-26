@@ -1,65 +1,92 @@
-import {curry, round} from '../utils';
+/**
+ * @typedef {number[]} Vector
+ * @description the vector is represented with a `Tuple` of two
+ * numbers [number, number].
+ */
 
-export type Vec = [number, number];
+/**
+ * Creates a vector with a `x` and a `y`.
+ *
+ * @param {number} x - the x value
+ * @param {number} y - the y value
+ * @return {Vector} - the new vector
+ */
+export function vector(x, y) {
+  return [x, y];
+}
 
-export const vector = (x: number, y: number): Vec => [x, y];
+/**
+ * The zero vector (0, 0)
+ * @type {Vector}
+ */
+const zero = vector(0, 0);
+/**
+ * The zero vector (0, 0)
+ * @type {Vector}
+ */
+const up = vector(0, 1);
+/**
+ * The down vector (0, -1)
+ * @type {Vector}
+ */
+const down = vector(0, -1);
+/**
+ * The left vector (-1, 0)
+ * @type {Vector}
+ */
+const left = vector(-1, 0);
+/**
+ * The right vector (1, 0)
+ * @type {Vector}
+ */
+const right = vector(1, 0);
 
-const zero: Vec = vector(0, 0);
-const up: Vec = vector(0, 1);
-const down: Vec = vector(0, -1);
-const left: Vec = vector(-1, 0);
-const right: Vec = vector(1, 0);
+/**
+ * Scales a vector by a `scalar`.
+ *
+ * @param {Vector} vector - a vector to scale
+ * @param {number} scalar - the scaling amount
+ * @return {Vector} - the scaled vector
+ */
+export function scale([x, y], scalar) {
+  return vector(scalar * x, scalar * y);
+}
 
-export const scale = ([x, y]: Vec, scalar: number): Vec =>
-  vector(scalar * x, scalar * y);
+/**
+ * Adds all the vectors together.
+ *
+ * @param {Vector[]} vx - all the vectors to add together
+ * @return {Vector} - the result of the vector
+ */
+export function add(...vx) {
+  return vx.reduce(
+    ([ax, ay], [vx, vy]) => vector(ax + vx, ay + vy),
+    vector(0, 0)
+  );
+}
 
-export const add = (...vx: Vec[]) =>
-  vx.reduce(([ax, ay], [vx, vy]) => vector(ax + vx, ay + vy), vector(0, 0));
+/**
+ * Subtracts all the vectors together.
+ *
+ * @param {Vector[]} vx - all the vectors to subtract together
+ * @return {Vector} - the result of the vector
+ */
+export function sub(...vx) {
+  return vx.reduce(([ax, ay], [vx, vy]) => vector(ax - vx, ay - vy));
+}
 
-export const sub = (...vx: Vec[]) =>
-  vx.reduce(([ax, ay], [vx, vy]) => vector(ax - vx, ay - vy));
-
-export const mult = (...vx: Vec[]) =>
-  vx.reduce(([ax, ay], [vx, vy]) => vector(ax * vx, ay * vy), vector(1, 1));
-
-export const dot = ([x1, y1], [x2, y2]) => x1 * x2 + y1 * y2;
-
-export const normalize = (v: Vec) => scale(v, 1 / (mag(v) || 1));
-
-export const mag = ([x, y]) => Math.sqrt(x * x + y * y);
-
-export const dist = ([x1, y1], [x2, y2]) =>
-  Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
-
-// ignore coverage
-const _drawVector = (
-  context: CanvasRenderingContext2D,
-  [v1x, v1y],
-  [v2x, v2y],
-  n,
-  color
-) => {
-  context.beginPath();
-  context.moveTo(v2x, v2y);
-  const [vx, vy] = vector(v2x + v1x * n, v2y + v1y * n);
-  context.lineTo(vx, vy);
-  context.strokeStyle = color;
-  context.stroke();
-  context.closePath();
-};
-
-// ignore coverage
-const _textVector = (
-  context: CanvasRenderingContext2D,
-  [v1x, v1y],
-  [v2x, v2y],
-  prefix: string
-) => {
-  context.fillText(prefix + `: [${round(v1x, 2)}, ${round(v1y, 2)}]`, v2x, v2y);
-};
-
-export const draw = curry(_drawVector);
-export const text = curry(_textVector);
+/**
+ * Multiplies all the vectors together.
+ *
+ * @param {Vector[]} vx - all the vectors to multiply together
+ * @return {Vector} - the result of the vector
+ */
+export function mult(...vx) {
+  return vx.reduce(
+    ([ax, ay], [vx, vy]) => vector(ax * vx, ay * vy),
+    vector(1, 1)
+  );
+}
 
 export default {
   vector,
@@ -71,10 +98,4 @@ export default {
   scale,
   add,
   sub,
-  dot,
-  normalize,
-  mag,
-  dist,
-  draw,
-  text,
 };

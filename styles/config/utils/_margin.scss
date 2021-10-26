@@ -1,0 +1,87 @@
+@use '../spacing' as *;
+@use '../breakpoints' as *;
+@use '../position' as *;
+
+@each $spacing-key, $space-value in $spacing {
+  .m-#{$spacing-key} {
+    margin: spacing-get($spacing-key) !important;
+  }
+
+  .-m-#{$spacing-key} {
+    margin: calc(#{spacing-get($spacing-key)} * -1) !important;
+  }
+
+  .mx-#{$spacing-key} {
+    margin-right: spacing-get($spacing-key) !important;
+    margin-left: spacing-get($spacing-key) !important;
+  }
+
+  .-mx-#{$spacing-key} {
+    margin-right: calc(#{spacing-get($spacing-key)} * -1) !important;
+    margin-left: calc(#{spacing-get($spacing-key)} * -1) !important;
+  }
+
+  .my-#{$spacing-key} {
+    margin-top: spacing-get($spacing-key) !important;
+    margin-bottom: spacing-get($spacing-key) !important;
+  }
+
+  .-my-#{$spacing-key} {
+    margin-top: calc(#{spacing-get($spacing-key)} * -1) !important;
+    margin-bottom: calc(#{spacing-get($spacing-key)} * -1) !important;
+  }
+
+  @each $position-short, $position-long in $inset {
+    .m#{$position-short}-#{$spacing-key} {
+      margin-#{$position-long}: spacing-get($spacing-key) !important;
+    }
+
+    .-m#{$position-short}-#{$spacing-key} {
+      margin-#{$position-long}: calc(
+        #{spacing-get($spacing-key)} * -1
+      ) !important;
+    }
+  }
+}
+
+.m-auto {
+  margin: auto !important;
+}
+.m-0 {
+  margin: 0 !important;
+}
+
+.mx-auto {
+  margin-right: auto !important;
+  margin-left: auto !important;
+}
+
+.mx-0 {
+  margin-right: 0 !important;
+  margin-left: 0 !important;
+}
+
+.my-auto {
+  margin-top: auto !important;
+  margin-bottom: auto !important;
+}
+
+.my-0 {
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+}
+
+@each $position-short, $position-long in $inset {
+  .m#{$position-short}-auto {
+    margin-#{$position-long}: auto !important;
+  }
+  .m#{$position-short}-0 {
+    margin-#{$position-long}: 0 !important;
+  }
+}
+
+.mt-xl\@sm {
+  @include breakpoint(sm) {
+    margin-top: spacing-get('xl') !important;
+  }
+}

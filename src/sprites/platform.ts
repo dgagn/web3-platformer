@@ -1,6 +1,10 @@
-import {vector} from '../core';
+import {vector} from '../core/vector';
 
-export const platformSprite = [
+/**
+ * The platform sprites.
+ * @type {Sprite[]}
+ */
+export const spritePlatform = [
   {
     state: 'idle',
     src: 'platform/platform.png',

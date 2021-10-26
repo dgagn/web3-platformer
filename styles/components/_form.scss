@@ -1,0 +1,32 @@
+@use '../config/spacing' as *;
+@use '../config/colors' as *;
+
+:root {
+  --control-color-border: var(--color-contrast-300);
+  --control-color-border-focus: var(--color-primary-500);
+  --control-color-shadow-focus: var(--color-primary-200);
+}
+
+.form__group {
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: spacing-get(md);
+}
+
+.form__control {
+  width: 100%;
+  min-height: spacing-get(xl);
+  padding: spacing-get(xs) spacing-get(md);
+  color: var(--base-color);
+  vertical-align: bottom;
+  background-color: var(--color-bg);
+  border: 1px solid var(--control-color-border);
+  border-radius: 4px;
+  outline: none;
+
+  &:focus {
+    border-color: var(--control-color-border-focus);
+    box-shadow: 0 0 0 2px var(--control-color-shadow-focus);
+    transition: all 0.3s;
+  }
+}

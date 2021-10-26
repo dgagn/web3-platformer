@@ -1,11 +1,13 @@
-import {game} from './game';
+import {emitterGame} from '../entities/emitter';
 
-export let time = 90; // in seconds
-export function timer() {
-  if (time === 0) {
-    game.emit('gameover');
-    return;
-  }
-  time--;
-  setTimeout(timer, 1000);
+/**
+ * Emits the `timer` event every seconds
+ * @return {NodeJS.Timer} - returns the id of the
+ * handle on the `setInterval` to be able to `clearInterval`
+ * later.
+ */
+export function startTimer() {
+  return setInterval(() => {
+    emitterGame.emit('timer');
+  }, 1000);
 }

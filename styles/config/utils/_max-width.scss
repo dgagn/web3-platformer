@@ -1,0 +1,59 @@
+@use '../max-width' as *;
+@use '../breakpoints' as *;
+
+@each $max-width-key, $max-width-value in $max-w {
+  .max-w-#{$max-width-key} {
+    max-width: max-w-get($max-width-key);
+  }
+}
+
+@each $breakpoint-key, $breakpoint-value in $breakpoints {
+  .max-w-screen-#{$breakpoint-key} {
+    max-width: $breakpoint-value;
+  }
+}
+
+@each $breakpoint-key, $breakpoint-value in $breakpoints {
+  @each $max-width-key, $max-width-value in $max-w {
+    .max-w-#{$max-width-key}\@#{$breakpoint-key} {
+      @include breakpoint($breakpoint-key) {
+        max-width: max-w-get($max-width-key);
+      }
+    }
+  }
+}
+
+$breakpointsNr: length($breakpoints);
+
+@each $breakpoint, $value in $breakpoints {
+  $i: index($breakpoints, $breakpoint $value);
+
+  @if $i == 1 {
+    [class^='max-w-adaptive'],
+    [class*=' max-w-adaptive'] {
+      max-width: map-get($map: $breakpoints, $key: #{$breakpoint});
+    }
+  } @else {
+    $classList: '';
+
+    @each $subBreakpoint, $subValue in $breakpoints {
+      $j: index($breakpoints, $subBreakpoint $subValue);
+
+      @if $j == $i {
+        $classList: '.max-w-adaptive-#{$subBreakpoint}';
+      } @else if $j > $i {
+        $classList: $classList + ', .max-w-adaptive-#{$subBreakpoint}';
+      }
+    }
+
+    @if $i < $breakpointsNr {
+      $classList: $classList + ', .max-w-adaptive';
+    }
+
+    @include breakpoint(#{$breakpoint}) {
+      #{$classList} {
+        max-width: map-get($map: $breakpoints, $key: #{$breakpoint});
+      }
+    }
+  }
+}

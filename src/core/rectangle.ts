@@ -1,8 +1,13 @@
-import {hasSize, hasPhysics} from './index';
 import {isDefined} from '../utils';
 
-export const hasRectangle = obj =>
-  [
+/**
+ * Checks for rectangle properties.
+ * @param {Object} obj - the entity
+ * @return {boolean} - if the entity has rectangle
+ * properties
+ */
+export function hasRectangle(obj) {
+  return [
     obj.top,
     obj.bottom,
     obj.left,
@@ -12,12 +17,15 @@ export const hasRectangle = obj =>
     obj.oldleft,
     obj.oldright,
   ].every(isDefined);
+}
 
-export const rectangle = obj => {
-  if (!hasPhysics(obj) || !hasSize(obj)) {
-    throw new Error('the object must have physics and size properties');
-  }
-
+/**
+ * Adds the rectangle properties to a entity.
+ * @param {Object} obj - the entity
+ * @return {Object} - the entity object with the
+ * rectangle properties
+ */
+export function rectangle(obj) {
   const [px, py] = obj.position;
   const [ox, oy] = obj.oldpos;
   const {width, height} = obj;
@@ -33,4 +41,4 @@ export const rectangle = obj => {
     oldleft: ox,
     oldright: ox + width,
   };
-};
+}

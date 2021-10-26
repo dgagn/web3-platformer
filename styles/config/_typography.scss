@@ -1,0 +1,110 @@
+@use 'sass:math';
+@use 'colors' as *;
+@use 'sass:map';
+
+$typography-size-prefix: --text- !default;
+$base-prefix: --base- !default;
+$heading-prefix: --heading- !default;
+
+$base: (
+  font:
+    '-apple-system, blinkmacsystemfont, segoe ui, roboto, oxygen, ubuntu, cantarell, fira sans, droid sans, helvetica neue, sans-serif',
+  line-height: 1.4,
+  color: var(--color-contrast-900),
+) !default;
+
+$heading: (
+  line-height: 1.5,
+  weight: 700,
+  color: var(--color-contrast-900),
+) !default;
+
+$scale-ratio: 1.2 !default;
+$base-size: 1em !default;
+
+$typography-sizes: (
+  scale-ratio: $scale-ratio,
+  base-size: $base-size,
+  xs:
+    calc(
+      (
+          var(#{$typography-size-prefix}base-size, #{$base-size}) /
+            var(--text-scale-ratio, #{$scale-ratio})
+        ) / var(--text-scale-ratio, #{$scale-ratio})
+    ),
+  sm:
+    calc(
+      var(
+          #{$typography-size-prefix}xs,
+          #{math.div(math.div($base-size, $scale-ratio), $scale-ratio)}
+        ) * var(--text-scale-ratio, #{$scale-ratio})
+    ),
+  md:
+    calc(
+      var(
+          #{$typography-size-prefix}sm,
+          #{math.div(math.div($base-size, $scale-ratio), $scale-ratio) *
+            $scale-ratio}
+        ) * var(--text-scale-ratio, #{$scale-ratio}) *
+        var(--text-scale-ratio, #{$scale-ratio})
+    ),
+  lg:
+    calc(
+      var(
+          #{$typography-size-prefix}md,
+          #{math.div(math.div($base-size, $scale-ratio), $scale-ratio) *
+            $scale-ratio * $scale-ratio * $scale-ratio}
+        ) * var(--text-scale-ratio, #{$scale-ratio})
+    ),
+  xl:
+    calc(
+      var(
+          #{$typography-size-prefix}lg,
+          #{math.div(math.div($base-size, $scale-ratio), $scale-ratio) *
+            $scale-ratio * $scale-ratio * $scale-ratio * $scale-ratio}
+        ) * var(--text-scale-ratio, #{$scale-ratio})
+    ),
+  2xl:
+    calc(
+      var(
+          #{$typography-size-prefix}xl,
+          #{math.div(math.div($base-size, $scale-ratio), $scale-ratio) *
+            $scale-ratio * $scale-ratio * $scale-ratio * $scale-ratio *
+            $scale-ratio}
+        ) * var(--text-scale-ratio, #{$scale-ratio})
+    ),
+  3xl:
+    calc(
+      var(
+          #{$typography-size-prefix}2xl,
+          #{math.div(math.div($base-size, $scale-ratio), $scale-ratio) *
+            $scale-ratio * $scale-ratio * $scale-ratio * $scale-ratio *
+            $scale-ratio * $scale-ratio}
+        ) * var(--text-scale-ratio, #{$scale-ratio})
+    ),
+  4xl:
+    calc(
+      var(
+          #{$typography-size-prefix}3xl,
+          #{math.div(math.div($base-size, $scale-ratio), $scale-ratio) *
+            $scale-ratio * $scale-ratio * $scale-ratio * $scale-ratio *
+            $scale-ratio * $scale-ratio * $scale-ratio}
+        ) * var(--text-scale-ratio, #{$scale-ratio})
+    ),
+);
+
+@function base-get($key) {
+  @if $key == 'font' {
+    @return var(#{$base-prefix}#{$key}, unquote(map.get($base, $key)));
+  }
+
+  @return var(#{$base-prefix}#{$key}, map.get($base, $key));
+}
+
+@function heading-get($key) {
+  @return var(#{$heading-prefix}#{$key}, map.get($heading, $key));
+}
+
+@function typography-size-get($key) {
+  @return var(#{$typography-size-prefix}#{$key});
+}

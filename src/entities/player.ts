@@ -1,79 +1,93 @@
+import {update} from '../core/engine';
 import {pipe, pipeWith} from '../utils';
-import {tag} from '../core/tag';
-import {
-  collision,
-  gravity,
-  jump,
-  jumpable,
-  movable,
-  movement,
-  physics,
-  rectangle,
-  size,
-  updatePhysics,
-} from '../core';
-import {state} from '../core/state';
-import {
-  createAnimations,
-  drawSprite,
-  unsafeUpdateAnimation,
-} from '../core/animation';
-import {holySprite} from '../player/sprites';
-import {createSound, playSoundOnState} from '../core/sound';
-import {playerSound} from '../player/sounds';
-import {draw, update} from '../core/game';
-import Input from '../game/input-manager';
-import {coinCollision} from '../core/collision';
+import Input from '../core/input-manager';
+import {collision, collisionTrigger} from '../core/collision';
+import {constraintBounds} from '../core/bounds';
 import {
   stateFalling,
   stateIdle,
   stateJumping,
   stateRunning,
-} from '../player/states';
-import {platforms} from './platforms';
-import {floor} from './floor';
-import {coins} from './coins';
-import {gameBounds} from '../game/bounds';
+} from '../core/state-manager';
+import {
+  createAnimations,
+  drawSprite,
+  unsafeUpdateAnimation,
+} from '../core/animation';
+import {createSounds, playSoundOnState} from '../core/sound';
+import {hasTag, tag} from '../core/tag';
+import {state} from '../core/state';
+import {spritePlayer} from '../sprites/player';
+import {soundPlayer} from '../sounds/player';
+import {gravity, physics, position, updatePhysics} from '../core/physics';
+import {emitterGame} from './emitter';
+import {player} from '../core/info';
+import {size} from '../core/size';
+import {jump, jumpable} from '../core/jumpable';
+import {movable, movement} from '../core/movable';
+import {rectangle} from '../core/rectangle';
 
-export let player = pipeWith(
-  {},
-  tag('player'),
-  physics({position: [48, 48]}),
-  size(32, 50),
-  state('idle', true),
-  jumpable(14),
-  movable(1),
-  rectangle,
-  createAnimations(holySprite),
-  createSound(playerSound)
+/**
+ * Creates the player entity.
+ *
+ * @return {Object} - the player entity
+ */
+export function createPlayer() {
+  return pipeWith(
+    player(),
+    tag('player'),
+    position([48, 48]),
+    physics(),
+    size(32, 50),
+    state('idle', true),
+    jumpable(14),
+    movable(1),
+    rectangle,
+    createAnimations(spritePlayer),
+    createSounds(soundPlayer)
+  );
+}
+
+/**
+ * Updates the player every frame.
+ *
+ * @function
+ * @type {Update}
+ */
+export const updatePlayer = update(
+  ({game, frames}) =>
+    (game.entities.player = pipeWith(
+      game.entities.player,
+      updatePhysics(0.1),
+      movement(Input.getAxisX()),
+      jump(Input.getAxisY()),
+      gravity(1),
+      rectangle,
+      pipe(...game.entities.platforms.map(collision)),
+      collision(game.entities.floor),
+      pipe(...game.entities.coins.map(collisionTrigger)),
+      constraintBounds(game.canvas),
+      stateIdle,
+      stateRunning(2),
+      stateJumping(-10),
+      stateFalling(5),
+      unsafeUpdateAnimation(~~frames),
+      playSoundOnState('running')
+    ))
 );
 
-update(frames => {
-  player = pipeWith(
-    player,
-    updatePhysics(0.1),
-    movement(Input.getAxisX()),
-    jump(Input.getAxisY()),
-    gravity(1),
-    rectangle,
-    pipe(...platforms.map(collision)),
-    collision(floor),
-    pipe(...coins.map(coinCollision)),
-    gameBounds,
-    stateIdle,
-    stateRunning(2),
-    stateJumping(-10),
-    stateFalling(5),
-    unsafeUpdateAnimation(~~frames),
-    playSoundOnState('running')
-  );
-});
-
-draw(context => {
+/**
+ * Draws the player every frame.
+ * @param {Object} game - the game object
+ */
+export function drawPlayer(game) {
+  const {
+    context,
+    entities: {player},
+  } = game;
   const [vx] = player.velocity;
   const [sw, sh] = player.animation.localSize;
   const [fpx, fpy] = player.animation.position;
-  // drawSprite(context, ui);
 
   if (vx < 0) {
     context.save();
@@ -84,4 +98,21 @@ draw(context => {
   context.strokeStyle = '#4e62e0';
   drawSprite(context, player);
   context.restore();
-});
+
+  // @ts-ignore
+  window.player = player;
+}
+
+/**
+ * Adds a sound when the player jumps.
+ */
+function playerSoundJump() {
+  emitterGame.on('jump', obj => {
+    if (!hasTag('player', obj)) {
+      return;
+    }
+    obj.sounds.filter(sound => sound.state === 'jumping')[0].audio.play();
+  });
+}
+
+playerSoundJump();

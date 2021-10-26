@@ -1,8 +1,19 @@
-import './entities';
-import {engine, game} from './core/game';
+import $ from 'jquery';
+import {setHomePage} from './pages/home';
+import '../styles/main.scss';
+import {eventModal} from './components/modal/modal';
 
-console.log(game);
+/**
+ * The main entry point to the `Collecteur` game.
+ * The main will set the page to the home page and starts
+ * listening for the modal events.
+ */
+function main() {
+  setHomePage();
+  eventModal();
+}
 
-const startGame = engine();
-
-startGame();
+/**
+ * Start the main when the DOM is ready.
+ */
+$(main);

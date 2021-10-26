@@ -1,34 +1,81 @@
-import {emitter} from './emitter';
+import $ from 'jquery';
+import {drawUi, updateUi} from '../entities/ui';
+import {clearEngine, engine} from './engine';
+import {drawPlayer, updatePlayer} from '../entities/player';
+import {drawCoins, eventCollectCoins, updateCoins} from '../entities/coins';
+import {updateFloor} from '../entities/floor';
+import {drawPlatforms, updatePlatform} from '../entities/platforms';
+import {createEntities} from './entities';
+import {drawColorCorrect, drawInitialSettings} from '../entities/utils';
+import {drawBackground} from '../entities/background';
+import {eventGameOver, eventTimerGameOver} from '../other/gameover';
+import {startTimer} from './timer';
+import {eventScore} from '../other/score';
+import {eventTime} from '../other/time';
+import {pauseMusic, startMusic} from '../other/gamestart';
 
-const createGame = id => {
-  const canvas = document.getElementById(id) as HTMLCanvasElement;
+/**
+ * Creates the game on the specified selector.
+ *
+ * @param {jQuery|string} selector - the canvas element or a selector
+ * @return {Object} - the game object with the options
+ */
+export function createGame(selector) {
+  const canvas = $(selector).get(0);
   const context = canvas.getContext('2d');
-  return {
-    ...emitter(),
+  const entities = createEntities(canvas);
+
+  const handle = startTimer();
+
+  const game = {
     canvas,
     context,
-    draws: [],
-    update: [],
+    entities,
+    maxTime: 90,
+    handle,
   };
-};
+  eventCollectCoins(game);
+  eventTimerGameOver();
+  eventGameOver(game);
+  eventTime(game);
+  eventScore();
+  startMusic();
 
-export const game = createGame('canvas');
+  engine(frames => {
+    const obj = {
+      game,
+      frames,
+    };
+    updatePlayer(obj);
+    updateCoins(obj);
+    updateFloor(obj);
+    updatePlatform(obj);
+    updateUi(obj);
+  })();
 
-export const draw = fn => {
-  game.draws.push(fn);
-};
+  engine(() => {
+    drawInitialSettings(game);
+    drawBackground(game);
+    drawPlayer(game);
+    drawCoins(game);
+    drawPlatforms(game);
+    drawUi(game);
+    drawColorCorrect(game);
+  })();
 
-export const update = fn => {
-  game.update.push(fn);
-};
-
-export const engine = () => {
-  let frames = 0;
-  const cb = () => {
-    requestAnimationFrame(cb);
-    game.update.forEach(f => f(~~frames));
-    game.draws.forEach(f => f(game.context));
-    frames++;
+  return {
+    game,
+    handle,
   };
-  return cb;
-};
+}
+
+/**
+ * Clears all the side effects from the game.
+ *
+ * @param {Object} game - the game object
+ */
+export function clearGame(game) {
+  clearInterval(game.handle);
+  clearEngine();
+  pauseMusic();
+}

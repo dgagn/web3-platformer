@@ -1,0 +1,35 @@
+@use 'colors/blue-gray' as *;
+@use 'colors/blue' as *;
+@use 'colors/red' as *;
+@use 'colors/green' as *;
+@use 'colors/yellow' as *;
+@use 'colors/orange' as *;
+@use 'colors/pink' as *;
+@use 'colors/warm-gray' as *;
+@use 'sass:map';
+
+$color-prefix: --color- !default;
+
+$colors: (
+  primary: $red,
+  contrast: $warm-gray,
+  error: $red,
+  success: $green,
+  warning: $yellow,
+  caution: $orange,
+) !default;
+
+$dark-colors: (
+  primary: (),
+) !default;
+
+@function color-get($key, $intensity) {
+  @return var(
+    --color-#{$key}-#{$intensity},
+    map.get(map.get($colors, $key), $intensity)
+  );
+}
+
+@function color-pure-get($key, $intensity) {
+  @return map.get(map.get($colors, $key), $intensity);
+}

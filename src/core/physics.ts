@@ -1,31 +1,69 @@
-import Vector, {add, vector, scale, Vec} from './vector';
+import Vector, {add, scale, vector} from './vector';
 import {curry, isDefined} from '../utils';
 
-export const hasPhysics = obj =>
-  [obj.mass, obj.position, obj.velocity, obj.acceleration, obj.oldpos].every(
-    isDefined
-  );
+/**
+ * Checks for physics properties.
+ * @param {Object} obj - the entity
+ * @return {boolean} - if the entity has physics
+ * properties
+ */
+export function hasPhysics(obj) {
+  return [
+    obj.mass,
+    obj.position,
+    obj.velocity,
+    obj.acceleration,
+    obj.oldpos,
+  ].every(isDefined);
+}
 
-export const physics =
-  ({
-    mass = 1,
-    position = Vector.zero,
-    velocity = Vector.zero,
-    acceleration = Vector.zero,
-    oldpos = Vector.zero,
-  } = {}) =>
-  (obj = {}) => ({
+/**
+ * Adds physics to a entity.
+ *
+ * @param {number} mass - the mass of a object
+ * @param {Vector} velocity - the velocity of a object
+ * @param {Vector} acceleration - the acceleration of the object
+ * @return {EntityCB} - the entity callback with
+ * the physics properties applied
+ */
+export function physics({
+  mass = 1,
+  velocity = Vector.zero,
+  acceleration = Vector.zero,
+} = {}) {
+  return (obj = {}) => ({
     ...obj,
     mass,
-    position,
     velocity,
     acceleration,
+  });
+}
+
+/**
+ * Updates a position on a entity.
+ *
+ * @param {Vector} position - the current position
+ * @param {Vector} oldpos - last frame position
+ * @return {EntityCB} - a entity callback with the updated
+ * position
+ */
+export function position(position = Vector.zero, oldpos = Vector.zero) {
+  return obj => ({
+    ...obj,
+    position,
     oldpos,
   });
+}
 
-export const updatePhysics =
-  (friction: number = 0.1) =>
-  obj => {
+/**
+ * Updates the physics properties.
+ *
+ * @param {number} friction
+ * @return {EntityCB} - a entity callback with the updated
+ * physics properties
+ */
+export function updatePhysics(friction = 0.1) {
+  return obj => {
     if (!hasPhysics(obj)) {
       throw new Error('object must have physics properties');
     }
@@ -48,8 +86,18 @@ export const updatePhysics =
       oldpos,
     };
   };
+}
 
-const _addForce = (force: Vec, obj) => {
+/**
+ * Adds a force to a object.
+ *
+ * @internal
+ * @function
+ * @param {Vector} force - the force to apply
+ * @param {Object} obj - the entity
+ * @return {Object} - the entity object
+ */
+const _addForce = (force, obj) => {
   if (!hasPhysics(obj) || force.length !== 2) {
     throw new Error(
       'the object needs to have the physics properties ' +
@@ -64,20 +112,31 @@ const _addForce = (force: Vec, obj) => {
 };
 
 /**
- * Ajoute une acceleration sur un object de type physics
- * pour permettre l'objet de se déplacer.
+ * Adds a acceleration force to move the object
+ * with physics.
  *
  * @function
- * @param {[number, number]} force - un vecteur pour la force
- * @param {Object=} obj - un objet pour appliquer
- * @return {(Function|Object)} - retourne un version `curried` de la fonction
- * ou un objet avec la force appliqué
+ * @category core
+ * @param {number[]} force - a force vector [x, y]
+ * @param {Object} obj - a object to apply the force
+ * @return {EntityCB} - returns a `curried` version of the
+ * `_addForce` that returns a object with a new acceleration
+ * @see _addForce
  */
 export const addForce = curry(_addForce);
 
-export const gravity = (gravity: number) => obj => {
-  if (!hasPhysics(obj)) {
-    throw new Error('the object must have the physics properties');
-  }
-  return addForce(vector(0, gravity), obj);
-};
+/**
+ * Applies a gravity on a entity.
+ *
+ * @param {number} gravity - a number, negative or positive
+ * @return {EntityCB} - the entity callback with the
+ * updated physics properties (gravity).
+ */
+export function gravity(gravity) {
+  return obj => {
+    if (!hasPhysics(obj)) {
+      throw new Error('the object must have the physics properties');
+    }
+    return addForce(vector(0, gravity), obj);
+  };
+}

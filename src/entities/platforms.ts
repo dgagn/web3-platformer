@@ -1,42 +1,58 @@
+import {update} from '../core/engine';
 import {pipe, pipeWith, random} from '../utils';
-import {tag} from '../core/tag';
-import {gravity, physics, rectangle, size, updatePhysics} from '../core';
-import {state} from '../core/state';
+import {fromTopBoundsToBottom} from '../core/bounds';
 import {
   createAnimations,
   drawSprite,
   unsafeUpdateAnimation,
 } from '../core/animation';
-import {platformSprite} from '../sprites/platform';
-import {draw, game, update} from '../core/game';
-import {stayTopBounds} from '../game/bounds';
+import {tag} from '../core/tag';
+import {state} from '../core/state';
+import {spritePlatform} from '../sprites/platform';
+import {gravity, physics, position, updatePhysics} from '../core/physics';
+import {size} from '../core/size';
+import {rectangle} from '../core/rectangle';
 
-const platform = () =>
-  pipeWith(
+/**
+ * Creates the platform entity.
+ * @param {HTMLCanvasElement} canvas - the game canvas
+ * @return {Object} - the platform entity
+ */
+export function createPlatform(canvas) {
+  return pipeWith(
     {},
     tag('platform'),
-    physics({
-      position: [random(0, game.canvas.width), random(0, game.canvas.height)],
-    }),
+    position([random(0, canvas.width), random(0, canvas.height)]),
+    physics(),
     size(64, 16),
     rectangle,
-    state(random(1, 2) === 1 ? 'idle_alt' : 'idle_alt', true), // todo: fix random if not touch
-    createAnimations(platformSprite)
+    state(random(1, 2) === 1 ? 'idle' : 'idle_alt')(true),
+    createAnimations(spritePlatform)
   );
+}
 
-export let platforms = Array(10).fill(true).map(platform);
-
-update(() => {
+/**
+ * Updates the platform every frame.
+ *
+ * @function
+ * @type {Update}
+ */
+export const updatePlatform = update(({game, frames}) => {
   const platformUpdate = pipe(
     updatePhysics(0.1),
     gravity(-0.2),
     rectangle,
-    stayTopBounds,
+    fromTopBoundsToBottom(game.canvas),
     unsafeUpdateAnimation(~~frames)
   );
-  platforms = platforms.map(platformUpdate);
+  game.entities.platforms = game.entities.platforms.map(platformUpdate);
 });
 
-draw(context => {
+/**
+ * Draws the platform every frame.
+ * @param {CanvasRenderingContext2D} context - the game context
+ * @param {Object} platforms - the platforms to draw
+ */
+export function drawPlatforms({context, entities: {platforms}}) {
   platforms.forEach(platform => drawSprite(context, platform));
-});
+}

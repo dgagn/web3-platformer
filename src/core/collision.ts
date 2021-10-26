@@ -1,139 +1,147 @@
 import {vector} from './vector';
 import {hasRectangle} from './rectangle';
-import {emitter} from './emitter';
-import {game} from './game';
+import {emitterGame} from '../entities/emitter';
 
 /**
- * Permet de savoir si il y a une collision entre deux
- * rectangles.
- * @param {Object} rec1 - le premier rectangle
- * @param {Object} rec2 - le deuxième rectangle
- * @return {boolean} - un booléen pour savoir si il y a une
- * collision entre deux rectangles.
+ * Detect if their is a collision between two rectangles.
+ *
+ * @param {Object} rec1 - the first rectangle
+ * @param {Object} rec2 - the second rectangle
+ * @return {boolean} - a boolean value on the detection between
+ * the first and the second rectangle.
  */
-export const hasCollision = (rec1, rec2) =>
-  !(
+export function hasCollision(rec1, rec2) {
+  return !(
     rec1.bottom < rec2.top ||
     rec1.top > rec2.bottom ||
     rec1.left > rec2.right ||
     rec1.right < rec2.left
   );
+}
 
 /**
- * Permet de savoir si la collision est une collision de
- * type bas à haut.
+ * If the collision is a bottom to top collision.
  *
- * @example
- * // Un joueur en haut d'une plateforme
- * @param {Object} rec1 - le rectangle pour vérifier le bas
- * @param {Object} rec2 - le rectangle pour vérifier le haut
- * @return {boolean} - un booléen pour savoir si le rectangle est
- * en collision (le bas du rectangle 1 sur le haut du rectangle 2)
+ * @param {Object} rec1 - rectangle to verify the bottom
+ * @param {Object} rec2 - rectangle to verify the top
+ * @return {boolean} - a boolean to detect if
+ * the bottom of rect 1 collided with the top of rec2
  */
-export const isBottomTopCollision = (rec1, rec2) =>
-  rec1.bottom >= rec2.top && rec1.oldbottom < rec2.oldtop;
+export function isBottomTopCollision(rec1, rec2) {
+  return rec1.bottom >= rec2.top && rec1.oldbottom < rec2.oldtop;
+}
 
 /**
- * Permet de savoir si la collision est une collision de
- * type haut à bas.
- *
- * @example
- * // Un joueur qui saute et a une collision avec le haut d'une
- * // plateforme
- * @param {Object} rec1 - le rectangle pour vérifier le haut
- * @param {Object} rec2 - le rectangle pour vérifier le bas
- * @return {boolean} - un booléen pour savoir si le rectangle est
- * en collision (le haut du rectangle 1 sur le bas du rectangle 2)
+ * If the collision is a top to bottom collision.
+ * @param {Object} rec1 - rectangle to verify top
+ * @param {Object} rec2 - rectangle to verify bottom
+ * @return {boolean} - verify the top of rec1 on the bottom of
+ * rec2
  */
-export const isTopBottomCollision = (rec1, rec2) =>
-  rec1.top <= rec2.bottom && rec1.oldtop > rec2.oldbottom;
+export function isTopBottomCollision(rec1, rec2) {
+  return rec1.top <= rec2.bottom && rec1.oldtop > rec2.oldbottom;
+}
 
 /**
- * Permet de savoir si la collision est une collision de
- * type droite à gauche.
+ * If the collision is a right to left collision.
  *
- * @example
- * // Un joueur qui saute et a une collision de droite avec le coté gauche
- * // d'une plateforme
- * @param {Object} rec1 - le rectangle pour vérifier la droite
- * @param {Object} rec2 - le rectangle pour vérifier la gauche
- * @return {boolean} - un booléen pour savoir si le rectangle est
- * en collision (la droite du rectangle 1 sur la gauche du rectangle 2)
+ * @param {Object} rec1 - rectangle to verify right
+ * @param {Object} rec2 - rectangle to verify left
+ * @return {boolean} - a boolean to verify if rec1 collides by
+ * the right with rec2 on the left
  */
-export const isRightLeftCollision = (rec1, rec2) =>
-  rec1.right >= rec2.left && rec1.oldright < rec2.oldleft;
+export function isRightLeftCollision(rec1, rec2) {
+  return rec1.right >= rec2.left && rec1.oldright < rec2.oldleft;
+}
 
 /**
- * Permet de savoir si la collision est une collision de
- * type haut à bas.
+ * If the collision is a left to right collision.
  *
- * @example
- * // Un joueur qui saute et a une collision de gauche avec le coté droite
- * // d'une plateforme
- * @param {Object} rec1 - le rectangle pour vérifier la gauche
- * @param {Object} rec2 - le rectangle pour vérifier la droite
- * @return {boolean} - un booléen pour savoir si le rectangle est
- * en collision (la gauche du rectangle 1 sur la droite du rectangle 2)
+ * @param {Object} rec1 - the rectangle to verify left
+ * @param {Object} rec2 - the rectangle to verify right
+ * @return {boolean} - a boolean to detect if rec1
+ * collides with rec2 from left to right
  */
-export const isLeftRightCollision = (rec1, rec2) =>
-  rec1.left <= rec2.right && rec1.oldleft > rec2.oldright;
+export function isLeftRightCollision(rec1, rec2) {
+  return rec1.left <= rec2.right && rec1.oldleft > rec2.oldright;
+}
 
-// todo: add a trigger collision instead
+/**
+ * Detects a trigger collision. Doesn't apply any transformation, so
+ * returns the object intact.
+ * *Emits the `trigger` event when the entity triggers with another
+ * entity.
+ * @param {Object} rec - the rectangle to add the trigger collision
+ * to
+ * @return {EntityCB}
+ */
+export function collisionTrigger(rec) {
+  return obj => {
+    if (hasCollision(obj, rec)) {
+      emitterGame.emit('trigger', {collider: rec, obj});
+    }
+    return obj;
+  };
+}
 
-export const coinCollision = rec => obj => {
-  const isCoin = rec.tag === 'coin';
-  if (isCoin && hasCollision(obj, rec)) {
-    game.emit('coin', rec);
-  }
-  return obj;
-};
+/**
+ * The collision module calculates the correct
+ * collision with a rectangle and computes the best
+ * outcome when colliding.
+ *
+ * @param {Object} rec - the rectangle object you want
+ * to look for collision
+ * @return {EntityCB} - returns the entity with the calculated
+ * position.
+ */
+export function collision(rec) {
+  return obj => {
+    if (!hasRectangle(obj) || !hasRectangle(rec)) {
+      throw new Error('objects must have the rectangle properties');
+    }
 
-export const collision = rec => obj => {
-  if (!hasRectangle(obj) || !hasRectangle(rec)) {
-    throw new Error('objects must have the rectangle properties');
-  }
+    if (!hasCollision(obj, rec)) return obj;
 
-  if (!hasCollision(obj, rec)) return obj;
+    const {width, height} = obj;
+    const [[px, py], [vx, vy], [rvx, rvy]] = [
+      obj.position,
+      obj.velocity,
+      rec.velocity,
+    ];
 
-  const {width, height} = obj;
-  const [[px, py], [vx, vy], [rvx, rvy]] = [
-    obj.position,
-    obj.velocity,
-    rec.velocity,
-  ];
+    if (isBottomTopCollision(obj, rec)) {
+      return {
+        ...obj,
+        position: vector(px, rec.top - 0.1 - height),
+        velocity: vector(vx, rvy),
+        isGrounded: true,
+      };
+    }
 
-  if (isBottomTopCollision(obj, rec)) {
-    return {
-      ...obj,
-      position: vector(px, rec.top - 0.1 - height),
-      velocity: vector(vx, rvy),
-      isGrounded: true,
-    };
-  }
+    if (isTopBottomCollision(obj, rec)) {
+      return {
+        ...obj,
+        position: vector(px, rec.bottom + 0.1),
+        velocity: vector(vx, rvy),
+      };
+    }
 
-  if (isTopBottomCollision(obj, rec)) {
-    return {
-      ...obj,
-      position: vector(px, rec.bottom + 0.1),
-      velocity: vector(vx, rvy),
-    };
-  }
+    if (isRightLeftCollision(obj, rec)) {
+      return {
+        ...obj,
+        position: vector(rec.left - 0.1 - width, py),
+        velocity: vector(rvx, vy),
+      };
+    }
 
-  if (isRightLeftCollision(obj, rec)) {
-    return {
-      ...obj,
-      position: vector(rec.left - 0.1 - width, py),
-      velocity: vector(rvx, vy),
-    };
-  }
+    if (isLeftRightCollision(obj, rec)) {
+      return {
+        ...obj,
+        position: vector(rec.right + 0.1, py),
+        velocity: vector(rvx, vy),
+      };
+    }
 
-  if (isLeftRightCollision(obj, rec)) {
-    return {
-      ...obj,
-      position: vector(rec.right + 0.1, py),
-      velocity: vector(rvx, vy),
-    };
-  }
-
-  return obj;
-};
+    return obj;
+  };
+}

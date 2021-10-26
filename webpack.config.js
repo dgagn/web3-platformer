@@ -17,7 +17,7 @@ module.exports = {
       template: './pages/index.html',
     }),
     new CopyWebpackPlugin({
-      patterns: [{from: 'assets'}],
+      patterns: [{from: 'assets'}, {from: 'docs', to: 'docs'}],
     }),
   ],
   module: {
@@ -28,6 +28,10 @@ module.exports = {
         use: {
           loader: 'babel-loader',
         },
+      },
+      {
+        test: /\.scss$/i,
+        use: ['style-loader', 'css-loader', 'sass-loader'],
       },
     ],
   },

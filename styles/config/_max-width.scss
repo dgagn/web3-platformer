@@ -1,0 +1,25 @@
+@use 'sass:map';
+
+$max-w-prefix: --max-w- !default;
+
+$max-w: (
+  none: none,
+  0: 0,
+  4xs: 20rem,
+  3xs: 26rem,
+  2xs: 32rem,
+  xs: 38rem,
+  sm: 48rem,
+  md: 64rem,
+  lg: 80rem,
+  xl: 90rem,
+  2xl: 100rem,
+  3xl: 120rem,
+  4xl: 150rem,
+  prose: 65ch,
+  full: 100%,
+) !default;
+
+@function max-w-get($key) {
+  @return var(#{$max-w-prefix}#{$key}, map.get($max-w, $key));
+}
