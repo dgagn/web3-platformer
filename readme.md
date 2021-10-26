@@ -1,18 +1,5 @@
----
-title: Semaine 6 - Partage SMB
-author: 'Dany Gagnon'
-numbersections: true
-autoEqnLabels: true
-citeproc: true
-fontfamily: helvet
-header-includes: |
-  \usepackage{float}
-  \floatplacement{figure}{H}
----
+# Collecteur
 
-\renewcommand{\contentsname}{Contenu pour mon jeu}
-\maketitle
-\tableofcontents
-\newpage
+**Dany Gagnon**
 
-# Platformer Dany Gagnon
+TP1 - Web3
